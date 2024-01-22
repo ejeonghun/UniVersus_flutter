@@ -1,0 +1,75 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:moyo/component/Login/Login.dart';
+import 'package:moyo/component/MainPage.dart';
+
+void main() {
+  KakaoSdk.init(nativeAppKey: 'c50414fe89e5d4854cee2d5648658978');
+  runApp(const MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late Future<bool> _loginInfo;
+
+  @override
+  void initState() {
+    super.initState();
+    _loginInfo = checkLoginInfo();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        home: FutureBuilder(
+      future: _loginInfo,
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SplashScreen();
+        } else {
+          if (snapshot.data == true) {
+            return MainApp();
+          } else {
+            return Login();
+          }
+        }
+      },
+    ));
+  }
+
+  Future<bool> checkLoginInfo() async {
+    await Future.delayed(Duration(seconds: 3)); // Show logo for 3 seconds
+    final storage = new FlutterSecureStorage();
+    String? value = await storage.read(key: 'user_id');
+    return value != null;
+  }
+}
+
+class SplashScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset('images/logo.png'), // Replace with your logo
+            Text('나의 모임을 만나는 앱',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black)),
+          ],
+        ),
+      ),
+    );
+  }
+}
