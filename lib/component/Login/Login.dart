@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:moyo/component/Login/KakaoLogin.dart';
 import 'package:moyo/component/Login/EmailLogin.dart';
 
-import 'package:flutter/material.dart';
-import 'package:moyo/component/Login/KakaoLogin.dart';
-import 'package:moyo/component/Login/EmailLogin.dart';
-
 class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -42,7 +38,7 @@ class KakaoLoginButton extends StatelessWidget {
                 EdgeInsets.symmetric(horizontal: 12, vertical: 8))),
         child: Text("카카오 로그인", style: TextStyle(color: Colors.black)),
         onPressed: () async {
-          kakaoLogin.login();
+          kakaoLogin.login(context);
         });
   }
 }

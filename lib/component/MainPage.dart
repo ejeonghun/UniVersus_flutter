@@ -1,6 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:moyo/component/Login/Login.dart';
+import 'package:moyo/main.dart';
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
+  @override
+  _MainAppState createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  final storage = FlutterSecureStorage();
+  String? userId;
+  String? userNickname;
+
+  @override
+  void initState() {
+    super.initState();
+    getUserId();
+  }
+
+  getUserId() async {
+    userId = await storage.read(key: 'user_id');
+    userNickname = await storage.read(key: 'nickname');
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +56,7 @@ class MainApp extends StatelessWidget {
                 color: Colors.blue,
               ),
               child: Text(
-                'Menu',
+                'Menu\n사용자 ID: $userId\n사용자 닉네임: $userNickname',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
@@ -58,6 +82,18 @@ class MainApp extends StatelessWidget {
               title: Text('앱 설정'),
               onTap: () {
                 // TODO: Implement settings screen
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text('로그 아웃'),
+              onTap: () async {
+                await storage.delete(key: 'user_id'); // 저장된 유저 정보 삭제
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyApp()), // 로그인 화면으로 이동
+                );
               },
             ),
           ],
