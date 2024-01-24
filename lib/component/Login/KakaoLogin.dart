@@ -19,31 +19,31 @@ class KakaoLogin {
       // 백엔드에서 user의 고유번호와 이메일을 받아서 추가 정보 기입? 하도록 연동?
       await storage.write(key: 'user_id', value: '${user.id}');
       await storage.write(
-          key: 'nickname', value: user.kakaoAccount?.profile?.nickname);
-      // MainPage.dart로 이동
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MainApp()),
-      );
+          key: 'nickname', value: '${user.kakaoAccount?.profile?.nickname}');
+      await storage.write(key: 'user_email', value: '${user.kakaoAccount?.email}');
+      await storage.write(key: 'platform', value:'kakao');
     } catch (error) {
       print('사용자 정보 요청 실패 $error');
     }
   }
 
-  Future<void> login(BuildContext context) async {
+  Future<bool> login(BuildContext context) async {
     if (await isKakaoTalkInstalled()) {
       try {
         await UserApi.instance.loginWithKakaoTalk();
         debugPrint('카카오톡으로 로그인 성공');
         _get_user_info(context);
+        return true;
       } catch (error) {
         debugPrint('카카오톡으로 로그인 실패 $error');
         try {
           await UserApi.instance.loginWithKakaoAccount();
           debugPrint('카카오계정으로 로그인 성공');
           _get_user_info(context);
+          return true;
         } catch (error) {
           debugPrint('카카오계정으로 로그인 실패 $error');
+          return false;
         }
       }
     } else {
@@ -51,8 +51,10 @@ class KakaoLogin {
         await UserApi.instance.loginWithKakaoAccount();
         debugPrint('카카오계정으로 로그인 성공');
         _get_user_info(context);
+        return true;
       } catch (error) {
         debugPrint('카카오계정으로 로그인 실패 $error');
+        return false;
       }
     }
   }

@@ -28,20 +28,22 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: FutureBuilder(
-      future: _loginInfo,
-      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return SplashScreen();
-        } else {
-          if (snapshot.data == true) {
-            return MainApp();
+      home: FutureBuilder(
+        future: _loginInfo,
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SplashScreen();
           } else {
-            return Login();
+            if (snapshot.data == true) {
+              return MainApp();
+            } else {
+              return Login();
+            }
           }
-        }
-      },
-    ));
+        },
+      ),
+
+    );
   }
 
   Future<bool> checkLoginInfo() async {
@@ -52,7 +54,28 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class SplashScreen extends StatelessWidget {
+class  SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  double _logoSize = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _animateLogo();
+  }
+
+  void _animateLogo() {
+    Future.delayed(Duration(milliseconds: 50), () {
+      setState(() {
+        _logoSize = 250;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,12 +84,28 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset('images/logo.png'), // Replace with your logo
-            Text('나의 모임을 만나는 앱',
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black)),
+            AnimatedContainer(
+              duration: Duration(seconds: 2),
+              curve: Curves.easeOutCubic,
+              width: _logoSize,
+              height: _logoSize,
+              child: Image.asset('images/logo.png'),
+            ),
+            SizedBox(height: 20),
+            TweenAnimationBuilder(
+              tween: Tween<double>(begin: 0, end: 1),
+              duration: Duration(seconds: 2),
+              builder: (context, value, child) {
+                return Opacity(
+                  opacity: value,
+                  child: Text('나의 모임을 만나는 앱',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black)),
+                );
+              },
+            ),
           ],
         ),
       ),

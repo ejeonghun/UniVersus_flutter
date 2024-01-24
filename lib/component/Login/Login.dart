@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moyo/component/Login/KakaoLogin.dart';
 import 'package:moyo/component/Login/EmailLogin.dart';
+import 'package:moyo/component/MainPage.dart';
 
 class Login extends StatelessWidget {
   @override
@@ -38,7 +39,15 @@ class KakaoLoginButton extends StatelessWidget {
                 EdgeInsets.symmetric(horizontal: 12, vertical: 8))),
         child: Text("카카오 로그인", style: TextStyle(color: Colors.black)),
         onPressed: () async {
-          kakaoLogin.login(context);
+          bool loginSuccess = await kakaoLogin.login(context);
+          if (loginSuccess) {
+            // 로그인 성공 시 스택을 모두 지우고 MainApp으로 이동
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => MainApp()),
+              (route) => false,
+            );
+          }
         });
   }
 }
