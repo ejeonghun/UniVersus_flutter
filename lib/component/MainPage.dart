@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moyo/component/Login/Login.dart';
+import 'package:moyo/component/Shared/BottomBar2.dart';
 import 'package:moyo/main.dart';
 import 'package:moyo/component/MyPage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
@@ -201,7 +202,7 @@ class _MainAppState extends State<MainApp> {
           ),
         ],
       ),
-    bottomNavigationBar: BottomBar(),
+    bottomNavigationBar: BottomBar2(),
     );
   }
 }
