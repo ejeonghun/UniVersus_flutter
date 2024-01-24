@@ -4,6 +4,7 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:moyo/component/Login/Login.dart';
 import 'package:moyo/component/MainPage.dart';
 
+
 void main() {
   KakaoSdk.init(nativeAppKey: 'c50414fe89e5d4854cee2d5648658978');
   runApp(const MyApp());
@@ -42,7 +43,6 @@ class _MyAppState extends State<MyApp> {
           }
         },
       ),
-
     );
   }
 

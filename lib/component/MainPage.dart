@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moyo/component/Login/Login.dart';
 import 'package:moyo/main.dart';
-import 'package:moyo/component/Member/MyPage.dart';
+import 'package:moyo/component/MyPage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:moyo/component/Shared/BottomBar.dart';
+
 
 class MainApp extends StatefulWidget {
   @override
@@ -12,7 +14,7 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   final storage = FlutterSecureStorage();
-  final categories = ['카테고리1', '카테고리2', '카테고리3'];
+  final categories = ['스포츠', '게임', '스터디모임'];
 
   String? userId;
   String? userNickname;
@@ -43,22 +45,67 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Image.asset(
-          'images/logo.png',
-          width: 100, // Adjust width as needed
-          height: 50, // Adjust height as needed
-        ),
-        centerTitle: true,
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-              icon: const Icon(Icons.menu),
+        title: Row(
+          children: [
+            // Current Location
+            Text("내 위치", style: TextStyle(fontSize: 14)),
+            // Spacer to separate text and logo
+            Spacer(),
+            // 로고
+            // Image.asset(
+            //   'images/logo.png', // replace with your actual logo path
+            //   height: 40, // adjust the height as needed
+            //   width: 50, // adjust the width as needed
+            // ),
+            // Icons on the right side
+            IconButton(
+              icon: Icon(Icons.search),
               onPressed: () {
-                Scaffold.of(context).openDrawer();
+                // Implement search functionality
               },
-              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-            );
-          },
+            ),
+            IconButton(
+              icon: Icon(Icons.notifications),
+              onPressed: () {
+                // Implement notification functionality
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.message),
+              onPressed: () {
+                // Implement message functionality
+              },
+            ),
+          ],
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(37.0), // adjust the height as needed
+          child: Row(
+            children: [
+              // Your List Widget
+              Expanded(
+                child: ListTile(
+                  title: Text("모임", style: TextStyle(fontSize: 13)),
+                  // Add your list functionality here
+                ),
+              ),
+              // Your AI Recommended Meeting Widget
+              Expanded(
+                child: ListTile(
+                  title: Text("AI 추천 모임", style: TextStyle(fontSize: 13)),
+                  // Add your meeting functionality here
+                ),
+              ),
+              // Your Diary Widget
+              Expanded(
+                child: ListTile(
+                  title: Text("Diary", style: TextStyle(fontSize: 13)),
+                  // Add your diary functionality here
+                ),
+              ),
+              // Add other widgets as needed
+            ],
+          ),
         ),
       ),
       drawer: Drawer(
@@ -98,7 +145,6 @@ class _MainAppState extends State<MainApp> {
               leading: Icon(Icons.settings),
               title: Text('앱 설정'),
               onTap: () {
-                // TODO: Implement settings screen
               },
             ),
             ListTile(
@@ -121,29 +167,8 @@ class _MainAppState extends State<MainApp> {
           ],
         ),
       ),
-body: Column(
+      body: Column(
         children: <Widget>[
-          Container(
-            height: 35,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(const Color.fromARGB(255, 81, 81, 82)),
-                    ),
-                    child: Text(categories[index], style: TextStyle(color: Colors.white)),
-                    onPressed: () {
-                      // TODO: Implement category filter
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
           Expanded(
             child: ListView.builder(
               itemCount: 10, // Replace with your list length
@@ -176,6 +201,7 @@ body: Column(
           ),
         ],
       ),
+    bottomNavigationBar: BottomBar(),
     );
   }
 }
