@@ -6,7 +6,7 @@ import 'package:moyo/component/MainPage.dart';
 class KakaoLogin {
   final storage = FlutterSecureStorage();
 
-  void _get_user_info(BuildContext context) async {
+  Future<void> _get_user_info(BuildContext context) async {
     try {
       User user = await UserApi.instance.me();
       print('사용자 정보 요청 성공'
@@ -32,15 +32,13 @@ class KakaoLogin {
       try {
         await UserApi.instance.loginWithKakaoTalk();
         debugPrint('카카오톡으로 로그인 성공');
-        _get_user_info(context);
-        return true;
+        await _get_user_info(context);
       } catch (error) {
         debugPrint('카카오톡으로 로그인 실패 $error');
         try {
           await UserApi.instance.loginWithKakaoAccount();
           debugPrint('카카오계정으로 로그인 성공');
-          _get_user_info(context);
-          return true;
+          await _get_user_info(context);
         } catch (error) {
           debugPrint('카카오계정으로 로그인 실패 $error');
           return false;
@@ -50,12 +48,12 @@ class KakaoLogin {
       try {
         await UserApi.instance.loginWithKakaoAccount();
         debugPrint('카카오계정으로 로그인 성공');
-        _get_user_info(context);
-        return true;
+        await _get_user_info(context);
       } catch (error) {
         debugPrint('카카오계정으로 로그인 실패 $error');
         return false;
       }
     }
+    return true;
   }
 }

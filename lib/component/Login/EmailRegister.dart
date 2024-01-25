@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:moyo/component/Login/EmailRegister.dart';
 
-class EmailLoginForm extends StatelessWidget {
-  const EmailLoginForm({Key? key}) : super(key: key);
+class EmailRegisterForm extends StatelessWidget {
+  const EmailRegisterForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +9,7 @@ class EmailLoginForm extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("이메일 로그인"),
+          title: Text("회원가입"),
           leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -23,7 +22,6 @@ class EmailLoginForm extends StatelessWidget {
                 ? Column(
                     mainAxisSize: MainAxisSize.min,
                     children: const [
-                      _Logo(),
                       _FormContent(),
                     ],
                   )
@@ -32,7 +30,6 @@ class EmailLoginForm extends StatelessWidget {
                     constraints: const BoxConstraints(maxWidth: 800),
                     child: Row(
                       children: const [
-                        Expanded(child: _Logo()),
                         Expanded(
                           child: Center(child: _FormContent()),
                         ),
@@ -42,34 +39,6 @@ class EmailLoginForm extends StatelessWidget {
   }
 }
 
-class _Logo extends StatelessWidget {
-  const _Logo({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final bool isSmallScreen = MediaQuery.of(context).size.width < 600;
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        FlutterLogo(size: isSmallScreen ? 100 : 200),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            "MoYo Login",
-            textAlign: TextAlign.center,
-            style: isSmallScreen
-                ? Theme.of(context).textTheme.headline5
-                : Theme.of(context)
-                    .textTheme
-                    .headline4
-                    ?.copyWith(color: Colors.black),
-          ),
-        )
-      ],
-    );
-  }
-}
 
 class _FormContent extends StatefulWidget {
   const _FormContent({Key? key}) : super(key: key);
@@ -80,7 +49,8 @@ class _FormContent extends StatefulWidget {
 
 class __FormContentState extends State<_FormContent> {
   bool _isPasswordVisible = false;
-  bool _rememberMe = false;
+  String textValue = "";
+  final int maxLength = 11;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -117,6 +87,12 @@ class __FormContentState extends State<_FormContent> {
                 border: OutlineInputBorder(),
               ),
             ),
+            TextButton(
+            onPressed: () {
+              // Handle email verification logic here
+            },
+            child: Text('이메일 인증'),
+          ),
             _gap(),
             TextFormField(
               validator: (value) {
@@ -147,18 +123,29 @@ class __FormContentState extends State<_FormContent> {
                   )),
             ),
             _gap(),
-            CheckboxListTile(
-              value: _rememberMe,
-              onChanged: (value) {
-                if (value == null) return;
-                setState(() {
-                  _rememberMe = value;
-                });
-              },
-              title: const Text('자동 로그인'),
-              controlAffinity: ListTileControlAffinity.leading,
-              dense: true,
-              contentPadding: const EdgeInsets.all(0),
+            TextFormField(
+              decoration: InputDecoration(
+                  labelText: '닉네임',
+                  prefixIcon: const Icon(Icons.account_circle),
+                  border: const OutlineInputBorder(),
+                  ),
+            ),
+            _gap(),
+            TextFormField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                  labelText: '휴대폰번호',
+                  prefixIcon: const Icon(Icons.smartphone_rounded),
+                  border: const OutlineInputBorder(),
+                  counterText: "",
+                  suffix: Text("${textValue.length} / $maxLength", style: TextStyle(fontSize: 13))
+                  ),
+                  maxLength: maxLength,
+                  onChanged: (value) {
+                    setState(() {
+                      textValue = value;
+                    });
+                  }
             ),
             _gap(),
             SizedBox(
@@ -171,7 +158,7 @@ class __FormContentState extends State<_FormContent> {
                 child: const Padding(
                   padding: EdgeInsets.all(10.0),
                   child: Text(
-                    '로그인',
+                    '회원가입',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -182,29 +169,6 @@ class __FormContentState extends State<_FormContent> {
                 },
               ),
             ),
-            _gap(),
-            SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4)),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(
-                      '회원가입',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => EmailRegisterForm()),
-                    );
-                  },
-                ),
-              ),
           ],
         ),
       ),
@@ -212,4 +176,5 @@ class __FormContentState extends State<_FormContent> {
   }
 
   Widget _gap() => const SizedBox(height: 16);
+
 }

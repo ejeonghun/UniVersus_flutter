@@ -152,10 +152,14 @@ class _MainAppState extends State<MainApp> {
               leading: Icon(Icons.logout),
               title: Text('로그 아웃'),
               onTap: () async {
-                String? platform = await storage.read(key: 'platform');
-                if (platform == 'kakao') { // 만약 카카오 로그인이면 카카오 SDK 로그아웃 함수 호출
-                  await UserApi.instance.logout();
-                  debugPrint("카카오 로그아웃 호출");
+                userPlatform = await storage.read(key: 'platform');
+                if (userPlatform == 'kakao') { // 만약 카카오 로그인이면 카카오 SDK 로그아웃 함수 호출
+                  try {
+                    await UserApi.instance.logout();
+                    debugPrint("카카오 로그아웃 호출");
+                  } catch(error) {
+                    debugPrint("로그아웃 실패, SDK에서 토큰 삭제");
+                  }
                 }
                 await storage.delete(key: 'user_id'); // 저장된 유저 정보 삭제
                 Navigator.pushReplacement(
