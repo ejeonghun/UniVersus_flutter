@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:moyo/component/MainPage.dart';
+import 'package:moyo/component/MyPage.dart';
+import 'package:moyo/component/MainPageLikeCardLayout.dart';
 
 class BottomBar2 extends StatefulWidget {
   const BottomBar2({Key? key}) : super(key: key);
@@ -20,13 +23,22 @@ class _BottomBar2State extends State<BottomBar2> {
 
         switch (index) {
           case 0:
-            debugPrint('0');
+          debugPrint("메인으로 이동");
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => MainPage()),
+                (route) => false,
+              );
             break;
           case 1:
-            debugPrint('1');
+            debugPrint('test');
             break;
           case 2:
-            debugPrint('2');
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MyPage()),
+              );
+            debugPrint('내 정보 클릭');
             break;
           case 3:
             debugPrint('3');

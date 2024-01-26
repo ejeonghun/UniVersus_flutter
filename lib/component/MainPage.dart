@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moyo/component/Login/Login.dart';
+import 'package:moyo/component/MainPageGroupList.dart';
 import 'package:moyo/component/Shared/BottomBar2.dart';
 import 'package:moyo/main.dart';
 import 'package:moyo/component/MyPage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:moyo/component/Shared/BottomBar.dart';
+import 'package:moyo/component/MainPageLikeCardLayout.dart';
+import 'package:moyo/component/Group.dart';
 
 
-class MainApp extends StatefulWidget {
+class MainPage extends StatefulWidget {
   @override
-  _MainAppState createState() => _MainAppState();
+  _MainPageState createState() => _MainPageState();
 }
 
-class _MainAppState extends State<MainApp> {
+class _MainPageState extends State<MainPage> {
   final storage = FlutterSecureStorage();
   final categories = ['스포츠', '게임', '스터디모임'];
 
@@ -42,15 +45,22 @@ class _MainAppState extends State<MainApp> {
   }
 
 
+  final posts = List.generate( // 메인페이지 최상단 카드 레이아웃 임시 데이터
+    10,
+    (index) => Post(
+      title: 'Post $index',
+      content: 'Content for Post $index',
+      likes: index * 10,
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            // Current Location
             Text("내 위치", style: TextStyle(fontSize: 14)),
-            // Spacer to separate text and logo
             Spacer(),
             // 로고
             // Image.asset(
@@ -58,7 +68,7 @@ class _MainAppState extends State<MainApp> {
             //   height: 40, // adjust the height as needed
             //   width: 50, // adjust the width as needed
             // ),
-            // Icons on the right side
+            // Spacer(),
             IconButton(
               icon: Icon(Icons.search),
               onPressed: () {
@@ -79,134 +89,49 @@ class _MainAppState extends State<MainApp> {
             ),
           ],
         ),
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(37.0), // adjust the height as needed
-          child: Row(
-            children: [
-              // Your List Widget
-              Expanded(
-                child: ListTile(
-                  title: Text("모임", style: TextStyle(fontSize: 13)),
-                  // Add your list functionality here
-                ),
-              ),
-              // Your AI Recommended Meeting Widget
-              Expanded(
-                child: ListTile(
-                  title: Text("AI 추천 모임", style: TextStyle(fontSize: 13)),
-                  // Add your meeting functionality here
-                ),
-              ),
-              // Your Diary Widget
-              Expanded(
-                child: ListTile(
-                  title: Text("Diary", style: TextStyle(fontSize: 13)),
-                  // Add your diary functionality here
-                ),
-              ),
-              // Add other widgets as needed
-            ],
-          ),
-        ),
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 110, 85, 138),
-              ),
-              child: Text(
-                '사용자 ID: $userId\n사용자 닉네임: $userNickname',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.message),
-              title: Text('채팅'),
-              onTap: () {
-                // TODO: Implement message screen
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text('마이페이지'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyPage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('앱 설정'),
-              onTap: () {
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('로그 아웃'),
-              onTap: () async {
-                userPlatform = await storage.read(key: 'platform');
-                if (userPlatform == 'kakao') { // 만약 카카오 로그인이면 카카오 SDK 로그아웃 함수 호출
-                  try {
-                    await UserApi.instance.logout();
-                    debugPrint("카카오 로그아웃 호출");
-                  } catch(error) {
-                    debugPrint("로그아웃 실패, SDK에서 토큰 삭제");
-                  }
-                }
-                await storage.delete(key: 'user_id'); // 저장된 유저 정보 삭제
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MyApp()), // 로그인 화면으로 이동
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-      body: Column(
+body: CustomScrollView(
+  slivers: <Widget>[
+    SliverToBoxAdapter(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
         children: <Widget>[
-          Expanded(
-            child: ListView.builder(
-              itemCount: 10, // Replace with your list length
-              itemBuilder: (BuildContext context, int index) {
-                return Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  elevation: 10,
-                  margin: EdgeInsets.all(8.0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(1.0),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        child: Text('모임 $index'),
-                        backgroundColor: Color.fromARGB(255, 56, 83, 100),
-                        foregroundColor: Color.fromARGB(255, 255, 255, 255),
-                      ),
-                      title: Text('모임 $index'),
-                      subtitle: Text(
-                          '모임 설명 $index'),
-                      onTap: () {
-                        // 네비게이션
-                      },
-                    ),
-                  ),
-                );
-              },
+          Padding(
+            padding: const EdgeInsets.all(8.0), // 패딩 추가
+            child: Text(
+              '월간 오뭐했 Top3', // 섹션 제목
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Container( // 월간 "오뭐했" Top3
+            height: 170, 
+            child: MainPageLikeCardLayout(posts: posts),
+          ),
+          Divider(color: Colors.grey), // 구분선
+          Padding(
+            padding: const EdgeInsets.all(8.0), // 패딩 추가
+            child: Text(
+              '추천 모임', // 섹션 제목
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
           ),
         ],
       ),
-    bottomNavigationBar: BottomBar2(),
+    ),
+    MainPageGroupList(groups: [
+      // 더미 데이터
+      [
+        Group(title: '모임1', description: '모임 설명1', image: 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png'),
+        Group(title: '모임2', description: '모임 설명2', image: 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png'),
+        Group(title: '모임3', description: '모임 설명3', image: 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png'),
+        Group(title: '모임4', description: '모임 설명4', image: 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png'),
+        Group(title: '모임5', description: '모임 설명5', image: 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png'),
+      ],
+      // 추가 그룹 리스트
+    ]),
+  ],
+),
+bottomNavigationBar: BottomBar2(),
     );
   }
 }

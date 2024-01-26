@@ -55,7 +55,7 @@ class KakaoLoginButton extends StatelessWidget {
               debugPrint("메인으로 이동");
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => MainApp()),
+                MaterialPageRoute(builder: (context) => MainPage()),
                 (route) => false,
               );
             }

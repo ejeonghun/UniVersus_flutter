@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
             return SplashScreen();
           } else {
             if (snapshot.data == true) {
-              return MainApp();
+              return MainPage();
             } else {
               return Login();
             }

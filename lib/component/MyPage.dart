@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moyo/component/MainPage.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
+import 'package:moyo/main.dart';
 
 class MyPage extends StatefulWidget {
   @override
@@ -12,6 +14,7 @@ class _MyPageState extends State<MyPage> {
   String? userId;
   String? userNickname;
   String? userEmail;
+  String? userPlatform;
 
   @override
   void initState() {
@@ -23,6 +26,7 @@ class _MyPageState extends State<MyPage> {
     userId = await storage.read(key: 'user_id');
     userNickname = await storage.read(key: 'nickname');
     userEmail = await storage.read(key: 'user_email');
+    userPlatform = await storage.read(key: 'platform');
     setState(() {});
   }
 
@@ -72,6 +76,10 @@ class _MyPageState extends State<MyPage> {
                 title: Text("개인 정보"),
                 subtitle: Text("생년월일: 1990-01-01"),
               ),
+              ListTile(
+                title: Text("플랫폼"),
+                subtitle: Text("${userPlatform}"),
+              ),
             ],
           ),
           // 설정
@@ -86,6 +94,38 @@ class _MyPageState extends State<MyPage> {
               ListTile(
                 title: Text("기타 설정"),
               ),
+              SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4)),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text(
+                    '로그아웃',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                onPressed: () async {
+                if (userPlatform == 'kakao') { // 만약 카카오 로그인이면 카카오 SDK 로그아웃 함수 호출
+                  try {
+                    await UserApi.instance.logout();
+                    debugPrint("카카오 로그아웃 호출");
+                  } catch(error) {
+                    debugPrint("로그아웃 실패, SDK에서 토큰 삭제");
+                  }
+                }
+                await storage.delete(key: 'user_id'); // 저장된 유저 정보 삭제
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyApp()), // 로그인 화면으로 이동
+                );
+                },
+              ),
+            ),
             ],
           ),
         ],
