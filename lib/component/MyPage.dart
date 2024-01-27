@@ -15,6 +15,7 @@ class _MyPageState extends State<MyPage> {
   String? userNickname;
   String? userEmail;
   String? userPlatform;
+  String? userProfileImgURL;
 
   @override
   void initState() {
@@ -27,6 +28,7 @@ class _MyPageState extends State<MyPage> {
     userNickname = await storage.read(key: 'nickname');
     userEmail = await storage.read(key: 'user_email');
     userPlatform = await storage.read(key: 'platform');
+    userProfileImgURL = await storage.read(key: 'user_profile_img');
     setState(() {});
   }
 
@@ -49,7 +51,7 @@ class _MyPageState extends State<MyPage> {
             children: [
               CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage("assets/images/profile.png"),
+                backgroundImage: NetworkImage(userProfileImgURL ?? 'https://i.ibb.co/X3wqTFm/image-upload.png'),
               ),
               SizedBox(width: 16),
               Column(
@@ -114,7 +116,7 @@ class _MyPageState extends State<MyPage> {
                     await UserApi.instance.logout();
                     debugPrint("카카오 로그아웃 호출");
                   } catch(error) {
-                    debugPrint("로그아웃 실패, SDK에서 토큰 삭제");
+                    debugPrint('로그아웃 실패, SDK에서 토큰 삭제 $error');
                   }
                 }
                 await storage.delete(key: 'user_id'); // 저장된 유저 정보 삭제

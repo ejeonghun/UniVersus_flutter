@@ -6,7 +6,6 @@ import 'package:moyo/component/Shared/BottomBar2.dart';
 import 'package:moyo/main.dart';
 import 'package:moyo/component/MyPage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:moyo/component/Shared/BottomBar.dart';
 import 'package:moyo/component/MainPageLikeCardLayout.dart';
 import 'package:moyo/component/Group.dart';
 

@@ -22,6 +22,7 @@ class KakaoLogin {
           key: 'nickname', value: '${user.kakaoAccount?.profile?.nickname}');
       await storage.write(key: 'user_email', value: '${user.kakaoAccount?.email}');
       await storage.write(key: 'platform', value:'kakao');
+      await storage.write(key: 'user_profile_img', value: '${user.kakaoAccount?.profile?.profileImageUrl}');
     } catch (error) {
       print('사용자 정보 요청 실패 $error');
     }
@@ -30,14 +31,16 @@ class KakaoLogin {
   Future<bool> login(BuildContext context) async {
     if (await isKakaoTalkInstalled()) {
       try {
-        await UserApi.instance.loginWithKakaoTalk();
+        OAuthToken token = await UserApi.instance.loginWithKakaoTalk();
         debugPrint('카카오톡으로 로그인 성공');
+        debugPrint('카카오계정으로 로그인 성공 ${token.accessToken}');
         await _get_user_info(context);
       } catch (error) {
         debugPrint('카카오톡으로 로그인 실패 $error');
         try {
-          await UserApi.instance.loginWithKakaoAccount();
+          OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
           debugPrint('카카오계정으로 로그인 성공');
+          debugPrint('카카오계정으로 로그인 성공 ${token.accessToken}');
           await _get_user_info(context);
         } catch (error) {
           debugPrint('카카오계정으로 로그인 실패 $error');
@@ -46,8 +49,9 @@ class KakaoLogin {
       }
     } else {
       try {
-        await UserApi.instance.loginWithKakaoAccount();
+        OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
         debugPrint('카카오계정으로 로그인 성공');
+        debugPrint('카카오계정으로 로그인 성공 ${token.accessToken}');
         await _get_user_info(context);
       } catch (error) {
         debugPrint('카카오계정으로 로그인 실패 $error');
