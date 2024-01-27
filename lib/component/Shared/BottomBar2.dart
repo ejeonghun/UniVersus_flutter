@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:moyo/component/MainPage.dart';
+import 'package:moyo/component/MyGroupPage.dart';
 import 'package:moyo/component/MyPage.dart';
 import 'package:moyo/component/MainPageLikeCardLayout.dart';
+import 'package:moyo/component/TodayWhatDoing.dart';
 
 class BottomBar2 extends StatefulWidget {
   const BottomBar2({Key? key}) : super(key: key);
@@ -23,15 +25,22 @@ class _BottomBar2State extends State<BottomBar2> {
 
         switch (index) {
           case 0:
-          debugPrint("메인으로 이동");
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => MainPage()),
-                (route) => false,
-              );
+          if (_selectedIndex != 0) {
+            debugPrint("메인으로 이동");
+            Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => MainPage()),
+            (route) => false,
+            );
+          }
+            else {debugPrint("현재 메인임");}
             break;
           case 1:
-            debugPrint('test');
+            debugPrint('내 모임으로 이동');
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MyGroupPage()),
+              );
             break;
           case 2:
             Navigator.push(
@@ -42,6 +51,7 @@ class _BottomBar2State extends State<BottomBar2> {
             break;
           case 3:
             debugPrint('3');
+            Navigator.push(context, MaterialPageRoute(builder: (context) => TodayWhatDoing()));
             break;
           default:
             debugPrint('의도하지 않은 버튼');
@@ -52,7 +62,7 @@ class _BottomBar2State extends State<BottomBar2> {
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
         BottomNavigationBarItem(icon: Icon(Icons.group), label: '내 모임'),
         BottomNavigationBarItem(icon: Icon(Icons.person), label: '내 정보'),
-        BottomNavigationBarItem(icon: Icon(Icons.book), label: '다이어리')
+        BottomNavigationBarItem(icon: Icon(Icons.book), label: '오뭐했')
       ],
       type: BottomNavigationBarType.fixed,
       backgroundColor: Colors.blue[200],

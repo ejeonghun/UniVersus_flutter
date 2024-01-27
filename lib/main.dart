@@ -4,10 +4,12 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:moyo/component/Login/Login.dart';
 import 'package:moyo/component/MainPage.dart';
 
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
   KakaoSdk.init(nativeAppKey: 'c50414fe89e5d4854cee2d5648658978');
-  runApp(const MyApp());
+  initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
 class MyApp extends StatefulWidget {
