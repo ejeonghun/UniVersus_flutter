@@ -16,6 +16,7 @@ class _MyPageState extends State<MyPage> {
   String? userEmail;
   String? userPlatform;
   String? userProfileImgURL;
+  String? JWTToken;
 
   @override
   void initState() {
@@ -29,6 +30,7 @@ class _MyPageState extends State<MyPage> {
     userEmail = await storage.read(key: 'user_email');
     userPlatform = await storage.read(key: 'platform');
     userProfileImgURL = await storage.read(key: 'user_profile_img');
+    JWTToken = await storage.read(key: 'JWT');
     setState(() {});
   }
 
@@ -38,11 +40,11 @@ class _MyPageState extends State<MyPage> {
       appBar: AppBar(
         title: Text("마이 페이지"),
         leading: IconButton(
-    icon: Icon(Icons.arrow_back),
-    onPressed: () {
-      Navigator.pop(context);
-    },
-  ),
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: ListView(
         children: [
@@ -51,7 +53,8 @@ class _MyPageState extends State<MyPage> {
             children: [
               CircleAvatar(
                 radius: 50,
-                backgroundImage: NetworkImage(userProfileImgURL ?? 'https://i.ibb.co/X3wqTFm/image-upload.png'),
+                backgroundImage: NetworkImage(userProfileImgURL ??
+                    'https://i.ibb.co/X3wqTFm/image-upload.png'),
               ),
               SizedBox(width: 16),
               Column(
@@ -82,6 +85,10 @@ class _MyPageState extends State<MyPage> {
                 title: Text("플랫폼"),
                 subtitle: Text("${userPlatform}"),
               ),
+              ListTile(
+                title: Text("UUID"),
+                subtitle: Text("${JWTToken}"),
+              ),
             ],
           ),
           // 설정
@@ -97,37 +104,40 @@ class _MyPageState extends State<MyPage> {
                 title: Text("기타 설정"),
               ),
               SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4)),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text(
-                    '로그아웃',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4)),
                   ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text(
+                      '로그아웃',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  onPressed: () async {
+                    if (userPlatform == 'kakao') {
+                      // 만약 카카오 로그인이면 카카오 SDK 로그아웃 함수 호출
+                      try {
+                        await UserApi.instance.logout();
+                        debugPrint("카카오 로그아웃 호출");
+                      } catch (error) {
+                        debugPrint('로그아웃 실패, SDK에서 토큰 삭제 $error');
+                      } finally {
+                        await storage.delete(key: 'user_id'); // 저장된 유저 정보 삭제
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyApp()), // 로그인 화면으로 이동
+                        );
+                      }
+                    }
+                  },
                 ),
-                onPressed: () async {
-                if (userPlatform == 'kakao') { // 만약 카카오 로그인이면 카카오 SDK 로그아웃 함수 호출
-                  try {
-                    await UserApi.instance.logout();
-                    debugPrint("카카오 로그아웃 호출");
-                  } catch(error) {
-                    debugPrint('로그아웃 실패, SDK에서 토큰 삭제 $error');
-                  }
-                }
-                await storage.delete(key: 'user_id'); // 저장된 유저 정보 삭제
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MyApp()), // 로그인 화면으로 이동
-                );
-                },
               ),
-            ),
             ],
           ),
         ],

@@ -16,11 +16,14 @@ class Login extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(bottom: 50.0),
-            child: Column(
+              child: Column(
                 children: <Widget>[
-                  Image.asset('images/logo.png', height: 100,),
-                  Text('모임/동호회의 "오뭐했"을 이쁘게 만들어봐요!', 
-                       style: TextStyle(fontSize: 16, color: Colors.black)),
+                  Image.asset(
+                    'images/logo.png',
+                    height: 100,
+                  ),
+                  Text('모임/동호회의 "오뭐했"을 이쁘게 만들어봐요!',
+                      style: TextStyle(fontSize: 16, color: Colors.black)),
                 ],
               ),
             ),
@@ -45,10 +48,11 @@ class KakaoLoginButton extends StatelessWidget {
       child: ElevatedButton(
           style: ButtonStyle(
               backgroundColor:
-              MaterialStateProperty.all<Color>(Color(0xFFFFE812)),
+                  MaterialStateProperty.all<Color>(Color(0xFFFFE812)),
               padding: MaterialStateProperty.all<EdgeInsets>(
                   EdgeInsets.symmetric(horizontal: 12, vertical: 8))),
-          child: Text("카카오 로그인", style: TextStyle(color: Colors.black, fontSize: 18)),
+          child: Text("카카오 로그인",
+              style: TextStyle(color: Colors.black, fontSize: 18)),
           onPressed: () async {
             bool loginSuccess = await kakaoLogin.login(context);
             if (loginSuccess) {
@@ -75,7 +79,8 @@ class EmailLoginButton extends StatelessWidget {
               backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
               padding: MaterialStateProperty.all<EdgeInsets>(
                   EdgeInsets.symmetric(horizontal: 12, vertical: 8))),
-          child: Text("이메일 로그인", style: TextStyle(color: Colors.white, fontSize: 18)),
+          child: Text("이메일 로그인",
+              style: TextStyle(color: Colors.white, fontSize: 18)),
           onPressed: () {
             Navigator.push(
               context,

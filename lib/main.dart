@@ -3,12 +3,15 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:moyo/component/Login/Login.dart';
 import 'package:moyo/component/MainPage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // 1번코드
   KakaoSdk.init(nativeAppKey: 'c50414fe89e5d4854cee2d5648658978');
+  await dotenv.load(fileName: ".env"); // 2번코드
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
@@ -56,7 +59,7 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class  SplashScreen extends StatefulWidget {
+class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }

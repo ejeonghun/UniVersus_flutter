@@ -1,7 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class EmailRegisterForm extends StatelessWidget {
   const EmailRegisterForm({Key? key}) : super(key: key);
+
+  Future<void> RegisterBackendReq(
+      String? email, String? password, String? nickname, String? phone) async {
+    try {
+      var url =
+          'http://172.26.29.231:8080/api/v1/auth/join'; // 백엔드 URL을 여기에 입력하세요.
+      var body = jsonEncode({
+        'email': email, // 여기에 실제 키-값 쌍을 입력하세요.
+        'password': password,
+        'nickname': nickname,
+        'phone': phone,
+      });
+    } catch (error) {
+      print('회원가입 요청 실패 $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,12 +30,12 @@ class EmailRegisterForm extends StatelessWidget {
         appBar: AppBar(
           title: Text("회원가입"),
           leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-      ),
-      ),
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
         body: Center(
             child: isSmallScreen
                 ? Column(
@@ -38,7 +57,6 @@ class EmailRegisterForm extends StatelessWidget {
                   )));
   }
 }
-
 
 class _FormContent extends StatefulWidget {
   const _FormContent({Key? key}) : super(key: key);
@@ -88,11 +106,11 @@ class __FormContentState extends State<_FormContent> {
               ),
             ),
             TextButton(
-            onPressed: () {
-              // Handle email verification logic here
-            },
-            child: Text('이메일 인증'),
-          ),
+              onPressed: () {
+                // Handle email verification logic here
+              },
+              child: Text('이메일 인증'),
+            ),
             _gap(),
             TextFormField(
               validator: (value) {
@@ -125,28 +143,27 @@ class __FormContentState extends State<_FormContent> {
             _gap(),
             TextFormField(
               decoration: InputDecoration(
-                  labelText: '닉네임',
-                  prefixIcon: const Icon(Icons.account_circle),
-                  border: const OutlineInputBorder(),
-                  ),
+                labelText: '닉네임',
+                prefixIcon: const Icon(Icons.account_circle),
+                border: const OutlineInputBorder(),
+              ),
             ),
             _gap(),
             TextFormField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  labelText: '휴대폰번호',
-                  prefixIcon: const Icon(Icons.smartphone_rounded),
-                  border: const OutlineInputBorder(),
-                  counterText: "",
-                  suffix: Text("${textValue.length} / $maxLength", style: TextStyle(fontSize: 13))
-                  ),
-                  maxLength: maxLength,
-                  onChanged: (value) {
-                    setState(() {
-                      textValue = value;
-                    });
-                  }
-            ),
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    labelText: '휴대폰번호',
+                    prefixIcon: const Icon(Icons.smartphone_rounded),
+                    border: const OutlineInputBorder(),
+                    counterText: "",
+                    suffix: Text("${textValue.length} / $maxLength",
+                        style: TextStyle(fontSize: 13))),
+                maxLength: maxLength,
+                onChanged: (value) {
+                  setState(() {
+                    textValue = value;
+                  });
+                }),
             _gap(),
             SizedBox(
               width: double.infinity,
@@ -176,5 +193,4 @@ class __FormContentState extends State<_FormContent> {
   }
 
   Widget _gap() => const SizedBox(height: 16);
-
 }

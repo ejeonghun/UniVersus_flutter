@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:moyo/component/Login/EmailRegister.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:moyo/component/MainPage.dart';
 
 class EmailLoginForm extends StatelessWidget {
   const EmailLoginForm({Key? key}) : super(key: key);
@@ -12,12 +17,12 @@ class EmailLoginForm extends StatelessWidget {
         appBar: AppBar(
           title: Text("이메일 로그인"),
           leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-      ),
-      ),
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
         body: Center(
             child: isSmallScreen
                 ? Column(
@@ -79,6 +84,8 @@ class _FormContent extends StatefulWidget {
 }
 
 class __FormContentState extends State<_FormContent> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
   bool _rememberMe = false;
 
@@ -116,6 +123,7 @@ class __FormContentState extends State<_FormContent> {
                 prefixIcon: Icon(Icons.email_outlined),
                 border: OutlineInputBorder(),
               ),
+              controller: _emailController,
             ),
             _gap(),
             TextFormField(
@@ -145,6 +153,7 @@ class __FormContentState extends State<_FormContent> {
                       });
                     },
                   )),
+              controller: _passwordController,
             ),
             _gap(),
             CheckboxListTile(
@@ -175,40 +184,91 @@ class __FormContentState extends State<_FormContent> {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState?.validate() ?? false) {
-                    /// do something
+                    _formKey.currentState!.save();
+
+                    final email = _emailController.text;
+                    final password = _passwordController.text;
+
+                    if (await sendLoginReq(email, password) == true) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('로그인 성공'),
+                        ),
+                      );
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => MainPage()),
+                        (route) => false,
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('로그인 실패'),
+                        ),
+                      );
+                    }
                   }
                 },
               ),
             ),
             _gap(),
             SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4)),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(
-                      '회원가입',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => EmailRegisterForm()),
-                    );
-                  },
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4)),
                 ),
+                child: const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text(
+                    '회원가입',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EmailRegisterForm()),
+                  );
+                },
               ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Future<bool> sendLoginReq(String email, String password) async {
+    final String? baseUrl = dotenv.env['BACKEND_URL'];
+    print("Email: $email, Password: $password");
+    var url = '${baseUrl}/api/v1/auth/login';
+    var body = jsonEncode({'email': email, 'password': password});
+    var response = await http.post(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+      body: body,
+    );
+    var responseBody = jsonDecode(response.body);
+    if (responseBody['success'] == true) {
+      debugPrint("로그인 성공");
+      debugPrint('JWT토큰 : ${responseBody['data']['accessToken'].toString()}');
+      JwtToken_Save(responseBody['data']['accessToken'].toString());
+      return true;
+    } else {
+      // 로그인 실패
+      debugPrint("로그인 실패");
+      return false;
+    }
+  }
+
+  void JwtToken_Save(String token) async {
+    final storage = FlutterSecureStorage();
+    await storage.write(key: 'JWT', value: token);
   }
 
   Widget _gap() => const SizedBox(height: 16);
