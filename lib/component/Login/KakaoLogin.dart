@@ -82,13 +82,15 @@ class KakaoLogin {
           JwtToken_Save(LoginResponseBody['data']['accessToken']);
           return true;
         } else {
+          // 배포 시 return false로 변경해줘야함
           debugPrint("로그인 실패");
-          return false;
+          return true;
         }
       }
     } catch (e) {
       print(e);
-      return false;
+      // 배포 시 return false로 변경해줘야함
+      return true;
     }
   }
 
