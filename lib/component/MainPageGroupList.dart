@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moyo/component/Group.dart';
+import 'package:moyo/component/Group/GroupDetailWidget.dart';
 
 class MainPageGroupList extends StatelessWidget {
   final List<List<Group>> groups;
@@ -27,6 +28,13 @@ class MainPageGroupList extends StatelessWidget {
               title: Text(group.title),
               subtitle: Text(group.description),
               onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        GroupDetailWidget(model: GroupDetailModel()),
+                  ),
+                );
                 // 네비게이션
               },
             ),

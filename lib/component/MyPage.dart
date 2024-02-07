@@ -46,6 +46,8 @@ class _MyPageState extends State<MyPage> {
 
   @override
   Widget build(BuildContext context) {
+    Widget _gap() => const SizedBox(height: 16);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("마이 페이지"),
@@ -114,6 +116,25 @@ class _MyPageState extends State<MyPage> {
                 title: Text("기타 설정"),
               ),
               SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4)),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Text(
+                        '비밀번호 변경',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    onPressed: () async {
+                      // 탈퇴하기 기능 구현
+                    },
+                  )),
+              SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -155,6 +176,25 @@ class _MyPageState extends State<MyPage> {
                   },
                 ),
               ),
+              SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4)),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Text(
+                        '탈퇴하기',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    onPressed: () async {
+                      // 탈퇴하기 기능 구현
+                    },
+                  )),
             ],
           ),
         ],
