@@ -34,6 +34,16 @@ class _MyPageState extends State<MyPage> {
     setState(() {});
   }
 
+  void StorageUserClear() async {
+    await storage.delete(key: 'user_id'); // 저장된 유저 정보 삭제
+    await storage.delete(key: 'JWT');
+    await storage.delete(key: 'nickname');
+    await storage.read(key: 'user_email');
+    await storage.read(key: 'platform');
+    await storage.read(key: 'user_profile_img');
+    await storage.read(key: 'JWT');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,13 +137,20 @@ class _MyPageState extends State<MyPage> {
                       } catch (error) {
                         debugPrint('로그아웃 실패, SDK에서 토큰 삭제 $error');
                       } finally {
-                        await storage.delete(key: 'user_id'); // 저장된 유저 정보 삭제
+                        StorageUserClear(); // 저장된 유저 정보 삭제
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => MyApp()), // 로그인 화면으로 이동
                         );
                       }
+                    } else {
+                      StorageUserClear();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MyApp()), // 로그인 화면으로 이동
+                      );
                     }
                   },
                 ),

@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:moyo/component/MainPage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class KakaoLogin {
   final storage = FlutterSecureStorage();
@@ -42,9 +43,9 @@ class KakaoLogin {
 
   Future<bool> KakaoLoginBackendReq(
       String? email, int? KakaoIdx, String? nickname) async {
+    final String? baseUrl = dotenv.env['BACKEND_URL'];
     try {
-      var url =
-          'http://172.18.8.190:8080/api/v1/auth/join'; // 백엔드 URL을 여기에 입력하세요.
+      var url = '${baseUrl}/api/v1/auth/join'; // 백엔드 URL을 여기에 입력하세요.
       var body = jsonEncode({
         'email': email, // 여기에 실제 키-값 쌍을 입력하세요.
         'password': KakaoIdx,
@@ -65,7 +66,7 @@ class KakaoLogin {
         return true;
       } else {
         // 로그인으로 넘어감
-        var LoginUrl = 'http://172.18.8.190:8080/api/v1/auth/login';
+        var LoginUrl = '${baseUrl}/api/v1/auth/login';
         var LoginResponse = await http.post(
           Uri.parse(LoginUrl),
           headers: {"Content-Type": "application/json"},

@@ -257,6 +257,7 @@ class __FormContentState extends State<_FormContent> {
     if (responseBody['success'] == true) {
       debugPrint("로그인 성공");
       debugPrint('JWT토큰 : ${responseBody['data']['accessToken'].toString()}');
+      UserInfo_Save(email);
       JwtToken_Save(responseBody['data']['accessToken'].toString());
       return true;
     } else {
@@ -269,6 +270,12 @@ class __FormContentState extends State<_FormContent> {
   void JwtToken_Save(String token) async {
     final storage = FlutterSecureStorage();
     await storage.write(key: 'JWT', value: token);
+  }
+
+  void UserInfo_Save(String user_id) {
+    final storage = FlutterSecureStorage();
+    storage.write(key: 'user_id', value: user_id);
+    storage.write(key: 'platform', value: 'email');
   }
 
   Widget _gap() => const SizedBox(height: 16);
