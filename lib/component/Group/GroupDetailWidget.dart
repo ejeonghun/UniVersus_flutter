@@ -65,19 +65,19 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
           ),
         ),
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).secondary,
-          automaticallyImplyLeading: false,
+          backgroundColor: FlutterFlowTheme.of(context).tertiary,
+          automaticallyImplyLeading: true,
           title: Text(
             '모임명 ',
             style: FlutterFlowTheme.of(context).bodyMedium,
           ),
           actions: [
             FlutterFlowIconButton(
-              borderColor: FlutterFlowTheme.of(context).primary,
+              borderColor: Color(0x00FFFFFF),
               borderRadius: 20,
               borderWidth: 1,
               buttonSize: 40,
-              fillColor: FlutterFlowTheme.of(context).accent1,
+              fillColor: Color(0x00FFFFFF),
               icon: Icon(
                 Icons.favorite_border,
                 color: FlutterFlowTheme.of(context).primaryText,
@@ -88,11 +88,11 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
               },
             ),
             FlutterFlowIconButton(
-              borderColor: FlutterFlowTheme.of(context).primary,
+              borderColor: Color(0x00FFFFFF),
               borderRadius: 20,
               borderWidth: 1,
               buttonSize: 40,
-              fillColor: FlutterFlowTheme.of(context).accent1,
+              fillColor: Color(0x00FFFFFF),
               icon: Icon(
                 Icons.share_outlined,
                 color: FlutterFlowTheme.of(context).primaryText,
@@ -103,11 +103,11 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
               },
             ),
             FlutterFlowIconButton(
-              borderColor: FlutterFlowTheme.of(context).primary,
+              borderColor: Color(0x00FFFFFF),
               borderRadius: 20,
               borderWidth: 1,
               buttonSize: 40,
-              fillColor: FlutterFlowTheme.of(context).accent1,
+              fillColor: Color(0x00FFFFFF),
               icon: Icon(
                 Icons.keyboard_control,
                 color: FlutterFlowTheme.of(context).primaryText,
@@ -142,61 +142,173 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
                   ),
                 ),
               ),
-              Divider(
-                thickness: 1,
-                color: FlutterFlowTheme.of(context).primaryText,
+              Opacity(
+                opacity: 0.7,
+                child: Divider(
+                  height: 10,
+                  thickness: 0.5,
+                  color: FlutterFlowTheme.of(context).secondaryText,
+                ),
               ),
               Container(
                 width: MediaQuery.sizeOf(context).width,
-                height: 50,
+                height: 59,
                 decoration: BoxDecoration(
                   color: FlutterFlowTheme.of(context).secondaryBackground,
                 ),
-                child: Align(
-                  alignment: AlignmentDirectional(-1, 0),
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-                    child: Text(
-                      '모임명',
-                      style: FlutterFlowTheme.of(context).bodyLarge.override(
-                            fontFamily: 'Readex Pro',
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: AlignmentDirectional(-1, 0),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-                  child: Text(
-                    '모임 설명',
-                    style: FlutterFlowTheme.of(context).bodyMedium,
-                  ),
-                ),
-              ),
-              FFButtonWidget(
-                onPressed: () {
-                  print('Button pressed ...');
-                },
-                text: '모임 가입',
-                options: FFButtonOptions(
-                  height: 40,
-                  padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
-                  iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
-                  color: FlutterFlowTheme.of(context).primary,
-                  textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                        fontFamily: 'Readex Pro',
-                        color: Colors.white,
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: AlignmentDirectional(-1, -0.62),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                        child: Text(
+                          '모임명',
+                          style:
+                              FlutterFlowTheme.of(context).bodyLarge.override(
+                                    fontFamily: 'Readex Pro',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                        ),
                       ),
-                  elevation: 3,
-                  borderSide: BorderSide(
-                    color: Colors.transparent,
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
+                    ),
+                    Align(
+                      alignment: AlignmentDirectional(0, 0.71),
+                      child: Container(
+                        width: MediaQuery.sizeOf(context).width * 0.95,
+                        height: MediaQuery.sizeOf(context).height * 0.03,
+                        decoration: BoxDecoration(
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Opacity(
+                              opacity: 0.8,
+                              child: Align(
+                                alignment: AlignmentDirectional(-0.93, 0.85),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      1, 0, 3, 0),
+                                  child: Text(
+                                    '지역',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily: 'Readex Pro',
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Opacity(
+                              opacity: 0.8,
+                              child: Align(
+                                alignment: AlignmentDirectional(-0.93, 0.85),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      1, 0, 3, 0),
+                                  child: Text(
+                                    '카테고리',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily: 'Readex Pro',
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Opacity(
+                              opacity: 0.8,
+                              child: Align(
+                                alignment: AlignmentDirectional(-0.93, 0.85),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      1, 0, 3, 0),
+                                  child: Text(
+                                    '멤버 수',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily: 'Readex Pro',
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                width: MediaQuery.sizeOf(context).width,
+                height: MediaQuery.sizeOf(context).height * 0.4,
+                decoration: BoxDecoration(
+                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                ),
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: AlignmentDirectional(-1.01, -0.95),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                        child: Text(
+                          '모임 설명',
+                          style: FlutterFlowTheme.of(context).bodyMedium,
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: AlignmentDirectional(0, 0.92),
+                      child: FFButtonWidget(
+                        onPressed: () {
+                          print('Button pressed ...');
+                        },
+                        text: '모임 가입',
+                        options: FFButtonOptions(
+                          height: 40,
+                          padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
+                          iconPadding:
+                              EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                          color: FlutterFlowTheme.of(context).primary,
+                          textStyle:
+                              FlutterFlowTheme.of(context).titleSmall.override(
+                                    fontFamily: 'Readex Pro',
+                                    color: Colors.white,
+                                  ),
+                          elevation: 3,
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: AlignmentDirectional(-0.12, -0.28),
+                      child: Container(
+                        width: MediaQuery.sizeOf(context).width * 0.95,
+                        height: MediaQuery.sizeOf(context).height * 0.295,
+                        decoration: BoxDecoration(
+                          color: FlutterFlowTheme.of(context).primaryBackground,
+                        ),
+                        child: Text(
+                          '모임 설명 들어간 공간',
+                          style: FlutterFlowTheme.of(context).bodyMedium,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Align(
@@ -204,7 +316,7 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
                 child: Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                   child: Text(
-                    '개설일',
+                    '개설일 :',
                     style: FlutterFlowTheme.of(context).bodyMedium,
                   ),
                 ),
@@ -214,7 +326,7 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
                 child: Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                   child: Text(
-                    '최근 가입일',
+                    '최근 가입일 :',
                     style: FlutterFlowTheme.of(context).bodyMedium,
                   ),
                 ),
@@ -224,7 +336,7 @@ class _GroupDetailWidgetState extends State<GroupDetailWidget> {
                 child: Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                   child: Text(
-                    '최근 활동일',
+                    '최근 활동일 : ',
                     style: FlutterFlowTheme.of(context).bodyMedium,
                   ),
                 ),
