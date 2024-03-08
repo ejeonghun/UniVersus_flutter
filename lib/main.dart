@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:moyo/component/Login/Login.dart';
-import 'package:moyo/component/MainPage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import 'package:moyo/class/user/user.dart';
+
+// Widget Import
+import 'package:moyo/auth/Login_Widget.dart';
+import 'package:moyo/component/MainPage.dart';
+import 'package:moyo/auth/CreateAccount_Widget.dart';
+import 'package:moyo/auth/PasswordForget_Widget.dart';
+import 'package:moyo/test/testscreen_Widget.dart';
+
 
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -34,28 +42,35 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: FutureBuilder(
-        future: _loginInfo,
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return SplashScreen();
-          } else {
-            if (snapshot.data == true) {
-              return MainPage();
+      initialRoute: '/',
+      routes: {
+        '/': (context) => FutureBuilder(
+          future: _loginInfo,
+          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return SplashScreen();
             } else {
-              return Login();
+              if (snapshot.data == true) {
+                return MainPage();
+              } else {
+                return LoginWidget();
+              }
             }
-          }
-        },
-      ),
+          },
+        ),
+        '/main': (context) => MainPage(),
+        '/login': (context) => LoginWidget(),
+        '/register': (context) => CreateAccountWidget(),
+        '/passwordforgot': (context) => PasswordForgetWidget(),
+        '/testscreen': (context) => TestscreenWidget(),
+      },
     );
   }
 
-  Future<bool> checkLoginInfo() async {
+  Future<bool> checkLoginInfo() async { // 유저 정보 확인 메서드
     await Future.delayed(Duration(seconds: 3)); // Show logo for 3 seconds
-    final storage = new FlutterSecureStorage();
-    String? value = await storage.read(key: 'user_id');
-    return value != null;
+    UserData? user = await UserData.getUser();
+    return user != null;
   }
 }
 

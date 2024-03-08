@@ -70,7 +70,8 @@ dependencies:
   url_launcher_android: 6.0.27
   url_launcher_ios: 6.1.4
   url_launcher_platform_interface: 2.1.2
-
+  flutter_spinkit: ^5.2.0
+  easy_debounce: ^2.0.3
 
 
 
