@@ -8,6 +8,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:moyo/class/api/ApiCall.dart';
+import 'package:moyo/class/user/user.dart';
 
 class LoginModel extends FlutterFlowModel<LoginWidget> {
   ///  State fields for stateful widgets in this page.
@@ -39,10 +41,31 @@ class LoginModel extends FlutterFlowModel<LoginWidget> {
     return null;
   }
 
-  // Stores action output result for [Backend Call - API (ClickLike)] action in Button widget.
-  // ApiCallResponse? apiResultbin;
+  // Backend Req 처리
+  Future<bool> sendLoginRequest() async {
+    var apiCall = ApiCall();
+    var responseBody = await apiCall.post('/auth/login', {
+      'email': emailAddressController?.text,
+      'password': passwordController?.text,
+    });
+    
+    if (responseBody['success'] == true) { // 로그인 성공
+      print('Login successful');
+      var userdata = await UserData(id: emailAddressController.text,
+                                    token: responseBody['data']['tokenDto']['accessToken'].toString(),
+                                    platform: 'email',
+                                    nickname: '',
+                                    );
+      userdata.saveUser(); // 유저 정보 디바이스 저장   
+      print(responseBody['data']['tokenDto']['accessToken'].toString()); // 백엔드 token 반환
+      return true;
+    } else {
+      // 예외 처리 필요
+      debugPrint("Login Failed");
+      return false;
+    }
+  }
 
-  /// Initialization and disposal methods.
 
   @override
   void initState(BuildContext context) {

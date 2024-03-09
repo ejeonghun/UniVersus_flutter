@@ -63,11 +63,6 @@ class _MyPageState extends State<MyPage> {
           // 프로필 사진과 이름
           Row(
             children: [
-              CircleAvatar(
-                radius: 50,
-                backgroundImage: NetworkImage(userProfileImgURL ??
-                    'https://i.ibb.co/X3wqTFm/image-upload.png'),
-              ),
               SizedBox(width: 16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -11,6 +11,7 @@ import 'package:moyo/component/MainPage.dart';
 import 'package:moyo/auth/CreateAccount_Widget.dart';
 import 'package:moyo/auth/PasswordForget_Widget.dart';
 import 'package:moyo/test/testscreen_Widget.dart';
+import 'package:moyo/auth/KakaoLogin.dart';
 
 
 import 'package:intl/intl.dart';
@@ -58,7 +59,7 @@ class _MyAppState extends State<MyApp> {
             }
           },
         ),
-        '/main': (context) => MainPage(),
+        '/main': (context) => TestscreenWidget(),
         '/login': (context) => LoginWidget(),
         '/register': (context) => CreateAccountWidget(),
         '/passwordforgot': (context) => PasswordForgetWidget(),

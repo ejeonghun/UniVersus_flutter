@@ -1,8 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 앱 권한 설정 -->    
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:label="moyo"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

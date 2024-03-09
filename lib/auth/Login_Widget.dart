@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'KakaoLogin.dart';
 
 import 'Login_Model.dart';
 export 'Login_Model.dart';
@@ -22,6 +23,7 @@ class _LoginWidgetState extends State<LoginWidget>
     with TickerProviderStateMixin {
   late LoginModel _model;
 
+  final KakaoLogin kakaoLogin = KakaoLogin();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final animationsMap = {
@@ -361,7 +363,10 @@ class _LoginWidgetState extends State<LoginWidget>
                               child: FFButtonWidget(
                                 onPressed: () async {
                                   // 로그인 백엔드 통신
-                                    Navigator.of(context).pushNamed('/testscreen');
+                                 if(await _model.sendLoginRequest() == true) {
+                                  Navigator.of(context).pushNamed('/main');
+                                 }
+                              
                                 },
                                 text: '로그인',
                                 options: FFButtonOptions(
@@ -409,8 +414,11 @@ class _LoginWidgetState extends State<LoginWidget>
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
                               child: FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
+                                onPressed: () async {
+                                  bool loginSuccess = await kakaoLogin.login(context);
+                                  if (loginSuccess == true) {
+                                    Navigator.of(context).pushNamed('/main');
+                                  }
                                 },
                                 text: '카카오 로그인',
                                 icon: FaIcon(

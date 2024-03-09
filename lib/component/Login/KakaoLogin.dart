@@ -45,7 +45,7 @@ class KakaoLogin {
       String? email, int? KakaoIdx, String? nickname) async {
     final String? baseUrl = dotenv.env['BACKEND_URL'];
     try {
-      var url = '${baseUrl}/api/v1/auth/join'; // 백엔드 URL을 여기에 입력하세요.
+      var url = '${baseUrl}/auth/join'; // 백엔드 URL을 여기에 입력하세요.
       var body = jsonEncode({
         'email': email, // 여기에 실제 키-값 쌍을 입력하세요.
         'password': KakaoIdx,

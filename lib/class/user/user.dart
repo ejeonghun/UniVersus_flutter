@@ -17,6 +17,7 @@ class UserData{
     await storage.write(key: 'nickname', value: this.nickname);
     await storage.write(key: 'platform', value: this.platform);
 
+    print("유저 정보 저장 완료");
     return true;
   }
 
