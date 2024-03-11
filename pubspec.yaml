@@ -73,6 +73,8 @@ dependencies:
   flutter_spinkit: ^5.2.0
   easy_debounce: ^2.0.3
   permission_handler: ^11.3.0
+  google_maps_flutter: 2.5.3
+  google_maps_place_picker_mb: ^2.0.0-mb.22
 
 
 dev_dependencies:

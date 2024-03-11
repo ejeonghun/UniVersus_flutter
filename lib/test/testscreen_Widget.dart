@@ -127,7 +127,8 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                                   EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  // context.pushNamed('createjungmo');
+                                  Navigator.of(context)
+                                      .pushNamed('/moim/createjungmo');
                                 },
                                 text: '정모 만들기',
                                 options: FFButtonOptions(
@@ -256,7 +257,8 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                                   EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  Navigator.of(context).pushNamed('/passwordforgot');
+                                  Navigator.of(context)
+                                      .pushNamed('/passwordforgot');
                                 },
                                 text: '비밀번호 찾기',
                                 options: FFButtonOptions(
@@ -364,9 +366,49 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                                   EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  // context.pushNamed('GroupDetail');
+                                  // Navigator.of(context).pushNamed('/login');
                                 },
                                 text: '모임 자세히보기',
+                                options: FFButtonOptions(
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  Navigator.of(context)
+                                      .pushNamed('/testplacepicker');
+                                },
+                                text: '위치 선택',
                                 options: FFButtonOptions(
                                   height: 40,
                                   padding: EdgeInsetsDirectional.fromSTEB(
