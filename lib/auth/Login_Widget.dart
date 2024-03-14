@@ -6,8 +6,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:moyo/class/auth/kakaoauth.dart';
 import 'package:provider/provider.dart';
-import 'KakaoLogin.dart';
+import 'KakaoLogin2.dart';
 
 import 'Login_Model.dart';
 export 'Login_Model.dart';
@@ -23,7 +24,7 @@ class _LoginWidgetState extends State<LoginWidget>
     with TickerProviderStateMixin {
   late LoginModel _model;
 
-  final KakaoLogin kakaoLogin = KakaoLogin();
+  final KakaoLogin2 kakaoLogin2 = KakaoLogin2();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final animationsMap = {
@@ -363,10 +364,9 @@ class _LoginWidgetState extends State<LoginWidget>
                               child: FFButtonWidget(
                                 onPressed: () async {
                                   // 로그인 백엔드 통신
-                                 if(await _model.sendLoginRequest() == true) {
-                                  Navigator.of(context).pushNamed('/main');
-                                 }
-                              
+                                  if (await _model.sendLoginRequest() == true) {
+                                    Navigator.of(context).pushNamed('/main');
+                                  }
                                 },
                                 text: '로그인',
                                 options: FFButtonOptions(
@@ -415,9 +415,26 @@ class _LoginWidgetState extends State<LoginWidget>
                                   EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  bool loginSuccess = await kakaoLogin.login(context);
-                                  if (loginSuccess == true) {
-                                    Navigator.of(context).pushNamed('/main');
+                                  KakaoAuthDto? data =
+                                      await kakaoLogin2.login(context);
+                                  if (data != null) {
+                                    if (data.memberStatus == 0) {
+                                      // 신규회원이면 추가 정보 기입 창으로
+                                      Navigator.of(context)
+                                          .pushNamed('/register');
+                                    } else if (data.memberStatus == 1) {
+                                      // 기존회원이면 메인으로
+                                      Navigator.of(context).pushNamed('/main');
+                                    } else {
+                                      // 에러
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text('카카오 로그인 실패'),
+                                          duration: Duration(seconds: 3),
+                                        ),
+                                      );
+                                    }
                                   }
                                 },
                                 text: '카카오 로그인',
@@ -507,7 +524,8 @@ class _LoginWidgetState extends State<LoginWidget>
                                 hoverColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () async {
-                                    Navigator.of(context).pushNamed('/passwordforgot');
+                                  Navigator.of(context)
+                                      .pushNamed('/passwordforgot');
                                 },
                                 child: RichText(
                                   textScaler: MediaQuery.of(context).textScaler,

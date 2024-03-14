@@ -20,15 +20,18 @@ class KakaoLogin {
 
       // 만약 이메일이 없는 경우를 대비해 예외 처리 필요
 
-      if (KakaoLoginBackendReq(user.kakaoAccount?.email, user.id, user.kakaoAccount?.profile?.nickname) == true) {
+      if (KakaoLoginBackendReq(user.kakaoAccount?.email, user.id,
+              user.kakaoAccount?.profile?.nickname) ==
+          true) {
         // 백엔드와 통신이 성공되면
-      } 
+      }
     } catch (error) {
       print('사용자 정보 요청 실패 $error');
     }
   }
 
-  Future<bool> KakaoLoginBackendReq(String? email, int? KakaoIdx, String? nickname) async {
+  Future<bool> KakaoLoginBackendReq(
+      String? email, int? KakaoIdx, String? nickname) async {
     final String? baseUrl = dotenv.env['BACKEND_URL'];
 
     try {
@@ -56,18 +59,17 @@ class KakaoLogin {
         debugPrint("${responseBody['data']['message'].toString()}");
 
         // 토큰을 UserData 객체에 저장
-        UserData myUser = UserData(id: email!,
-                                   token: responseBody['data']['tokenDto']['accessToken'].toString(),
-                                   nickname: '임시',
-                                  platform: 'kakao');
+        UserData myUser = UserData(
+            id: email!,
+            token: responseBody['data']['tokenDto']['accessToken'].toString(),
+            platform: 'kakao');
         await myUser.saveUser();
-        
 
         return true;
       }
 
       // 만약 회원가입이 실패하면? -> 아이디가 이미 존재한다는 뜻
-       else {
+      else {
         // 로그인으로 넘어감
         var LoginUrl = '${baseUrl}/auth/login';
         var LoginResponse = await http.post(
@@ -81,13 +83,15 @@ class KakaoLogin {
         var LoginResponseBody = jsonDecode(LoginResponse.body);
         if (LoginResponseBody['success'] == true) {
           debugPrint("${LoginResponseBody['data']['message'].toString()}");
-          debugPrint('JWT토큰 : ${LoginResponseBody['data']['tokenDto']['accessToken'].toString()}');
+          debugPrint(
+              'JWT토큰 : ${LoginResponseBody['data']['tokenDto']['accessToken'].toString()}');
 
           // 토큰을 UserData 객체에 저장
-          UserData myUser = UserData(id: email!,
-                                   token: LoginResponseBody['data']['tokenDto']['accessToken'].toString(),
-                                   nickname: '임시',
-                                   platform: 'kakao');
+          UserData myUser = UserData(
+              id: email!,
+              token: LoginResponseBody['data']['tokenDto']['accessToken']
+                  .toString(),
+              platform: 'kakao');
           await myUser.saveUser();
 
           return true;
@@ -98,11 +102,11 @@ class KakaoLogin {
         }
       }
     } catch (e, stackTrace) {
-        print('Exception details:\n $e');
-        print('Stack trace:\n $stackTrace');
-        return false;
-      }
-      debugPrint("백엔드와 연결되지 않음");
+      print('Exception details:\n $e');
+      print('Stack trace:\n $stackTrace');
+      return false;
+    }
+    debugPrint("백엔드와 연결되지 않음");
   }
 
   Future<bool> login(BuildContext context) async {
@@ -136,5 +140,5 @@ class KakaoLogin {
       }
     }
     return true;
-  }  
+  }
 }

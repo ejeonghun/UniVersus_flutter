@@ -12,7 +12,7 @@ import 'package:moyo/auth/CreateAccount_Widget.dart';
 import 'package:moyo/auth/PasswordForget_Widget.dart';
 import 'package:moyo/test/testscreen_Widget.dart';
 import 'package:moyo/auth/KakaoLogin.dart';
-import 'package:moyo/testplacepicker.dart';
+import 'package:moyo/moim/placepicker.dart';
 import 'package:moyo/moim/jungmo/CreateJungmoWidget.dart';
 
 import 'package:intl/intl.dart';
@@ -20,7 +20,9 @@ import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 1번코드
-  KakaoSdk.init(nativeAppKey: 'c50414fe89e5d4854cee2d5648658978');
+  KakaoSdk.init(
+      nativeAppKey: 'c42d4f7154f511f29ae715dc77565878',
+      javaScriptAppKey: '240cc5ab531ff61f42c8e0a1723a4f96');
   await dotenv.load(fileName: ".env"); // 2번코드
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }

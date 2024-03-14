@@ -48,16 +48,18 @@ class LoginModel extends FlutterFlowModel<LoginWidget> {
       'email': emailAddressController?.text,
       'password': passwordController?.text,
     });
-    
-    if (responseBody['success'] == true) { // 로그인 성공
+
+    if (responseBody['success'] == true) {
+      // 로그인 성공
       print('Login successful');
-      var userdata = await UserData(id: emailAddressController.text,
-                                    token: responseBody['data']['tokenDto']['accessToken'].toString(),
-                                    platform: 'email',
-                                    nickname: '',
-                                    );
-      userdata.saveUser(); // 유저 정보 디바이스 저장   
-      print(responseBody['data']['tokenDto']['accessToken'].toString()); // 백엔드 token 반환
+      var userdata = await UserData(
+        id: emailAddressController.text,
+        token: responseBody['data']['tokenDto']['accessToken'].toString(),
+        platform: 'email',
+      );
+      userdata.saveUser(); // 유저 정보 디바이스 저장
+      print(responseBody['data']['tokenDto']['accessToken']
+          .toString()); // 백엔드 token 반환
       return true;
     } else {
       // 예외 처리 필요
@@ -65,7 +67,6 @@ class LoginModel extends FlutterFlowModel<LoginWidget> {
       return false;
     }
   }
-
 
   @override
   void initState(BuildContext context) {
