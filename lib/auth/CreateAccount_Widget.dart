@@ -6,6 +6,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:moyo/shared/CustomSnackbar.dart';
 
 import 'CreateAccount_Model.dart';
 export 'CreateAccount_Model.dart';
@@ -68,6 +69,9 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
     _model.emailAddressController ??= TextEditingController();
     _model.emailAddressFocusNode ??= FocusNode();
 
+    _model.verifyController ??= TextEditingController();
+    _model.verifyFocusNode ??= FocusNode();
+
     _model.passwordController ??= TextEditingController();
     _model.passwordFocusNode ??= FocusNode();
 
@@ -83,8 +87,6 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
 
   @override
   Widget build(BuildContext context) {
-    // context.watch<FFAppState>();
-
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -162,31 +164,19 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                 mainAxisSize: MainAxisSize.max,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    '회원가입',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context)
-                                        .displaySmall
-                                        .override(
-                                          fontFamily: 'Plus Jakarta Sans',
-                                          color: Color(0xFF101213),
-                                          fontSize: 36,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                  ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 12, 0, 24),
+                                        0, 0, 0, 16),
                                     child: Text(
-                                      'Moyo에 오신걸 환영합니다. \n이메일과 패스워드를 입력해주세요.',
+                                      '회원가입',
                                       textAlign: TextAlign.center,
                                       style: FlutterFlowTheme.of(context)
-                                          .labelLarge
+                                          .displaySmall
                                           .override(
                                             fontFamily: 'Plus Jakarta Sans',
-                                            color: Color(0xFF57636C),
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xFF101213),
+                                            fontSize: 36,
+                                            fontWeight: FontWeight.w600,
                                           ),
                                     ),
                                   ),
@@ -213,7 +203,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                               ],
                                               obscureText: false,
                                               decoration: InputDecoration(
-                                                labelText: 'Email',
+                                                labelText: '이메일',
                                                 labelStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .labelLarge
@@ -290,6 +280,204 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                             width: double.infinity,
                                             child: TextFormField(
                                               controller:
+                                                  _model.verifyController,
+                                              focusNode: _model.verifyFocusNode,
+                                              obscureText: false,
+                                              decoration: InputDecoration(
+                                                labelText: '인증번호',
+                                                labelStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelLarge
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color:
+                                                              Color(0xFF57636C),
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Color(0xFFF1F4F8),
+                                                    width: 2,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Color(0xFF4B39EF),
+                                                    width: 2,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                errorBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Color(0xFFE0E3E7),
+                                                    width: 2,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                focusedErrorBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Color(0xFFE0E3E7),
+                                                    width: 2,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                filled: true,
+                                                fillColor: Color(0xFFF1F4F8),
+                                              ),
+                                              style: FlutterFlowTheme.of(
+                                                      context)
+                                                  .bodyLarge
+                                                  .override(
+                                                    fontFamily:
+                                                        'Plus Jakarta Sans',
+                                                    color: Color(0xFF101213),
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                              validator: _model
+                                                  .verifyControllerValidator
+                                                  .asValidator(context),
+                                            ),
+                                          ),
+                                        ),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 0, 6, 16),
+                                              child: FFButtonWidget(
+                                                onPressed: () async {
+                                                  if (await _model.sendEmailRequest() == true) {
+                                                  CustomSnackbar.success(context, '알림', '이메일로 인증번호가 발송되었습니다.', 3);
+                                                  } else {
+                                                    CustomSnackbar.error(context, '알림', '이미 가입된 이메일입니다.', 3);
+                                                  }
+                                                },
+                                                text: '이메일 인증',
+                                                icon: Icon(
+                                                  Icons.mark_email_read_rounded,
+                                                  size: 20,
+                                                ),
+                                                options: FFButtonOptions(
+                                                  width:
+                                                      MediaQuery.sizeOf(context)
+                                                              .width *
+                                                          0.5,
+                                                  height: 44,
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 0, 0),
+                                                  iconPadding:
+                                                      EdgeInsetsDirectional
+                                                          .fromSTEB(0, 0, 0, 0),
+                                                  color: Colors.white,
+                                                  textStyle: FlutterFlowTheme
+                                                          .of(context)
+                                                      .titleSmall
+                                                      .override(
+                                                        fontFamily:
+                                                            'Plus Jakarta Sans',
+                                                        color:
+                                                            Color(0xFF101213),
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                  elevation: 0,
+                                                  borderSide: BorderSide(
+                                                    color: Color(0xFFE0E3E7),
+                                                    width: 2,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  hoverColor: Color(0xFFF1F4F8),
+                                                ),
+                                              ),
+                                            ),
+                                            Flexible(
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 0, 0, 16),
+                                                child: FFButtonWidget(
+                                                  onPressed: () async {
+                                                    // 이메일 인증 확인
+                                                    if (await _model.verifyRequest() == true) {
+                                                      CustomSnackbar.success(context, '알림', '이메일 인증이 완료되었습니다.', 3);
+                                                    } else {
+                                                      CustomSnackbar.error(context, '알림', '인증번호가 일치하지 않습니다.', 3);
+                                                    }
+                                                    
+                                                  },
+                                                  text: '인증 확인',
+                                                  icon: Icon(
+                                                    Icons
+                                                        .mark_email_read_rounded,
+                                                    size: 20,
+                                                  ),
+                                                  options: FFButtonOptions(
+                                                    width: MediaQuery.sizeOf(
+                                                                context)
+                                                            .width *
+                                                        0.3,
+                                                    height: 44,
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 0, 0, 0),
+                                                    iconPadding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 0, 0, 0),
+                                                    color: Colors.white,
+                                                    textStyle: FlutterFlowTheme
+                                                            .of(context)
+                                                        .titleSmall
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color:
+                                                              Color(0xFF101213),
+                                                          fontSize: 13,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                    elevation: 0,
+                                                    borderSide: BorderSide(
+                                                      color: Color(0xFFE0E3E7),
+                                                      width: 2,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    hoverColor:
+                                                        Color(0xFFF1F4F8),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 0, 0, 16),
+                                          child: Container(
+                                            width: double.infinity,
+                                            child: TextFormField(
+                                              controller:
                                                   _model.passwordController,
                                               focusNode:
                                                   _model.passwordFocusNode,
@@ -300,7 +488,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                               obscureText:
                                                   !_model.passwordVisibility,
                                               decoration: InputDecoration(
-                                                labelText: 'Password',
+                                                labelText: '비밀번호',
                                                 labelStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .labelLarge
@@ -393,150 +581,10 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0, 0, 0, 16),
                                     child: FFButtonWidget(
-                                      onPressed: () async {
-                                  //       if (FFAppState().EmailVerifySend ==
-                                  //           true) {
-                                  //         ScaffoldMessenger.of(context)
-                                  //             .showSnackBar(
-                                  //           SnackBar(
-                                  //             content: Text(
-                                  //               '10초 후 다시 시도해주세요.',
-                                  //               style: TextStyle(
-                                  //                 color: FlutterFlowTheme.of(
-                                  //                         context)
-                                  //                     .primaryText,
-                                  //               ),
-                                  //             ),
-                                  //             duration:
-                                  //                 Duration(milliseconds: 9750),
-                                  //             backgroundColor:
-                                  //                 FlutterFlowTheme.of(context)
-                                  //                     .secondaryText,
-                                  //           ),
-                                  //         );
-                                  //         await Future.delayed(const Duration(
-                                  //             milliseconds: 10000));
-                                  //         FFAppState().update(() {
-                                  //           FFAppState().EmailVerifySend =
-                                  //               false;
-                                  //         });
-                                  //       } else {
-                                  //         if (_model.formKey.currentState ==
-                                  //                 null ||
-                                  //             !_model.formKey.currentState!
-                                  //                 .validate()) {
-                                  //           return;
-                                  //         }
-                                  //         await VerifyEmailCall.call();
-                                  //         FFAppState().update(() {
-                                  //           FFAppState().EmailVerifySend = true;
-                                  //         });
-                                  //         ScaffoldMessenger.of(context)
-                                  //             .showSnackBar(
-                                  //           SnackBar(
-                                  //             content: Text(
-                                  //               '인증 메일이 전송되었습니다. ',
-                                  //               style: GoogleFonts.getFont(
-                                  //                 'Noto Sans',
-                                  //                 color: FlutterFlowTheme.of(
-                                  //                         context)
-                                  //                     .primaryText,
-                                  //               ),
-                                  //             ),
-                                  //             duration:
-                                  //                 Duration(milliseconds: 3350),
-                                  //             backgroundColor:
-                                  //                 FlutterFlowTheme.of(context)
-                                  //                     .secondaryText,
-                                  //           ),
-                                  //         );
-                                  //       }
-                                  //     },
-                                  //     text: '이메일 인증',
-                                  //     icon: Icon(
-                                  //       Icons.mark_email_read_rounded,
-                                  //       size: 20,
-                                  //     ),
-                                  //     options: FFButtonOptions(
-                                  //       width: double.infinity,
-                                  //       height: 44,
-                                  //       padding: EdgeInsetsDirectional.fromSTEB(
-                                  //           0, 0, 0, 0),
-                                  //       iconPadding:
-                                  //           EdgeInsetsDirectional.fromSTEB(
-                                  //               0, 0, 0, 0),
-                                  //       color: Colors.white,
-                                  //       textStyle: FlutterFlowTheme.of(context)
-                                  //           .titleSmall
-                                  //           .override(
-                                  //             fontFamily: 'Plus Jakarta Sans',
-                                  //             color: Color(0xFF101213),
-                                  //             fontSize: 16,
-                                  //             fontWeight: FontWeight.w500,
-                                  //           ),
-                                  //       elevation: 0,
-                                  //       borderSide: BorderSide(
-                                  //         color: Color(0xFFE0E3E7),
-                                  //         width: 2,
-                                  //       ),
-                                  //       borderRadius: BorderRadius.circular(12),
-                                  //       hoverColor: Color(0xFFF1F4F8),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // Padding(
-                                  //   padding: EdgeInsetsDirectional.fromSTEB(
-                                  //       0, 0, 0, 16),
-                                  //   child: FFButtonWidget(
-                                  //     onPressed: () async {
-                                  //       // 계정생성
-                                  //       _model.apiResulttx8 =
-                                  //           await ClickLikeCall.call();
-                                  //       if ((_model.apiResulttx8?.succeeded ??
-                                  //           true)) {
-                                  //         ScaffoldMessenger.of(context)
-                                  //             .showSnackBar(
-                                  //           SnackBar(
-                                  //             content: Text(
-                                  //               '회원가입이 완료되었습니다.',
-                                  //               style: TextStyle(
-                                  //                 color: FlutterFlowTheme.of(
-                                  //                         context)
-                                  //                     .primaryText,
-                                  //               ),
-                                  //             ),
-                                  //             duration:
-                                  //                 Duration(milliseconds: 2200),
-                                  //             backgroundColor:
-                                  //                 FlutterFlowTheme.of(context)
-                                  //                     .secondaryText,
-                                  //           ),
-                                  //         );
-                                  //         context.safePop();
-                                  //       } else {
-                                  //         ScaffoldMessenger.of(context)
-                                  //             .showSnackBar(
-                                  //           SnackBar(
-                                  //             content: Text(
-                                  //               '동일한 이메일 계정 및 인증번호가 틀립니다. 다시 시도해주세요',
-                                  //               style: TextStyle(
-                                  //                 color: FlutterFlowTheme.of(
-                                  //                         context)
-                                  //                     .primaryText,
-                                  //               ),
-                                  //             ),
-                                  //             duration:
-                                  //                 Duration(milliseconds: 2100),
-                                  //             backgroundColor:
-                                  //                 FlutterFlowTheme.of(context)
-                                  //                     .secondaryText,
-                                  //           ),
-                                  //         );
-                                  //       }
-
-                                  //       setState(() {});
+                                      onPressed: () {
+                                        _model.test();
                                       },
-                                      text: 'Create Account',
+                                      text: '계정 생성',
                                       options: FFButtonOptions(
                                         width: double.infinity,
                                         height: 44,
@@ -562,7 +610,6 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                     ),
-                                  
                                   ),
 
                                   // You will have to add an action on this rich text to go to your login page.
@@ -575,7 +622,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                       hoverColor: Colors.transparent,
                                       highlightColor: Colors.transparent,
                                       onTap: () async {
-                                        Navigator.of(context).pushNamed('/login');
+                                        Navigator.of(context).pushNamed('/Login');
                                       },
                                       child: RichText(
                                         textScaler:

@@ -10,7 +10,9 @@ export 'AdditionalInfo_Model.dart';
 
 class AdditionalInfoWidget extends StatefulWidget {
   final KakaoAuthDto dto;
-  const AdditionalInfoWidget({super.key, required this.dto}); // 생성자 정의
+
+  const AdditionalInfoWidget({Key? key, required this.dto}) : super(key: key); // 카카오 회원가입 생성자
+  AdditionalInfoWidget.noDto({Key? key}) : dto = KakaoAuthDto(memberStatus: 1), super(key: key); // 이메일 회원가입 생성자
 
   @override
   State<AdditionalInfoWidget> createState() => _AdditionalInfoWidgetState();

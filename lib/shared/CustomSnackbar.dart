@@ -1,32 +1,74 @@
 import 'package:flutter/material.dart';
 
 class CustomSnackbar {
-  static void show(
-      BuildContext context, String title, String message, int duration) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: ListTile(
-          leading: Icon(Icons.info_outline),
-          title: Text(title),
-          subtitle: Text(message),
+
+static void success(BuildContext context,String title, String message, int duration) {
+  final snackBar = SnackBar(
+content: Container(
+        padding: EdgeInsets.all(8),
+        height: 80,
+        decoration: BoxDecoration(
+          color: Colors.blueAccent,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          child : Row(children: [
+            Icon(Icons.check_circle, color: Colors.white, size:35),
+            SizedBox(width: 20),
+            Expanded(child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style:TextStyle(fontSize: 20, color:Colors.white, fontWeight: FontWeight.bold)),
+                Spacer(),
+                Text(message, style: TextStyle(color: Colors.white, fontSize: 12),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ))
+            ]
         ),
-        duration: Duration(seconds: duration),
-        backgroundColor: Colors.blueAccent,
       ),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      elevation: 0, // 그림자
+      duration: Duration(seconds: duration),
     );
-  }
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
-/*
-사용법 
 
-onPressed: () {
-              CustomSnackbar.show(
-                context,
-                '알림',
-                '이것은 커스텀 스낵바입니다.',
-                3, // 스낵바가 떠있는 시간 (초)
-              );
-            },
+static void error(BuildContext context,String title, String message, int duration) {
+  final snackBar = SnackBar(
+  content: Container(
+        padding: EdgeInsets.all(8),
+        height: 80,
+        decoration: BoxDecoration(
+          color: Color.fromARGB(255, 223, 52, 60),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          child : Row(children: [
+            Icon(Icons.error, color: Colors.white, size:35),
+            SizedBox(width: 20),
+            Expanded(child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style:TextStyle(fontSize: 20, color:Colors.white, fontWeight: FontWeight.bold)),
+                Spacer(),
+                Text(message, style: TextStyle(color: Colors.white, fontSize: 12),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ))
+            ]
+        ),
+      ),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      elevation: 0, // 그림자
+      duration: Duration(seconds: duration),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
 
-*/
+}
