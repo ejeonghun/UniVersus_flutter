@@ -5,6 +5,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:moyo/auth/AdditionalInfo_Widget.dart';
+import 'package:moyo/class/auth/kakaoauth.dart';
 import 'package:provider/provider.dart';
 import 'package:moyo/shared/CustomSnackbar.dart';
 
@@ -581,9 +583,15 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0, 0, 0, 16),
                                     child: FFButtonWidget(
-                                      onPressed: () {
-                                        _model.test();
-                                      },
+                                      onPressed: () async {
+                                            final data = await _model.returnData();
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) => AdditionalInfoWidget(dto: KakaoAuthDto(memberStatus: 2), emailData: data),
+                                              ),
+                                            );
+                                          },
+
                                       text: '계정 생성',
                                       options: FFButtonOptions(
                                         width: double.infinity,
@@ -622,7 +630,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                       hoverColor: Colors.transparent,
                                       highlightColor: Colors.transparent,
                                       onTap: () async {
-                                        Navigator.of(context).pushNamed('/Login');
+                                        Navigator.of(context).pushNamed('/login');
                                       },
                                       child: RichText(
                                         textScaler:

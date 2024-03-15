@@ -522,7 +522,8 @@ class _LoginWidgetState extends State<LoginWidget>
                                 hoverColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () async {
-                                    Navigator.of(context).pushNamed('/passwordforgot');
+                                    // Navigator.of(context).pushNamed('/passwordforgot'); 테스트 끝나면 원상복구
+                                    Navigator.of(context).pushNamed('/addinfo');
                                 },
                                 child: RichText(
                                   textScaler: MediaQuery.of(context).textScaler,

@@ -10,9 +10,9 @@ export 'AdditionalInfo_Model.dart';
 
 class AdditionalInfoWidget extends StatefulWidget {
   final KakaoAuthDto dto;
+  final Map<String, dynamic>? emailData;
 
-  const AdditionalInfoWidget({Key? key, required this.dto}) : super(key: key); // 카카오 회원가입 생성자
-  AdditionalInfoWidget.noDto({Key? key}) : dto = KakaoAuthDto(memberStatus: 1), super(key: key); // 이메일 회원가입 생성자
+  const AdditionalInfoWidget({Key? key, required this.dto, this.emailData}) : super(key: key); // 카카오 회원가입 생성자
 
   @override
   State<AdditionalInfoWidget> createState() => _AdditionalInfoWidgetState();
@@ -31,9 +31,9 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
     _model.fullNameController ??= TextEditingController();
     _model.fullNameFocusNode ??= FocusNode();
     _model.fullNameFocusNode!.addListener(() => setState(() {}));
-    _model.ageController ??= TextEditingController();
-    _model.ageFocusNode ??= FocusNode();
-    _model.ageFocusNode!.addListener(() => setState(() {}));
+    _model.nickNameController ??= TextEditingController();
+    _model.nickNameFocusNode ??= FocusNode();
+    _model.nickNameFocusNode!.addListener(() => setState(() {}));
     _model.phoneNumberController ??= TextEditingController();
     _model.phoneNumberFocusNode ??= FocusNode();
     _model.phoneNumberFocusNode!.addListener(() => setState(() {}));
@@ -43,9 +43,15 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
 
     if (widget.dto != null) { // 초기값 설정 부분
+      _model.email = widget.dto?.email; // 카카오 이메일
+      _model.password = widget.dto?.kakaoIdx.toString(); // 카카오 IDx
+
       _model.fullNameController!.text = widget.dto?.name ?? '';
       _model.phoneNumberController!.text = widget.dto?.phoneNumber ?? '';
       _model.descriptionController!.text = widget.dto?.email ?? '';
+    } else {
+      _model.email = widget.emailData?['email']; // 이메일
+      _model.password = widget.emailData?['password']; // 비밀번호
     }
   }
 
@@ -197,8 +203,8 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                                         .asValidator(context),
                                   ),
                                   TextFormField(
-                                    controller: _model.ageController,
-                                    focusNode: _model.ageFocusNode,
+                                    controller: _model.nickNameController,
+                                    focusNode: _model.nickNameFocusNode,
                                     autofocus: true,
                                     textCapitalization:
                                     TextCapitalization.words,
@@ -259,7 +265,7 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                                       ),
                                       filled: true,
                                       fillColor:
-                                      (_model.ageFocusNode?.hasFocus ??
+                                      (_model.nickNameFocusNode?.hasFocus ??
                                           false)
                                           ? Color(0x4D9489F5)
                                           : Colors.white,
@@ -276,7 +282,7 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                                       fontWeight: FontWeight.w600,
                                     ),
                                     cursorColor: Color(0xFF6F61EF),
-                                    validator: _model.ageControllerValidator
+                                    validator: _model.nickNameControllerValidator
                                         .asValidator(context),
                                   ),
                                   TextFormField(
@@ -658,6 +664,7 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                             !_model.formKey.currentState!.validate()) {
                           return;
                         }
+                        _model.inputTest();
                       },
                       text: '가입 완료',
                       options: FFButtonOptions(
