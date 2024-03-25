@@ -3,7 +3,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:universus/auth/AdditionalInfo_Widget.dart';
-import 'package:universus/class/auth/kakaoauth.dart';
 
 import 'package:universus/class/user/user.dart';
 
@@ -72,8 +71,7 @@ class _MyAppState extends State<MyApp> {
         '/testplacepicker': (context) => new PlacePickerScreen(),
         '/moim/createjungmo': (context) => CreatejungmoWidget(),
         '/addinfo': (context) => AdditionalInfoWidget(
-              dto: KakaoAuthDto(memberStatus: 2),
-              emailData: {'email': '1231231', 'password': 'asdfasdfasdf'},
+              emailData: {'email': '1231231', 'university': 'asdfasdfasdf'},
             ), // 테스트 용도
       },
     );

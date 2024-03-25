@@ -3,7 +3,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:universus/class/auth/kakaoauth.dart';
 import 'KakaoLogin3.dart';
 import 'AdditionalInfo_Widget.dart';
 
@@ -21,7 +20,6 @@ class _LoginWidgetState extends State<LoginWidget>
     with TickerProviderStateMixin {
   late LoginModel _model;
 
-  final KakaoLogin3 kakaoLogin = KakaoLogin3();
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final animationsMap = {
@@ -95,7 +93,10 @@ class _LoginWidgetState extends State<LoginWidget>
           height: double.infinity,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFF4B39EF), Color(0xFFEE8B60)],
+              colors: [
+                FlutterFlowTheme.of(context).tertiary,
+                FlutterFlowTheme.of(context).warning
+              ],
               stops: [0, 1],
               begin: AlignmentDirectional(0.87, -1),
               end: AlignmentDirectional(-0.87, 1),
@@ -117,11 +118,11 @@ class _LoginWidgetState extends State<LoginWidget>
                     ),
                     alignment: AlignmentDirectional(0, 0),
                     child: Text(
-                      'universus',
+                      'UNIVERSUS',
                       style: FlutterFlowTheme.of(context).displaySmall.override(
                             fontFamily: 'Plus Jakarta Sans',
                             color: Colors.white,
-                            fontSize: 36,
+                            fontSize: 32,
                             fontWeight: FontWeight.w600,
                           ),
                     ),
@@ -169,7 +170,7 @@ class _LoginWidgetState extends State<LoginWidget>
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(0, 12, 0, 24),
                               child: Text(
-                                '이메일과 비밀번호를 입력해주세요.',
+                                '대학 이메일과 비밀번호를 입력해주세요.',
                                 textAlign: TextAlign.center,
                                 style: FlutterFlowTheme.of(context)
                                     .labelMedium
@@ -361,9 +362,6 @@ class _LoginWidgetState extends State<LoginWidget>
                               child: FFButtonWidget(
                                 onPressed: () async {
                                   // 로그인 백엔드 통신
-                                  if (await _model.sendLoginRequest() == true) {
-                                    Navigator.of(context).pushNamed('/main');
-                                  }
                                 },
                                 text: '로그인',
                                 options: FFButtonOptions(
@@ -405,67 +403,6 @@ class _LoginWidgetState extends State<LoginWidget>
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                     ),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
-                              child: FFButtonWidget(
-                                onPressed: () async {
-                                  KakaoAuthDto? dto =
-                                      await kakaoLogin.login(context);
-                                  if (dto!.memberStatus == 0) {
-                                    Navigator.of(context).pushNamed('/main');
-                                    debugPrint("추가 정보 기입 필요");
-                                    /*
-                                    * final selectedPlace =
-                                      await Navigator.push<PickResult>(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => PlacePickerScreen()),
-                                  );
-                                    * */
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                AdditionalInfoWidget(
-                                                    dto: dto)));
-                                  } else if (dto!.memberStatus == 1) {
-                                    Navigator.of(context).pushNamed('/main');
-                                  } else {
-                                    // 에러 처리
-                                  }
-                                },
-                                text: '카카오 로그인',
-                                icon: FaIcon(
-                                  FontAwesomeIcons.apple,
-                                  size: 20,
-                                ),
-                                options: FFButtonOptions(
-                                  width: double.infinity,
-                                  height: 44,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 0),
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 0),
-                                  color: Colors.white,
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        fontFamily: 'Plus Jakarta Sans',
-                                        color: Color(0xFF101213),
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                  elevation: 0,
-                                  borderSide: BorderSide(
-                                    color: Color(0xFFF1F4F8),
-                                    width: 2,
-                                  ),
-                                  borderRadius: BorderRadius.circular(12),
-                                  hoverColor: Color(0xFFF1F4F8),
-                                ),
                               ),
                             ),
 
@@ -524,8 +461,7 @@ class _LoginWidgetState extends State<LoginWidget>
                                 hoverColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () async {
-                                  // Navigator.of(context).pushNamed('/passwordforgot'); 테스트 끝나면 원상복구
-                                  Navigator.of(context).pushNamed('/addinfo');
+                                  Navigator.of(context).pushNamed('/main');
                                 },
                                 child: RichText(
                                   textScaler: MediaQuery.of(context).textScaler,

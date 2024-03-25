@@ -4,17 +4,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:universus/shared/CustomSnackbar.dart';
-
-import '../class/auth/kakaoauth.dart';
 import 'AdditionalInfo_Model.dart';
 export 'AdditionalInfo_Model.dart';
 
 class AdditionalInfoWidget extends StatefulWidget {
-  final KakaoAuthDto dto;
   final Map<String, dynamic>? emailData;
 
-  const AdditionalInfoWidget({Key? key, required this.dto, this.emailData})
-      : super(key: key); // 카카오 회원가입 생성자
+  const AdditionalInfoWidget({Key? key, required this.emailData})
+      : super(key: key); // 이메일 DTO 생성자
 
   @override
   State<AdditionalInfoWidget> createState() => _AdditionalInfoWidgetState();
@@ -30,32 +27,30 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
     super.initState();
     _model = createModel(context, () => AdditionalInfoModel());
 
+    _model.universityController ??= TextEditingController();
+    _model.universityFocusNode ??= FocusNode();
+
+    _model.emailController ??= TextEditingController();
+    _model.emailFocusNode ??= FocusNode();
+
+    _model.passwordController ??= TextEditingController();
+    _model.passwordFocusNode ??= FocusNode();
+
     _model.fullNameController ??= TextEditingController();
     _model.fullNameFocusNode ??= FocusNode();
     _model.fullNameFocusNode!.addListener(() => setState(() {}));
-    _model.nickNameController ??= TextEditingController();
-    _model.nickNameFocusNode ??= FocusNode();
-    _model.nickNameFocusNode!.addListener(() => setState(() {}));
+    _model.nicknameController ??= TextEditingController();
+    _model.nicknameFocusNode ??= FocusNode();
+    _model.nicknameFocusNode!.addListener(() => setState(() {}));
     _model.phoneNumberController ??= TextEditingController();
     _model.phoneNumberFocusNode ??= FocusNode();
     _model.phoneNumberFocusNode!.addListener(() => setState(() {}));
-    _model.descriptionController ??= TextEditingController();
-    _model.descriptionFocusNode ??= FocusNode();
-    _model.descriptionFocusNode!.addListener(() => setState(() {}));
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
-
-    if (widget.dto.memberStatus != 2) {
-      // 초기값 설정 부분
-      _model.email = widget.dto.email; // 카카오 이메일
-      _model.password = widget.dto.kakaoIdx.toString(); // 카카오 IDx
-
-      _model.fullNameController!.text = widget.dto.name ?? '';
-      _model.phoneNumberController!.text = widget.dto.phoneNumber ?? '';
-      _model.descriptionController!.text = widget.dto.email ?? '';
-    } else {
-      _model.email = widget.emailData?['email']; // 이메일
-      _model.password = widget.emailData?['password']; // 비밀번호
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {
+          _model.universityController?.text = widget.emailData?['university'];
+          _model.emailController?.text = widget.emailData?['email'];
+          _model.univId = widget.emailData?['univId'];
+          ;
+        }));
   }
 
   @override
@@ -130,17 +125,76 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                               decoration: BoxDecoration(),
                               child: Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    16, 12, 16, 0),
+                                    16, 20, 16, 0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     TextFormField(
+                                      controller: _model.universityController,
+                                      focusNode: _model.universityFocusNode,
+                                      textCapitalization:
+                                          TextCapitalization.words,
+                                      readOnly: true,
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        labelText: '대학교',
+                                        labelStyle: FlutterFlowTheme.of(context)
+                                            .bodyLarge,
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFFE5E7EB),
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFF6F61EF),
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFFFF5963),
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFFFF5963),
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        filled: true,
+                                        fillColor: (_model.universityFocusNode
+                                                    ?.hasFocus ??
+                                                false)
+                                            ? Color(0x4D9489F5)
+                                            : Colors.white,
+                                        contentPadding:
+                                            EdgeInsetsDirectional.fromSTEB(
+                                                16, 20, 16, 20),
+                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyLarge,
+                                      cursorColor: Color(0xFF6F61EF),
+                                      validator: _model
+                                          .universityControllerValidator
+                                          .asValidator(context),
+                                    ),
+                                    TextFormField(
                                       controller: _model.emailController,
                                       focusNode: _model.emailFocusNode,
                                       textCapitalization:
                                           TextCapitalization.words,
-                                      initialValue: _model.email,
                                       readOnly: true,
                                       obscureText: false,
                                       decoration: InputDecoration(
@@ -192,6 +246,81 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                                       style: FlutterFlowTheme.of(context)
                                           .bodyLarge,
                                       cursorColor: Color(0xFF6F61EF),
+                                      validator: _model.emailControllerValidator
+                                          .asValidator(context),
+                                    ),
+                                    TextFormField(
+                                      controller: _model.passwordController,
+                                      focusNode: _model.passwordFocusNode,
+                                      textCapitalization:
+                                          TextCapitalization.words,
+                                      obscureText: !_model.passwordVisibility,
+                                      decoration: InputDecoration(
+                                        labelText: '비밀번호',
+                                        labelStyle: FlutterFlowTheme.of(context)
+                                            .bodyLarge,
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFFE5E7EB),
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFF6F61EF),
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFFFF5963),
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xFFFF5963),
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        filled: true,
+                                        fillColor: (_model.passwordFocusNode
+                                                    ?.hasFocus ??
+                                                false)
+                                            ? Color(0x4D9489F5)
+                                            : Colors.white,
+                                        contentPadding:
+                                            EdgeInsetsDirectional.fromSTEB(
+                                                16, 20, 16, 20),
+                                        suffixIcon: InkWell(
+                                          onTap: () => setState(
+                                            () => _model.passwordVisibility =
+                                                !_model.passwordVisibility,
+                                          ),
+                                          focusNode:
+                                              FocusNode(skipTraversal: true),
+                                          child: Icon(
+                                            _model.passwordVisibility
+                                                ? Icons.visibility_outlined
+                                                : Icons.visibility_off_outlined,
+                                            size: 24,
+                                          ),
+                                        ),
+                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyLarge,
+                                      cursorColor: Color(0xFF6F61EF),
+                                      validator: _model
+                                          .passwordControllerValidator
+                                          .asValidator(context),
                                     ),
                                     TextFormField(
                                       controller: _model.fullNameController,
@@ -203,7 +332,11 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                                       decoration: InputDecoration(
                                         labelText: '이름',
                                         labelStyle: FlutterFlowTheme.of(context)
-                                            .bodyLarge,
+                                            .bodyLarge
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              color: Color(0xFF606A85),
+                                            ),
                                         hintStyle: FlutterFlowTheme.of(context)
                                             .labelMedium
                                             .override(
@@ -263,15 +396,20 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                                                 16, 20, 16, 20),
                                       ),
                                       style: FlutterFlowTheme.of(context)
-                                          .bodyLarge,
+                                          .bodyLarge
+                                          .override(
+                                            fontFamily: 'Readex Pro',
+                                            color: Color(0xFF15161E),
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                       cursorColor: Color(0xFF6F61EF),
                                       validator: _model
                                           .fullNameControllerValidator
                                           .asValidator(context),
                                     ),
                                     TextFormField(
-                                      controller: _model.nickNameController,
-                                      focusNode: _model.nickNameFocusNode,
+                                      controller: _model.nicknameController,
+                                      focusNode: _model.nicknameFocusNode,
                                       autofocus: true,
                                       textCapitalization:
                                           TextCapitalization.words,
@@ -335,7 +473,7 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                                               BorderRadius.circular(12),
                                         ),
                                         filled: true,
-                                        fillColor: (_model.nickNameFocusNode
+                                        fillColor: (_model.nicknameFocusNode
                                                     ?.hasFocus ??
                                                 false)
                                             ? Color(0x4D9489F5)
@@ -354,7 +492,7 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                                           ),
                                       cursorColor: Color(0xFF6F61EF),
                                       validator: _model
-                                          .nickNameControllerValidator
+                                          .nicknameControllerValidator
                                           .asValidator(context),
                                     ),
                                     TextFormField(
@@ -534,61 +672,20 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                                         ),
                                       ),
                                     ),
-                                    Text(
-                                      '관심 지역 ',
-                                      style: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .override(
-                                            fontFamily: 'Outfit',
-                                            color: Color(0xFF606A85),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                    ),
-                                    FlutterFlowDropDown(
-                                      // 추후 관심지역 변경 예정
-                                      // 컨트롤러
-                                      options: [
-                                        'Insurance Provider 1',
-                                        'Insurance Provider 2',
-                                        'Insurance Provider 3'
-                                      ],
-                                      onChanged: (val) => setState(
-                                          () => _model.dropDownValue = val),
-                                      width: double.infinity,
-                                      height: 52,
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .bodyLarge
-                                          .override(
-                                            fontFamily: 'Figtree',
-                                            color: Color(0xFF15161E),
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                      icon: Icon(
-                                        Icons.keyboard_arrow_down_rounded,
-                                        color: Color(0xFF606A85),
-                                        size: 24,
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          5, 0, 0, 0),
+                                      child: Text(
+                                        '성별',
+                                        style: FlutterFlowTheme.of(context)
+                                            .labelMedium
+                                            .override(
+                                              fontFamily: 'Outfit',
+                                              color: Color(0xFF606A85),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                       ),
-                                      fillColor: Colors.white,
-                                      elevation: 2,
-                                      borderColor: Color(0xFFE5E7EB),
-                                      borderWidth: 2,
-                                      borderRadius: 12,
-                                      margin: EdgeInsetsDirectional.fromSTEB(
-                                          12, 4, 8, 4),
-                                      hidesUnderline: true,
-                                    ),
-                                    Text(
-                                      '성별',
-                                      style: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .override(
-                                            fontFamily: 'Outfit',
-                                            color: Color(0xFF606A85),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                          ),
                                     ),
                                     FlutterFlowRadioButton(
                                       options: ['여성', '남성'].toList(),
@@ -613,9 +710,9 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                                       horizontalAlignment: WrapAlignment.start,
                                       verticalAlignment:
                                           WrapCrossAlignment.start,
-                                    )
+                                    ),
                                   ]
-                                      .divide(SizedBox(height: 12))
+                                      .divide(SizedBox(height: 18))
                                       .addToEnd(SizedBox(height: 32)),
                                 ),
                               ),
@@ -639,12 +736,12 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                             return;
                           }
                           _model.inputTest();
-                          if (await _model.RegisterUser() == true) {
+                          if (await _model.RegisterUser()) {
                             CustomSnackbar.success(
-                                context, "회원가입 성공", "회원가입에 성공하였습니다.", 3);
+                                context, "회원가입 성공", "회원가입에 성공했습니다.", 3);
                           } else {
-                            CustomSnackbar.error(context, "회원가입 실패",
-                                "회원가입에 실패하였습니다. 잠시후 다시 시도해주세요.", 3);
+                            CustomSnackbar.error(
+                                context, "회원가입 실패", "회원가입에 실패했습니다.", 3);
                           }
                         },
                         text: '가입 완료',

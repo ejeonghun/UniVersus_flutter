@@ -1,20 +1,16 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
-import 'package:universus/auth/AdditionalInfo_Widget.dart';
-import 'package:universus/class/api/ApiCall.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:universus/auth/AdditionalInfo_Widget.dart';
 import 'package:provider/provider.dart';
-import 'package:dropdown_search/dropdown_search.dart';
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:universus/shared/CustomSnackbar.dart';
-import 'package:universus/shared/UnivList.dart';
 
-import 'CreateAccount_Model.dart';
-export 'CreateAccount_Model.dart';
+import 'CreateAccount_Model2.dart';
+export 'CreateAccount_Model2.dart';
 
 class CreateAccountWidget extends StatefulWidget {
   const CreateAccountWidget({super.key});
@@ -77,6 +73,9 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
     _model.verifyController ??= TextEditingController();
     _model.verifyFocusNode ??= FocusNode();
 
+    _model.passwordController ??= TextEditingController();
+    _model.passwordFocusNode ??= FocusNode();
+
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
@@ -106,10 +105,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                 height: double.infinity,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      FlutterFlowTheme.of(context).tertiary,
-                      FlutterFlowTheme.of(context).warning
-                    ],
+                    colors: [Color(0xFF4B39EF), Color(0xFFEE8B60)],
                     stops: [0, 1],
                     begin: AlignmentDirectional(0.87, -1),
                     end: AlignmentDirectional(-0.87, 1),
@@ -118,7 +114,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                 alignment: AlignmentDirectional(0, -1),
                 child: SingleChildScrollView(
                   child: Column(
-                    mainAxisSize: MainAxisSize.max,
+                    mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
@@ -131,13 +127,13 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                           ),
                           alignment: AlignmentDirectional(0, 0),
                           child: Text(
-                            'UNIVERSUS',
+                            'universus',
                             style: FlutterFlowTheme.of(context)
                                 .displaySmall
                                 .override(
                                   fontFamily: 'Plus Jakarta Sans',
                                   color: Colors.white,
-                                  fontSize: 32,
+                                  fontSize: 36,
                                   fontWeight: FontWeight.w600,
                                 ),
                           ),
@@ -196,44 +192,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 0, 16),
                                           child: Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                .width,
-                                            height: 56,
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 16),
-                                            decoration: BoxDecoration(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .surface, // 대응되는 색상으로 변경해야 할 수 있음
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              border: Border.all(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurfaceVariant, // 대응되는 색상으로 변경해야 할 수 있음
-                                                width: 2,
-                                              ),
-                                            ),
-                                            child: UnivList(
-                                              onUnivSelected: (selectedUniv) {
-                                                if (selectedUniv != null) {
-                                                  // Access and use the selected university here
-                                                  print(
-                                                      'Selected university: ${selectedUniv.school_name}');
-                                                  _model.selectedUniv =
-                                                      selectedUniv.school_name;
-                                                }
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 0, 16),
-                                          child: Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                .width,
+                                            width: double.infinity,
                                             child: TextFormField(
                                               controller:
                                                   _model.emailAddressController,
@@ -317,63 +276,9 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
-                                                  0, 0, 6, 16),
-                                          child: FFButtonWidget(
-                                            onPressed: () async {
-                                              if (await _model.sendUnivCert() ==
-                                                  true) {
-                                                CustomSnackbar.success(
-                                                    context,
-                                                    '알림',
-                                                    '이메일로 인증번호가 발송되었습니다.',
-                                                    3);
-                                              } else {
-                                                CustomSnackbar.error(context,
-                                                    '알림', '이미 가입된 이메일입니다.', 3);
-                                              }
-                                            },
-                                            text: '이메일 인증',
-                                            icon: Icon(
-                                              Icons.mark_email_read_rounded,
-                                              size: 20,
-                                            ),
-                                            options: FFButtonOptions(
-                                              width: MediaQuery.sizeOf(context)
-                                                  .width,
-                                              height: 44,
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 0, 0, 0),
-                                              iconPadding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 0, 0, 0),
-                                              color: Colors.white,
-                                              textStyle: FlutterFlowTheme.of(
-                                                      context)
-                                                  .titleSmall
-                                                  .override(
-                                                    fontFamily:
-                                                        'Plus Jakarta Sans',
-                                                    color: Color(0xFF101213),
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                              elevation: 0,
-                                              borderSide: BorderSide(
-                                                color: Color(0xFFE0E3E7),
-                                                width: 2,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
-                                              hoverColor: Color(0xFFF1F4F8),
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 0, 16),
                                           child: Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                .width,
+                                            width: double.infinity,
                                             child: TextFormField(
                                               controller:
                                                   _model.verifyController,
@@ -447,56 +352,248 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                             ),
                                           ),
                                         ),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 0, 6, 16),
+                                              child: FFButtonWidget(
+                                                onPressed: () async {
+                                                  if (await _model
+                                                          .sendEmailRequest() ==
+                                                      true) {
+                                                    CustomSnackbar.success(
+                                                        context,
+                                                        '알림',
+                                                        '이메일로 인증번호가 발송되었습니다.',
+                                                        3);
+                                                  } else {
+                                                    CustomSnackbar.error(
+                                                        context,
+                                                        '알림',
+                                                        '이미 가입된 이메일입니다.',
+                                                        3);
+                                                  }
+                                                },
+                                                text: '이메일 인증',
+                                                icon: Icon(
+                                                  Icons.mark_email_read_rounded,
+                                                  size: 20,
+                                                ),
+                                                options: FFButtonOptions(
+                                                  width:
+                                                      MediaQuery.sizeOf(context)
+                                                              .width *
+                                                          0.5,
+                                                  height: 44,
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 0, 0),
+                                                  iconPadding:
+                                                      EdgeInsetsDirectional
+                                                          .fromSTEB(0, 0, 0, 0),
+                                                  color: Colors.white,
+                                                  textStyle: FlutterFlowTheme
+                                                          .of(context)
+                                                      .titleSmall
+                                                      .override(
+                                                        fontFamily:
+                                                            'Plus Jakarta Sans',
+                                                        color:
+                                                            Color(0xFF101213),
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                  elevation: 0,
+                                                  borderSide: BorderSide(
+                                                    color: Color(0xFFE0E3E7),
+                                                    width: 2,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                  hoverColor: Color(0xFFF1F4F8),
+                                                ),
+                                              ),
+                                            ),
+                                            Flexible(
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 0, 0, 16),
+                                                child: FFButtonWidget(
+                                                  onPressed: () async {
+                                                    // 이메일 인증 확인
+                                                    if (await _model
+                                                            .verifyRequest() ==
+                                                        true) {
+                                                      CustomSnackbar.success(
+                                                          context,
+                                                          '알림',
+                                                          '이메일 인증이 완료되었습니다.',
+                                                          3);
+                                                    } else {
+                                                      CustomSnackbar.error(
+                                                          context,
+                                                          '알림',
+                                                          '인증번호가 일치하지 않습니다.',
+                                                          3);
+                                                    }
+                                                  },
+                                                  text: '인증 확인',
+                                                  icon: Icon(
+                                                    Icons
+                                                        .mark_email_read_rounded,
+                                                    size: 20,
+                                                  ),
+                                                  options: FFButtonOptions(
+                                                    width: MediaQuery.sizeOf(
+                                                                context)
+                                                            .width *
+                                                        0.3,
+                                                    height: 44,
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 0, 0, 0),
+                                                    iconPadding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 0, 0, 0),
+                                                    color: Colors.white,
+                                                    textStyle: FlutterFlowTheme
+                                                            .of(context)
+                                                        .titleSmall
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color:
+                                                              Color(0xFF101213),
+                                                          fontSize: 13,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                    elevation: 0,
+                                                    borderSide: BorderSide(
+                                                      color: Color(0xFFE0E3E7),
+                                                      width: 2,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    hoverColor:
+                                                        Color(0xFFF1F4F8),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                         Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 0, 16),
-                                          child: FFButtonWidget(
-                                            onPressed: () async {
-                                              if (await _model
-                                                      .certifyUnivCert() ==
-                                                  true) {
-                                                CustomSnackbar.success(context,
-                                                    '알림', '인증이 완료되었습니다.', 3);
-                                              } else {
-                                                CustomSnackbar.error(
-                                                    context,
-                                                    '알림',
-                                                    '인증번호가 일치하지 않습니다.',
-                                                    3);
-                                              }
-                                            },
-                                            text: '인증 확인',
-                                            icon: Icon(
-                                              Icons.mark_email_read_rounded,
-                                              size: 20,
-                                            ),
-                                            options: FFButtonOptions(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              height: 44,
-                                              color: Colors.white,
-                                              textStyle: FlutterFlowTheme.of(
+                                          child: Container(
+                                            width: double.infinity,
+                                            child: TextFormField(
+                                              controller:
+                                                  _model.passwordController,
+                                              focusNode:
+                                                  _model.passwordFocusNode,
+                                              autofocus: true,
+                                              autofillHints: [
+                                                AutofillHints.password
+                                              ],
+                                              obscureText:
+                                                  !_model.passwordVisibility,
+                                              decoration: InputDecoration(
+                                                labelText: '비밀번호',
+                                                labelStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelLarge
+                                                        .override(
+                                                          fontFamily:
+                                                              'Plus Jakarta Sans',
+                                                          color:
+                                                              Color(0xFF57636C),
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Color(0xFFF1F4F8),
+                                                    width: 2,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Color(0xFF4B39EF),
+                                                    width: 2,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                errorBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Color(0xFFFF5963),
+                                                    width: 2,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                focusedErrorBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: Color(0xFFFF5963),
+                                                    width: 2,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                                filled: true,
+                                                fillColor: Color(0xFFF1F4F8),
+                                                suffixIcon: InkWell(
+                                                  onTap: () => setState(
+                                                    () => _model
+                                                            .passwordVisibility =
+                                                        !_model
+                                                            .passwordVisibility,
+                                                  ),
+                                                  focusNode: FocusNode(
+                                                      skipTraversal: true),
+                                                  child: Icon(
+                                                    _model.passwordVisibility
+                                                        ? Icons
+                                                            .visibility_outlined
+                                                        : Icons
+                                                            .visibility_off_outlined,
+                                                    color: Color(0xFF57636C),
+                                                    size: 24,
+                                                  ),
+                                                ),
+                                              ),
+                                              style: FlutterFlowTheme.of(
                                                       context)
-                                                  .titleSmall
+                                                  .bodyLarge
                                                   .override(
                                                     fontFamily:
                                                         'Plus Jakarta Sans',
                                                     color: Color(0xFF101213),
-                                                    fontSize: 13,
+                                                    fontSize: 16,
                                                     fontWeight: FontWeight.w500,
                                                   ),
-                                              elevation: 0,
-                                              borderSide: BorderSide(
-                                                color: Color(0xFFE0E3E7),
-                                                width: 2,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(12),
+                                              validator: _model
+                                                  .passwordControllerValidator
+                                                  .asValidator(context),
                                             ),
                                           ),
-                                        )
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -504,29 +601,21 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0, 0, 0, 16),
                                     child: FFButtonWidget(
-                                      onPressed: () {
-                                        if (_model.isEmailValid == true) {
-                                          // model에 저장된 이메일 인증 여부 bool 체크 후 Navigator
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  AdditionalInfoWidget(
-                                                      emailData: {
-                                                    'email': _model.emailSaved,
-                                                    'university':
-                                                        _model.selectedUniv,
-                                                    'univId': _model.univId
-                                                  }),
-                                            ),
-                                          );
-                                        } else {
-                                          CustomSnackbar.error(context, '알림',
-                                              '이메일 인증을 완료해주세요.', 3);
-                                        }
+                                      onPressed: () async {
+                                        // final data = await _model.returnData();
+                                        // Navigator.of(context).push(
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) =>
+                                        //         AdditionalInfoWidget(
+                                        //             dto: KakaoAuthDto(
+                                        //                 memberStatus: 2),
+                                        //             emailData: data),
+                                        //   ),
+                                        // );
                                       },
                                       text: '계정 생성',
                                       options: FFButtonOptions(
-                                        width: MediaQuery.sizeOf(context).width,
+                                        width: double.infinity,
                                         height: 44,
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0, 0, 0, 0),

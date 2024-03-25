@@ -12,49 +12,49 @@ class AdditionalInfoModel extends FlutterFlowModel<AdditionalInfoWidget> {
   final formKey = GlobalKey<FormState>();
   // State field(s) for fullName widget.
 
+  String? univId; // 대학 Id값
+
+  FocusNode? universityFocusNode;
+  TextEditingController? universityController;
+  String? Function(BuildContext, String?)? universityControllerValidator;
+  // State field(s) for email widget.
   FocusNode? emailFocusNode;
   TextEditingController? emailController;
-
+  String? Function(BuildContext, String?)? emailControllerValidator;
+  // State field(s) for password widget.
+  FocusNode? passwordFocusNode;
+  TextEditingController? passwordController;
+  late bool passwordVisibility;
+  String? Function(BuildContext, String?)? passwordControllerValidator;
+  // State field(s) for fullName widget.
   FocusNode? fullNameFocusNode;
   TextEditingController? fullNameController;
   String? Function(BuildContext, String?)? fullNameControllerValidator;
-  // State field(s) for age widget.
-  FocusNode? nickNameFocusNode;
-  TextEditingController? nickNameController;
-  String? Function(BuildContext, String?)? nickNameControllerValidator;
+  // State field(s) for nickname widget.
+  FocusNode? nicknameFocusNode;
+  TextEditingController? nicknameController;
+  String? Function(BuildContext, String?)? nicknameControllerValidator;
   // State field(s) for phoneNumber widget.
   FocusNode? phoneNumberFocusNode;
   TextEditingController? phoneNumberController;
   String? Function(BuildContext, String?)? phoneNumberControllerValidator;
-  DateTime? datePicked;
-  // State field(s) for DropDown widget.
-  String? dropDownValue;
-  FormFieldController<String>? dropDownValueController;
-  // State field(s) for ChoiceChips widget.
-  FormFieldController<List<String>>? choiceChipsValueController;
-  String? get choiceChipsValue =>
-      choiceChipsValueController?.value?.firstOrNull;
-  set choiceChipsValue(String? val) =>
-      choiceChipsValueController?.value = val != null ? [val] : [];
-  // State field(s) for description widget.
-  FocusNode? descriptionFocusNode;
-  TextEditingController? descriptionController;
-  String? Function(BuildContext, String?)? descriptionControllerValidator;
-
+  // State field(s) for RadioButton widget.
   FormFieldController<String>? radioButtonValueController;
 
-  String? email;
-  String? password;
-  String? gender;
+  DateTime? datePicked;
 
   void inputTest() {
-    debugPrint(email);
-    debugPrint(password);
+    debugPrint(univId.toString());
+    debugPrint(universityController?.text);
+    debugPrint(emailController?.text);
+    debugPrint(passwordController?.text);
     debugPrint(fullNameController?.text);
-    debugPrint(nickNameController?.text);
+    debugPrint(nicknameController?.text);
     debugPrint(radioButtonValue.toString());
     debugPrint(DateFormat('yyyyMMdd').format(datePicked!));
   }
+
+  String? gender;
 
   Future<bool> RegisterUser() async {
     ApiCall api = ApiCall();
@@ -67,15 +67,15 @@ class AdditionalInfoModel extends FlutterFlowModel<AdditionalInfoWidget> {
     }
 
     var response = await api.post('/auth/join', {
-      'email': email,
-      'password': password,
+      'univId': univId,
+      'email': emailController?.text,
+      'password': passwordController?.text,
       'userName': fullNameController?.text,
       'birth': DateFormat('yyyyMMdd').format(datePicked!),
       'phone': phoneNumberController?.text,
-      'nickname': nickNameController?.text,
+      'nickname': nicknameController?.text,
       'gender': gender,
       'address': '주소',
-      'areaIntrs': '관심분야',
     });
     if (response['success'] == true) {
       debugPrint("회원가입 성공");
@@ -88,22 +88,30 @@ class AdditionalInfoModel extends FlutterFlowModel<AdditionalInfoWidget> {
   }
 
   @override
-  void initState(BuildContext context) {}
+  void initState(BuildContext context) {
+    passwordVisibility = false;
+  }
 
   @override
   void dispose() {
     unfocusNode.dispose();
+    universityFocusNode?.dispose();
+    universityController?.dispose();
+
+    emailFocusNode?.dispose();
+    emailController?.dispose();
+
+    passwordFocusNode?.dispose();
+    passwordController?.dispose();
+
     fullNameFocusNode?.dispose();
     fullNameController?.dispose();
 
-    nickNameFocusNode?.dispose();
-    nickNameController?.dispose();
+    nicknameFocusNode?.dispose();
+    nicknameController?.dispose();
 
     phoneNumberFocusNode?.dispose();
     phoneNumberController?.dispose();
-
-    descriptionFocusNode?.dispose();
-    descriptionController?.dispose();
   }
 
   /// Action blocks are added here.
