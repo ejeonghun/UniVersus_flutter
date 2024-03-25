@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:moyo/component/Login/Login.dart';
-import 'package:moyo/component/MainPageGroupList.dart';
-import 'package:moyo/component/Shared/BottomBar2.dart';
-import 'package:moyo/main.dart';
-import 'package:moyo/component/MyPage.dart';
+import 'package:universus/component/Login/Login.dart';
+import 'package:universus/component/MainPageGroupList.dart';
+import 'package:universus/component/Shared/BottomBar2.dart';
+import 'package:universus/main.dart';
+import 'package:universus/component/MyPage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:moyo/component/MainPageLikeCardLayout.dart';
-import 'package:moyo/component/Group.dart';
+import 'package:universus/component/MainPageLikeCardLayout.dart';
+import 'package:universus/component/Group.dart';
 
 class MainPage extends StatefulWidget {
   @override

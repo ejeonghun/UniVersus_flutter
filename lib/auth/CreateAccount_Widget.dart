@@ -5,10 +5,10 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:moyo/auth/AdditionalInfo_Widget.dart';
-import 'package:moyo/class/auth/kakaoauth.dart';
+import 'package:universus/auth/AdditionalInfo_Widget.dart';
+import 'package:universus/class/auth/kakaoauth.dart';
 import 'package:provider/provider.dart';
-import 'package:moyo/shared/CustomSnackbar.dart';
+import 'package:universus/shared/CustomSnackbar.dart';
 
 import 'CreateAccount_Model.dart';
 export 'CreateAccount_Model.dart';
@@ -128,7 +128,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                           ),
                           alignment: AlignmentDirectional(0, 0),
                           child: Text(
-                            'Moyo',
+                            'universus',
                             style: FlutterFlowTheme.of(context)
                                 .displaySmall
                                 .override(
@@ -363,10 +363,20 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                                   .fromSTEB(0, 0, 6, 16),
                                               child: FFButtonWidget(
                                                 onPressed: () async {
-                                                  if (await _model.sendEmailRequest() == true) {
-                                                  CustomSnackbar.success(context, '알림', '이메일로 인증번호가 발송되었습니다.', 3);
+                                                  if (await _model
+                                                          .sendEmailRequest() ==
+                                                      true) {
+                                                    CustomSnackbar.success(
+                                                        context,
+                                                        '알림',
+                                                        '이메일로 인증번호가 발송되었습니다.',
+                                                        3);
                                                   } else {
-                                                    CustomSnackbar.error(context, '알림', '이미 가입된 이메일입니다.', 3);
+                                                    CustomSnackbar.error(
+                                                        context,
+                                                        '알림',
+                                                        '이미 가입된 이메일입니다.',
+                                                        3);
                                                   }
                                                 },
                                                 text: '이메일 인증',
@@ -416,12 +426,21 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                                 child: FFButtonWidget(
                                                   onPressed: () async {
                                                     // 이메일 인증 확인
-                                                    if (await _model.verifyRequest() == true) {
-                                                      CustomSnackbar.success(context, '알림', '이메일 인증이 완료되었습니다.', 3);
+                                                    if (await _model
+                                                            .verifyRequest() ==
+                                                        true) {
+                                                      CustomSnackbar.success(
+                                                          context,
+                                                          '알림',
+                                                          '이메일 인증이 완료되었습니다.',
+                                                          3);
                                                     } else {
-                                                      CustomSnackbar.error(context, '알림', '인증번호가 일치하지 않습니다.', 3);
+                                                      CustomSnackbar.error(
+                                                          context,
+                                                          '알림',
+                                                          '인증번호가 일치하지 않습니다.',
+                                                          3);
                                                     }
-                                                    
                                                   },
                                                   text: '인증 확인',
                                                   icon: Icon(
@@ -584,14 +603,17 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                         0, 0, 0, 16),
                                     child: FFButtonWidget(
                                       onPressed: () async {
-                                            final data = await _model.returnData();
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) => AdditionalInfoWidget(dto: KakaoAuthDto(memberStatus: 2), emailData: data),
-                                              ),
-                                            );
-                                          },
-
+                                        final data = await _model.returnData();
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                AdditionalInfoWidget(
+                                                    dto: KakaoAuthDto(
+                                                        memberStatus: 2),
+                                                    emailData: data),
+                                          ),
+                                        );
+                                      },
                                       text: '계정 생성',
                                       options: FFButtonOptions(
                                         width: double.infinity,
@@ -630,7 +652,8 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                       hoverColor: Colors.transparent,
                                       highlightColor: Colors.transparent,
                                       onTap: () async {
-                                        Navigator.of(context).pushNamed('/login');
+                                        Navigator.of(context)
+                                            .pushNamed('/login');
                                       },
                                       child: RichText(
                                         textScaler:

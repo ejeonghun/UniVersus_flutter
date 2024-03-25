@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:moyo/class/auth/kakaoauth.dart';
+import 'package:universus/class/auth/kakaoauth.dart';
 import 'KakaoLogin3.dart';
 import 'AdditionalInfo_Widget.dart';
 
@@ -117,7 +117,7 @@ class _LoginWidgetState extends State<LoginWidget>
                     ),
                     alignment: AlignmentDirectional(0, 0),
                     child: Text(
-                      'Moyo',
+                      'universus',
                       style: FlutterFlowTheme.of(context).displaySmall.override(
                             fontFamily: 'Plus Jakarta Sans',
                             color: Colors.white,
@@ -361,10 +361,9 @@ class _LoginWidgetState extends State<LoginWidget>
                               child: FFButtonWidget(
                                 onPressed: () async {
                                   // 로그인 백엔드 통신
-                                 if(await _model.sendLoginRequest() == true) {
-                                  Navigator.of(context).pushNamed('/main');
-                                 }
-                              
+                                  if (await _model.sendLoginRequest() == true) {
+                                    Navigator.of(context).pushNamed('/main');
+                                  }
                                 },
                                 text: '로그인',
                                 options: FFButtonOptions(
@@ -413,7 +412,8 @@ class _LoginWidgetState extends State<LoginWidget>
                                   EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  KakaoAuthDto? dto = await kakaoLogin.login(context);
+                                  KakaoAuthDto? dto =
+                                      await kakaoLogin.login(context);
                                   if (dto!.memberStatus == 0) {
                                     Navigator.of(context).pushNamed('/main');
                                     debugPrint("추가 정보 기입 필요");
@@ -425,12 +425,14 @@ class _LoginWidgetState extends State<LoginWidget>
                                         builder: (context) => PlacePickerScreen()),
                                   );
                                     * */
-                                    Navigator.push (
-                                      context, MaterialPageRoute(builder: (context) => AdditionalInfoWidget(dto: dto))
-                                    );
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                AdditionalInfoWidget(
+                                                    dto: dto)));
                                   } else if (dto!.memberStatus == 1) {
                                     Navigator.of(context).pushNamed('/main');
-                                    
                                   } else {
                                     // 에러 처리
                                   }
@@ -522,8 +524,8 @@ class _LoginWidgetState extends State<LoginWidget>
                                 hoverColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onTap: () async {
-                                    // Navigator.of(context).pushNamed('/passwordforgot'); 테스트 끝나면 원상복구
-                                    Navigator.of(context).pushNamed('/addinfo');
+                                  // Navigator.of(context).pushNamed('/passwordforgot'); 테스트 끝나면 원상복구
+                                  Navigator.of(context).pushNamed('/addinfo');
                                 },
                                 child: RichText(
                                   textScaler: MediaQuery.of(context).textScaler,

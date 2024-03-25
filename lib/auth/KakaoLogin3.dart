@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:moyo/class/auth/kakaoauth.dart';
-import 'package:moyo/class/user/user.dart';
-import 'package:moyo/class/api/ApiCall.dart';
+import 'package:universus/class/auth/kakaoauth.dart';
+import 'package:universus/class/user/user.dart';
+import 'package:universus/class/api/ApiCall.dart';
 
 class KakaoLogin3 {
   final storage = FlutterSecureStorage();
@@ -16,7 +16,7 @@ class KakaoLogin3 {
         print('사용자 정보 요청 성공'
             '\n회원번호: ${user.id}' // int
             '\n닉네임: ${user.kakaoAccount?.profile?.nickname}' // String?
-            '\n프로필 링크: ${user.kakaoAccount?.profile?.profileImageUrl}' // String? 
+            '\n프로필 링크: ${user.kakaoAccount?.profile?.profileImageUrl}' // String?
             '\n이메일 : ${user.kakaoAccount?.email}' // String?
             '\n생년월일 : ${user.kakaoAccount?.birthday}' // String? (MMDD)
             '\n출생년도 : ${user.kakaoAccount?.birthyear}' // String? (YYYY)
@@ -41,8 +41,8 @@ class KakaoLogin3 {
       String? email = user?.kakaoAccount?.email;
       int? kakaoIdx = user?.id;
       var apiCall = ApiCall();
-      var responseBody =
-          await apiCall.post('/auth/kakao/app', {'email': email, 'kakaoIdx': kakaoIdx});
+      var responseBody = await apiCall
+          .post('/auth/kakao/app', {'email': email, 'kakaoIdx': kakaoIdx});
       if (responseBody['success'] == true) {
         // 서버 요청이 성공적으로 처리 되면? -> 서버 오류는 false
         if (responseBody['message'] == '로그인 성공') {
@@ -73,13 +73,13 @@ class KakaoLogin3 {
   }
 
   Future<KakaoAuthDto?> resCheck(String? res) async {
-     User? user = await UserApi.instance.me();
+    User? user = await UserApi.instance.me();
     if (res == '추가정보기입') {
       // 추가 정보 기입
       return Future.value(KakaoAuthDto(
         email: user.kakaoAccount?.email,
         kakaoIdx: user.id,
-        nickname: user.kakaoAccount?.profile?.nickname?? '',
+        nickname: user.kakaoAccount?.profile?.nickname ?? '',
         birthday: user.kakaoAccount?.birthday ?? '',
         birthyear: user.kakaoAccount?.birthyear ?? '',
         gender: user.kakaoAccount?.gender?.toString() ?? '',
@@ -126,4 +126,3 @@ class KakaoLogin3 {
     }
   }
 }
-

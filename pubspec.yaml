@@ -1,4 +1,4 @@
-name: moyo
+name: universus
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -39,7 +39,7 @@ dependencies:
   flutter_dotenv: ^5.1.0
   http: ^1.2.1
   flutter_secure_storage: ^9.0.0 # flutter_secure_storage 관련 패키지
-  ############################################################################################################
+  ###########################################flu#################################################################
   flutterflow_ui: ^0.2.0+1
   auto_size_text: 3.0.0
   from_css_color: 2.0.0

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:moyo/component/Login/KakaoLogin.dart';
-import 'package:moyo/component/Login/EmailLogin.dart';
-import 'package:moyo/component/MainPage.dart';
+import 'package:universus/component/Login/KakaoLogin.dart';
+import 'package:universus/component/Login/EmailLogin.dart';
+import 'package:universus/component/MainPage.dart';
 
 class Login extends StatelessWidget {
   @override

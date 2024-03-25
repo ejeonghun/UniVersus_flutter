@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:moyo/auth/AdditionalInfo_Widget.dart';
-import 'package:moyo/class/auth/kakaoauth.dart';
+import 'package:universus/auth/AdditionalInfo_Widget.dart';
+import 'package:universus/class/auth/kakaoauth.dart';
 
-import 'package:moyo/class/user/user.dart';
+import 'package:universus/class/user/user.dart';
 
 // Widget Import
-import 'package:moyo/auth/Login_Widget.dart';
-import 'package:moyo/component/MainPage.dart';
-import 'package:moyo/auth/CreateAccount_Widget.dart';
-import 'package:moyo/auth/PasswordForget_Widget.dart';
-import 'package:moyo/test/testscreen_Widget.dart';
-import 'package:moyo/auth/KakaoLogin.dart';
-import 'package:moyo/moim/placepicker.dart';
-import 'package:moyo/moim/jungmo/CreateJungmoWidget.dart';
+import 'package:universus/auth/Login_Widget.dart';
+import 'package:universus/component/MainPage.dart';
+import 'package:universus/auth/CreateAccount_Widget.dart';
+import 'package:universus/auth/PasswordForget_Widget.dart';
+import 'package:universus/test/testscreen_Widget.dart';
+import 'package:universus/auth/KakaoLogin.dart';
+import 'package:universus/moim/placepicker.dart';
+import 'package:universus/moim/jungmo/CreateJungmoWidget.dart';
 
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -71,7 +71,10 @@ class _MyAppState extends State<MyApp> {
         '/testscreen': (context) => TestscreenWidget(),
         '/testplacepicker': (context) => new PlacePickerScreen(),
         '/moim/createjungmo': (context) => CreatejungmoWidget(),
-        '/addinfo' :(context) => AdditionalInfoWidget(dto: KakaoAuthDto(memberStatus: 2), emailData: {'email' : '1231231', 'password' : 'asdfasdfasdf'},), // 테스트 용도
+        '/addinfo': (context) => AdditionalInfoWidget(
+              dto: KakaoAuthDto(memberStatus: 2),
+              emailData: {'email': '1231231', 'password': 'asdfasdfasdf'},
+            ), // 테스트 용도
       },
     );
   }

@@ -8,8 +8,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:moyo/class/api/ApiCall.dart';
-import 'package:moyo/class/user/user.dart';
+import 'package:universus/class/api/ApiCall.dart';
+import 'package:universus/class/user/user.dart';
 
 class LoginModel extends FlutterFlowModel<LoginWidget> {
   ///  State fields for stateful widgets in this page.

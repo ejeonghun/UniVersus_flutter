@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:moyo/component/Group.dart';
-import 'package:moyo/component/Group/GroupDetailWidget.dart';
+import 'package:universus/component/Group.dart';
+import 'package:universus/component/Group/GroupDetailWidget.dart';
 
 class MainPageGroupList extends StatelessWidget {
   final List<List<Group>> groups;

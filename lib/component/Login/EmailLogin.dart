@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:moyo/component/Login/EmailRegister.dart';
+import 'package:universus/component/Login/EmailRegister.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:moyo/component/MainPage.dart';
+import 'package:universus/component/MainPage.dart';
 
 class EmailLoginForm extends StatelessWidget {
   const EmailLoginForm({Key? key}) : super(key: key);
@@ -61,7 +61,7 @@ class _Logo extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            "MoYo Login",
+            "universus Login",
             textAlign: TextAlign.center,
             style: isSmallScreen
                 ? Theme.of(context).textTheme.headline5

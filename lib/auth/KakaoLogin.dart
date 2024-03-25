@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:moyo/class/user/user.dart';
+import 'package:universus/class/user/user.dart';
 
 class KakaoLogin {
   final storage = FlutterSecureStorage();

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:moyo/component/MainPage.dart';
+import 'package:universus/component/MainPage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:moyo/main.dart';
+import 'package:universus/main.dart';
 
 class MyPage extends StatefulWidget {
   @override
