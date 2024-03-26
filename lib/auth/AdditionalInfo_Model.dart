@@ -60,7 +60,7 @@ class AdditionalInfoModel extends FlutterFlowModel<AdditionalInfoWidget> {
     ApiCall api = ApiCall();
 
     // Backend 정보 가공
-    if (radioButtonValue.toString() == '남자') {
+    if (radioButtonValue.toString() == '남성') {
       gender = 'M';
     } else {
       gender = 'F';
@@ -79,10 +79,12 @@ class AdditionalInfoModel extends FlutterFlowModel<AdditionalInfoWidget> {
     });
     if (response['success'] == true) {
       debugPrint("회원가입 성공");
+      debugPrint(response.toString());
       return true;
     } else {
       debugPrint(response.toString());
       debugPrint("회원가입 실패");
+
       return false;
     }
   }

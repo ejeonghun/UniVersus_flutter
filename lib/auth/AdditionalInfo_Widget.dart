@@ -739,6 +739,8 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                           if (await _model.RegisterUser()) {
                             CustomSnackbar.success(
                                 context, "회원가입 성공", "회원가입에 성공했습니다.", 3);
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/login', (route) => false);
                           } else {
                             CustomSnackbar.error(
                                 context, "회원가입 실패", "회원가입에 실패했습니다.", 3);

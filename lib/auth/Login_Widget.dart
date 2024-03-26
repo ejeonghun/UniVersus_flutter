@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:universus/shared/CustomSnackbar.dart';
 import 'KakaoLogin3.dart';
 import 'AdditionalInfo_Widget.dart';
 
@@ -362,6 +363,16 @@ class _LoginWidgetState extends State<LoginWidget>
                               child: FFButtonWidget(
                                 onPressed: () async {
                                   // 로그인 백엔드 통신
+                                  if (await _model.sendLoginRequest() == true) {
+                                    CustomSnackbar.success(
+                                        context, "로그인 성공", "로그인에 성공하였습니다.", 3);
+                                    Navigator.of(context)
+                                        .pushNamedAndRemoveUntil(
+                                            '/main', (route) => false);
+                                  } else {
+                                    CustomSnackbar.error(context, "로그인 실패",
+                                        "이메일과 비밀번호를 확인해주세요.", 3);
+                                  }
                                 },
                                 text: '로그인',
                                 options: FFButtonOptions(
