@@ -1,4 +1,5 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:universus/class/api/ApiCall.dart';
 import 'PasswordForget_Widget.dart' show PasswordForgetWidget;
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
@@ -7,39 +8,70 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class PasswordForgetModel extends FlutterFlowModel<PasswordForgetWidget> {
-  ///  State fields for stateful widgets in this page.
-
   final formKey = GlobalKey<FormState>();
-  // State field(s) for emailAddress widget.
   FocusNode? emailAddressFocusNode;
   TextEditingController? emailAddressController;
   String? Function(BuildContext, String?)? emailAddressControllerValidator;
-  String? _emailAddressControllerValidator(BuildContext context, String? val) {
-    if (val == null || val.isEmpty) {
-      return '이메일을 입력하세요';
-    }
+  FocusNode? userNameFocusNode;
+  TextEditingController? userNameController;
+  String? Function(BuildContext, String?)? userNameControllerValidator;
+  FocusNode? verifyFocusNode;
+  TextEditingController? verifyController;
+  String? Function(BuildContext, String?)? verifyControllerValidator;
 
-    if (val.length < 6) {
-      return '올바른 이메일을 입력하세요';
-    }
+  late int memberIdx; // 인증 성공 시 MemberIdx를 반환하는데 Pwchange Api에서 사용해야함
 
-    return null;
+  void inputTest() {
+    debugPrint(emailAddressController?.text);
+    debugPrint(userNameController?.text);
+    debugPrint(verifyController?.text);
   }
 
-  // Stores action output result for [Backend Call - API (ClickLike)] action in Button-Login widget.
-  // ApiCallResponse? apiResult2od;
+  Future<bool> sendEmailRequest() async {
+    ApiCall api = ApiCall();
+    final response = await api.post('/pwFind/emailSend', {
+      'email': emailAddressController?.text,
+      'userName': userNameController?.text
+    });
+    if (response['success'] == true) {
+      debugPrint("이메일 전송");
+      return true;
+    }
+    debugPrint(response.toString());
+    debugPrint("이메일 전송 실패");
+    return false;
+  }
 
-  /// Initialization and disposal methods.
+  Future<bool> verifyEmail() async {
+    ApiCall api = ApiCall();
+    final response = await api.post('/pwFind/email/auth', {
+      'email': emailAddressController?.text,
+      'verifcode': verifyController?.text
+    });
+    if (response['success'] == true) {
+      debugPrint(response.toString());
+      debugPrint("인증 성공");
+      memberIdx = response['data']['memberIdx'];
+      return true;
+    }
+    debugPrint(response.toString());
+    debugPrint("인증 실패");
+    return false;
+  }
 
   @override
-  void initState(BuildContext context) {
-    emailAddressControllerValidator = _emailAddressControllerValidator;
-  }
+  void initState(BuildContext context) {}
 
   @override
   void dispose() {
     emailAddressFocusNode?.dispose();
     emailAddressController?.dispose();
+
+    userNameFocusNode?.dispose();
+    userNameController?.dispose();
+
+    verifyFocusNode?.dispose();
+    verifyController?.dispose();
   }
 
   /// Action blocks are added here.
