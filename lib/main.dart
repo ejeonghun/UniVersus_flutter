@@ -12,7 +12,7 @@ import 'package:universus/component/MainPage.dart';
 import 'package:universus/auth/CreateAccount_Widget.dart';
 import 'package:universus/auth/PasswordForget_Widget.dart';
 import 'package:universus/test/testscreen_Widget.dart';
-import 'package:universus/auth/KakaoLogin.dart';
+import 'package:universus/auth/tmp/KakaoLogin.dart';
 import 'package:universus/moim/placepicker.dart';
 import 'package:universus/moim/jungmo/CreateJungmoWidget.dart';
 

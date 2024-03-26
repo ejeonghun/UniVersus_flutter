@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:universus/shared/CustomSnackbar.dart';
-import 'KakaoLogin3.dart';
+import 'tmp/KakaoLogin3.dart';
 import 'AdditionalInfo_Widget.dart';
 
 import 'Login_Model.dart';
