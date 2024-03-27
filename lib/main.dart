@@ -8,12 +8,13 @@ import 'package:universus/class/user/user.dart';
 
 // Widget Import
 import 'package:universus/auth/Login_Widget.dart';
+import 'package:universus/club/CreateClub_Widget.dart';
 import 'package:universus/component/MainPage.dart';
 import 'package:universus/auth/CreateAccount_Widget.dart';
 import 'package:universus/auth/PasswordForget_Widget.dart';
 import 'package:universus/test/testscreen_Widget.dart';
 import 'package:universus/auth/tmp/KakaoLogin.dart';
-import 'package:universus/moim/placepicker.dart';
+import 'package:universus/shared/placepicker.dart';
 import 'package:universus/moim/jungmo/CreateJungmoWidget.dart';
 
 import 'package:intl/intl.dart';
@@ -56,7 +57,7 @@ class _MyAppState extends State<MyApp> {
                   return SplashScreen();
                 } else {
                   if (snapshot.data == true) {
-                    return MainPage();
+                    return TestscreenWidget();
                   } else {
                     return LoginWidget();
                   }
@@ -73,6 +74,7 @@ class _MyAppState extends State<MyApp> {
         '/addinfo': (context) => AdditionalInfoWidget(
               emailData: {'email': '1231231', 'university': 'asdfasdfasdf'},
             ), // 테스트 용도
+        '/createClub': (context) => CreateClubWidget(),
       },
     );
   }

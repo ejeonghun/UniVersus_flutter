@@ -128,9 +128,9 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                               child: FFButtonWidget(
                                 onPressed: () async {
                                   Navigator.of(context)
-                                      .pushNamed('/moim/createjungmo');
+                                      .pushNamed('/createClub');
                                 },
-                                text: '정모 만들기',
+                                text: 'Club(모임) 만들기',
                                 options: FFButtonOptions(
                                   height: 40,
                                   padding: EdgeInsetsDirectional.fromSTEB(

@@ -7,7 +7,7 @@ import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
-import 'package:universus/moim/placepicker.dart';
+import 'package:universus/shared/placepicker.dart';
 
 import 'CreateJungmoModel.dart';
 export 'CreateJungmoModel.dart';

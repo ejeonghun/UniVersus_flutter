@@ -63,6 +63,9 @@ dependencies:
   google_maps_place_picker_mb: ^3.1.2
   dropdown_search: ^5.0.6 # dropdown_search 관련 패키지
   animated_custom_dropdown: ^3.0.0
+  image_picker: ^1.0.7
+  dio: ^5.4.2
+  file_picker: ^8.0.0+1
 
 
 dev_dependencies:

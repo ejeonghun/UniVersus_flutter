@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class UserData {
@@ -6,7 +7,11 @@ class UserData {
   String platform; // 플랫폼 -> 'kakao' , 'email'
   String memberIdx; // 회원번호
 
-  UserData({required this.id, required this.token, required this.platform, required this.memberIdx});
+  UserData(
+      {required this.id,
+      required this.token,
+      required this.platform,
+      required this.memberIdx});
 
   // 사용자 정보를 Secure Storage에 저장하는 메소드
   Future<bool> saveUser() async {
@@ -40,9 +45,21 @@ class UserData {
         s_token != null &&
         s_memberIdx != null &&
         s_platform != null) {
-      return UserData(id: s_id, token: s_token, memberIdx: s_memberIdx, platform: s_platform);
+      return UserData(
+          id: s_id,
+          token: s_token,
+          memberIdx: s_memberIdx,
+          platform: s_platform);
     } else {
       return null;
     }
+  }
+
+  static Future<String?> getMemberIdx() async {
+    final storage = FlutterSecureStorage();
+    if (await storage.read(key: 'memberIdx') == null) {
+      return null;
+    }
+    return storage.read(key: 'memberIdx');
   }
 }
