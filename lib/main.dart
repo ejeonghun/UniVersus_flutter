@@ -9,6 +9,7 @@ import 'package:universus/class/user/user.dart';
 // Widget Import
 import 'package:universus/auth/Login_Widget.dart';
 import 'package:universus/club/CreateClub_Widget.dart';
+import 'package:universus/club/UpdateClub_Widget.dart';
 import 'package:universus/component/MainPage.dart';
 import 'package:universus/auth/CreateAccount_Widget.dart';
 import 'package:universus/auth/PasswordForget_Widget.dart';
@@ -75,6 +76,8 @@ class _MyAppState extends State<MyApp> {
               emailData: {'email': '1231231', 'university': 'asdfasdfasdf'},
             ), // 테스트 용도
         '/createClub': (context) => CreateClubWidget(),
+        '/club/update': (context) =>
+            UpdateClubWidget(clubId: "9"), // 테스트용 나중에 clubId 파라미터도 같이 전달해야함
       },
     );
   }

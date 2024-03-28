@@ -10,26 +10,27 @@ import 'package:universus/shared/EventList.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart';
 
-import 'CreateClub_Model.dart';
-export 'CreateClub_Model.dart';
+import 'UpdateClub_Model.dart';
+export 'UpdateClub_Model.dart';
 
-class CreateClubWidget extends StatefulWidget {
-  const CreateClubWidget({super.key});
+class UpdateClubWidget extends StatefulWidget {
+  final String clubId;
+  const UpdateClubWidget({super.key, required this.clubId});
 
   @override
-  State<CreateClubWidget> createState() => _CreateClubWidgetState();
+  State<UpdateClubWidget> createState() => _UpdateClubWidgetState();
 }
 
-class _CreateClubWidgetState extends State<CreateClubWidget> {
-  late CreateClubModel _model;
+class _UpdateClubWidgetState extends State<UpdateClubWidget> {
+  late UpdateClubModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
+    _model = createModel(context, () => UpdateClubModel());
+    _model.getClub(widget.clubId);
     super.initState();
-
-    _model = createModel(context, () => CreateClubModel());
 
     _model.clubNameController ??= TextEditingController();
     _model.clubNameFocusNode ??= FocusNode();
@@ -77,7 +78,7 @@ class _CreateClubWidgetState extends State<CreateClubWidget> {
             },
           ),
           title: Text(
-            '모임 생성',
+            '모임 수정',
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Outfit',
                   color: Color(0xFF14181B),
@@ -122,8 +123,7 @@ class _CreateClubWidgetState extends State<CreateClubWidget> {
                                       onTap: () async {
                                         if (await _model.pickImage()) {
                                           debugPrint('이미지 선택');
-                                          setState(
-                                              () {}); // 이미지가 선택되었으므로 화면을 다시 그립니다.
+                                          setState(() {});
                                         }
                                       },
                                       child: Container(
@@ -145,31 +145,36 @@ class _CreateClubWidgetState extends State<CreateClubWidget> {
                                                 File(_model.imageFile!.path),
                                                 fit: BoxFit.cover,
                                               )
-                                            : Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                0, 35, 0, 0),
-                                                    child: Icon(
-                                                      Icons.camera_alt,
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                                            : _model.uploadedImageUrl != null
+                                                ? Image.network(
+                                                    _model.uploadedImageUrl!,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(0, 35,
+                                                                    0, 0),
+                                                        child: Icon(
+                                                          Icons.camera_alt,
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
                                                               .primaryText,
-                                                      size: 100,
-                                                    ),
+                                                          size: 100,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '사진을 등록해주세요.',
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyText1,
+                                                      ),
+                                                    ],
                                                   ),
-                                                  Text(
-                                                    '사진을 등록해주세요.',
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyText1,
-                                                  ),
-                                                ],
-                                              ),
                                       ),
                                     ),
                                   ],
@@ -181,6 +186,7 @@ class _CreateClubWidgetState extends State<CreateClubWidget> {
                                 child: TextFormField(
                                   controller: _model.clubNameController,
                                   focusNode: _model.clubNameFocusNode,
+                                  // initialValue: _model.clubNameInit,
                                   textCapitalization: TextCapitalization.words,
                                   obscureText: false,
                                   decoration: InputDecoration(
@@ -307,7 +313,8 @@ class _CreateClubWidgetState extends State<CreateClubWidget> {
                                             style: FlutterFlowTheme.of(context)
                                                 .titleLarge,
                                           ),
-                                          count: _model.countControllerValue ??=
+                                          count: _model
+                                                  .countControllerValue ??= // 변수가 null이면 4로 초기화됨
                                               4,
                                           updateCount: (count) => setState(() =>
                                               _model.countControllerValue =
@@ -322,19 +329,19 @@ class _CreateClubWidgetState extends State<CreateClubWidget> {
                                 ),
                               ),
                               Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      20, 0, 20, 16),
-                                  child: EventList(
-                                    onEventSelected: (Event? selectedEvent) {
-                                      if (selectedEvent != null) {
-                                        int eventId =
-                                            selectedEvent.getEventId();
-                                        debugPrint("이벤트 이름 : $selectedEvent");
-                                        debugPrint("이벤트 아이디 : $eventId");
-                                        _model.eventId = eventId;
-                                      }
-                                    },
-                                  )),
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    20, 0, 20, 16),
+                                child: EventList(
+                                  onEventSelected: (Event? selectedEvent) {
+                                    if (selectedEvent != null) {
+                                      int eventId = selectedEvent.getEventId();
+                                      debugPrint("이벤트 이름 : $selectedEvent");
+                                      debugPrint("이벤트 아이디 : $eventId");
+                                      _model.eventId = eventId;
+                                    }
+                                  },
+                                ),
+                              ),
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     20, 0, 20, 16),
@@ -490,13 +497,15 @@ class _CreateClubWidgetState extends State<CreateClubWidget> {
                                   child: FFButtonWidget(
                                     onPressed: () async {
                                       _model.inputTest();
-                                      if (await _model.uploadFile() == true) {
+                                      if (await _model.updateClub() == true) {
                                         debugPrint('성공');
-                                        // 추후 생성된 클럽으로 이동하는 로직 추가
+                                        // 수정된 클럽으로 이동하는 로직 필요
                                         Navigator.of(context).pop();
+                                      } else {
+                                        debugPrint('오류 발생');
                                       }
                                     },
-                                    text: '모임 생성 ',
+                                    text: '모임 수정 ',
                                     options: FFButtonOptions(
                                       width: 270,
                                       height: 50,
