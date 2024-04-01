@@ -72,9 +72,6 @@ class _MyAppState extends State<MyApp> {
         '/testscreen': (context) => TestscreenWidget(),
         '/testplacepicker': (context) => new PlacePickerScreen(),
         '/moim/createjungmo': (context) => CreatejungmoWidget(),
-        '/addinfo': (context) => AdditionalInfoWidget(
-              emailData: {'email': '1231231', 'university': 'asdfasdfasdf'},
-            ), // 테스트 용도
         '/createClub': (context) => CreateClubWidget(),
         '/club/update': (context) =>
             UpdateClubWidget(clubId: "9"), // 테스트용 나중에 clubId 파라미터도 같이 전달해야함
@@ -134,7 +131,7 @@ class _SplashScreenState extends State<SplashScreen> {
               builder: (context, value, child) {
                 return Opacity(
                   opacity: value,
-                  child: Text('나의 모임을 만나는 앱',
+                  child: Text('대학교끼리 경쟁을 해보세요!',
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,

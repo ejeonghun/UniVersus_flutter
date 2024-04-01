@@ -1,5 +1,6 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:universus/class/api/ApiCall.dart';
+import 'package:universus/shared/CustomSnackbar.dart';
 import 'AdditionalInfo_Widget.dart' show AdditionalInfoWidget;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,8 @@ class AdditionalInfoModel extends FlutterFlowModel<AdditionalInfoWidget> {
 
   DateTime? datePicked;
 
+  int? selectedDeptId;
+
   void inputTest() {
     debugPrint(univId.toString());
     debugPrint(universityController?.text);
@@ -56,7 +59,7 @@ class AdditionalInfoModel extends FlutterFlowModel<AdditionalInfoWidget> {
 
   String? gender;
 
-  Future<bool> RegisterUser() async {
+  Future<bool> RegisterUser(BuildContext context) async {
     ApiCall api = ApiCall();
 
     // Backend 정보 가공
@@ -66,6 +69,19 @@ class AdditionalInfoModel extends FlutterFlowModel<AdditionalInfoWidget> {
       gender = 'F';
     }
 
+    // 변수들이 null인지 체크
+    if (univId == null ||
+        emailController?.text == null ||
+        passwordController?.text == null ||
+        fullNameController?.text == null ||
+        nicknameController?.text == null ||
+        datePicked == null ||
+        selectedDeptId == null) {
+      // 스낵바 띄우기
+      CustomSnackbar.error(context, "회원가입 실패", "모든 필수 정보를 입력해주세요.", 3);
+      return false;
+    }
+    inputTest();
     var response = await api.post('/auth/join', {
       'univId': univId,
       'email': emailController?.text,
@@ -76,6 +92,7 @@ class AdditionalInfoModel extends FlutterFlowModel<AdditionalInfoWidget> {
       'nickname': nicknameController?.text,
       'gender': gender,
       'address': '주소',
+      'deptId': selectedDeptId,
     });
     if (response['success'] == true) {
       debugPrint("회원가입 성공");

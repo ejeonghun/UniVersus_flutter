@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:universus/auth/AdditionalInfo_Widget.dart';
 
 import 'testscreen_Model.dart';
 export 'testscreen_Model.dart';
@@ -449,6 +450,54 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                                       .pushNamed('/club/update');
                                 },
                                 text: '모임 수정',
+                                options: FFButtonOptions(
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          AdditionalInfoWidget(emailData: {
+                                        'email': 'wjdgns4019@g.yju.ac.kr',
+                                        'university': '영진전문대학교',
+                                        'univId': "214"
+                                      }),
+                                    ),
+                                  );
+                                },
+                                text: '추가정보 기입',
                                 options: FFButtonOptions(
                                   height: 40,
                                   padding: EdgeInsetsDirectional.fromSTEB(

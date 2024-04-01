@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:universus/shared/CustomSnackbar.dart';
+import 'package:universus/shared/DeptList.dart';
 import 'AdditionalInfo_Model.dart';
 export 'AdditionalInfo_Model.dart';
 
@@ -321,6 +322,41 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                                       validator: _model
                                           .passwordControllerValidator
                                           .asValidator(context),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 0, 0, 16),
+                                      child: Container(
+                                          width: double.infinity,
+                                          height: 56,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .surface, // 대응되는 색상으로 변경해야 할 수 있음
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            border: Border.all(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurfaceVariant, // 대응되는 색상으로 변경해야 할 수 있음
+                                              width: 2,
+                                            ),
+                                          ),
+                                          child: DeptList(
+                                            univId: _model.univId!.toString(),
+                                            onDeptSelected: (selectedDept) {
+                                              if (selectedDept != null) {
+                                                // Access and use the selected department here
+                                                print(
+                                                    'Selected department: ${selectedDept.deptName}'
+                                                    'Selected department: ${selectedDept.deptId}');
+                                                _model.selectedDeptId =
+                                                    selectedDept.deptId;
+                                              }
+                                            },
+                                          )),
                                     ),
                                     TextFormField(
                                       controller: _model.fullNameController,
@@ -735,8 +771,8 @@ class _AdditionalInfoWidgetState extends State<AdditionalInfoWidget> {
                               !_model.formKey.currentState!.validate()) {
                             return;
                           }
-                          _model.inputTest();
-                          if (await _model.RegisterUser()) {
+
+                          if (await _model.RegisterUser(context)) {
                             CustomSnackbar.success(
                                 context, "회원가입 성공", "회원가입에 성공했습니다.", 3);
                             Navigator.of(context).pushNamedAndRemoveUntil(

@@ -40,7 +40,7 @@ class _UnivListState extends State<UnivList> {
 
   Future<List<Univ>> _fetchUniversityList() async {
     ApiCall api = ApiCall();
-    final response = await api.get('/university/list');
+    final response = await api.get('/university/univList');
     if (response['success'] == true) {
       return List<Univ>.from(
           response['data'].map((item) => Univ(item['schoolName'])).toList());
