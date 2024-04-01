@@ -44,53 +44,27 @@ class CreateClubModel extends FlutterFlowModel<CreateClubWidget> {
     debugPrint(countControllerValue.toString());
   }
 
-  Future<bool> createClub() async {
-    ApiCall api = ApiCall();
-    final response = await api.multipartReq(
-        '/club/create',
-        {
-          'memberIdx': '103',
-          'clubName': clubNameController?.text,
-          'price': clubPriceController?.text,
-          'introduction': clubIntroController?.text,
-          'eventId': eventId.toString(),
-          'maximumMembers': countControllerValue.toString(),
-        },
-        imageFile: imageFile);
-    if (response['success'] == true) {
-      debugPrint(response.toString());
-      debugPrint("동아리 생성 성공");
-      return true;
-    }
-    debugPrint(response.toString());
-    debugPrint("동아리 생성 실패");
-    return false;
-  }
-
-  // Future<bool> uploadImage() async {
-  //   Dio dio = Dio();
-  //   String path = imageFile; // 이미지 파일 경로
-  //   String url = 'https://moyoapi.lunaweb.dev/api/v1/club/create'; // 서버 URL
-
-  //   FormData formData = FormData.fromMap({
-  //     "clubImage":
-  //         await MultipartFile.fromFile(path, filename: "upload.jpg"), // 파일 업로드
-  //     'memberIdx': '103',
-  //     'clubName': clubNameController?.text,
-  //     'price': clubPriceController?.text,
-  //     'introduction': clubIntroController?.text,
-  //     'eventId': eventId.toString(),
-  //     'maximumMembers': countControllerValue.toString(),
-  //   });
-
-  //   var response = await dio.post(url, data: formData);
-  //   if (response.statusCode == 200) {
-  //     print('Image uploaded successfully');
+  // Future<bool> createClub() async {
+  //   ApiCall api = ApiCall();
+  //   final response = await api.multipartReq(
+  //       '/club/create',
+  //       {
+  //         'memberIdx': '103',
+  //         'clubName': clubNameController?.text,
+  //         'price': clubPriceController?.text,
+  //         'introduction': clubIntroController?.text,
+  //         'eventId': eventId.toString(),
+  //         'maximumMembers': countControllerValue.toString(),
+  //       },
+  //       imageFile: imageFile);
+  //   if (response['success'] == true) {
+  //     debugPrint(response.toString());
+  //     debugPrint("동아리 생성 성공");
   //     return true;
-  //   } else {
-  //     print('Image upload failed');
-  //     return false;
   //   }
+  //   debugPrint(response.toString());
+  //   debugPrint("동아리 생성 실패");
+  //   return false;
   // }
 
 // 1개의 파일 업로드
@@ -128,6 +102,7 @@ class CreateClubModel extends FlutterFlowModel<CreateClubWidget> {
         'introduction': clubIntroController?.text,
         'eventId': eventId.toString(),
         'maximumMembers': countControllerValue.toString(),
+        'univId': await UserData.getUnivId(),
       });
 
       // 업로드 요청
@@ -137,7 +112,22 @@ class CreateClubModel extends FlutterFlowModel<CreateClubWidget> {
       return response.statusCode == 200;
     } else {
       // 아무런 파일도 선택되지 않음.
-      return false;
+      var dio = Dio();
+      var formData = FormData.fromMap({
+        'memberIdx': await UserData.getMemberIdx(),
+        'clubName': clubNameController?.text,
+        'price': clubPriceController?.text,
+        'introduction': clubIntroController?.text,
+        'eventId': eventId.toString(),
+        'maximumMembers': countControllerValue.toString(),
+        'univId': await UserData.getUnivId(),
+      });
+
+      // 업로드 요청
+      final response = await dio.post(
+          'https://moyoapi.lunaweb.dev/api/v1/club/create',
+          data: formData);
+      return response.statusCode == 200;
     }
   }
 

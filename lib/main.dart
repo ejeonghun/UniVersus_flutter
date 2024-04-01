@@ -13,6 +13,7 @@ import 'package:universus/club/UpdateClub_Widget.dart';
 import 'package:universus/component/MainPage.dart';
 import 'package:universus/auth/CreateAccount_Widget.dart';
 import 'package:universus/auth/PasswordForget_Widget.dart';
+import 'package:universus/member/profile_Widget.dart';
 import 'package:universus/test/testscreen_Widget.dart';
 import 'package:universus/auth/tmp/KakaoLogin.dart';
 import 'package:universus/shared/placepicker.dart';
@@ -33,6 +34,9 @@ void main() async {
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  static final ValueNotifier<ThemeMode> themeNotifier =
+      ValueNotifier(ThemeMode.light);
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -48,35 +52,44 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: '/',
-      routes: {
-        '/': (context) => FutureBuilder(
-              future: _loginInfo,
-              builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return SplashScreen();
-                } else {
-                  if (snapshot.data == true) {
-                    return TestscreenWidget();
-                  } else {
-                    return LoginWidget();
-                  }
-                }
-              },
-            ),
-        '/main': (context) => TestscreenWidget(),
-        '/login': (context) => LoginWidget(),
-        '/register': (context) => CreateAccountWidget(),
-        '/passwordforgot': (context) => PasswordForgetWidget(),
-        '/testscreen': (context) => TestscreenWidget(),
-        '/testplacepicker': (context) => new PlacePickerScreen(),
-        '/moim/createjungmo': (context) => CreatejungmoWidget(),
-        '/createClub': (context) => CreateClubWidget(),
-        '/club/update': (context) =>
-            UpdateClubWidget(clubId: "9"), // 테스트용 나중에 clubId 파라미터도 같이 전달해야함
-      },
-    );
+    return ValueListenableBuilder(
+        valueListenable: MyApp.themeNotifier,
+        builder: (context, ThemeMode value, child) {
+          return MaterialApp(
+            darkTheme: ThemeData.dark(),
+            theme: ThemeData.light(),
+            themeMode: value,
+            initialRoute: '/',
+            routes: {
+              '/': (context) => FutureBuilder(
+                    future: _loginInfo,
+                    builder:
+                        (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return SplashScreen();
+                      } else {
+                        if (snapshot.data == true) {
+                          return TestscreenWidget();
+                        } else {
+                          return LoginWidget();
+                        }
+                      }
+                    },
+                  ),
+              '/main': (context) => TestscreenWidget(),
+              '/login': (context) => LoginWidget(),
+              '/register': (context) => CreateAccountWidget(),
+              '/passwordforgot': (context) => PasswordForgetWidget(),
+              '/testscreen': (context) => TestscreenWidget(),
+              '/testplacepicker': (context) => new PlacePickerScreen(),
+              '/moim/createjungmo': (context) => CreatejungmoWidget(),
+              '/createClub': (context) => CreateClubWidget(),
+              '/club/update': (context) => UpdateClubWidget(
+                  clubId: "9"), // 테스트용 나중에 clubId 파라미터도 같이 전달해야함
+              '/profile': (context) => ProfileWidget(),
+            },
+          );
+        });
   }
 
   Future<bool> checkLoginInfo() async {

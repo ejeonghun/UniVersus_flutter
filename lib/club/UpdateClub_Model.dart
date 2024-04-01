@@ -29,6 +29,7 @@ class UpdateClubModel extends FlutterFlowModel<UpdateClubWidget> {
 
   int? eventId; // 카테고리 아이디
   String? uploadedImageUrl; // 이미지 URL
+  String? clubId; // 모임 id
 
   void inputTest() {
     debugPrint(clubNameController?.text);
@@ -38,7 +39,7 @@ class UpdateClubModel extends FlutterFlowModel<UpdateClubWidget> {
     debugPrint(countControllerValue.toString());
   }
 
-  Future<void> getClub(String clubId) async {
+  Future<bool> getClub(String clubId) async {
     ApiCall api = ApiCall();
     final response = await api.get('/club/info?clubId=9');
     if (response['success'] == true) {
@@ -52,9 +53,12 @@ class UpdateClubModel extends FlutterFlowModel<UpdateClubWidget> {
       eventId = response['data']['eventId'];
       print(response['data']['clubImage'][0]['imageUrl']);
       uploadedImageUrl = response['data']['clubImage'][0]['imageUrl'];
+      this.clubId = clubId;
+      return true;
     } else {
       debugPrint(response.toString());
       debugPrint("동아리 정보 가져오기 실패");
+      return false;
     }
   }
 
@@ -78,14 +82,13 @@ class UpdateClubModel extends FlutterFlowModel<UpdateClubWidget> {
   }
 
   Future<bool> updateClub() async {
-    // file picker를 통해 파일 선택
-    // FilePickerResult? result = await FilePicker.platform.pickFiles();
     var formData;
     if (imageFile != null) {
       final filePath = imageFile!.path;
 
       // 파일 경로를 통해 formData 생성
       formData = FormData.fromMap({
+        'clubId': clubId,
         'clubImage': await MultipartFile.fromFile(filePath),
         'memberIdx': await UserData.getMemberIdx(),
         'clubName': clubNameController?.text,
@@ -93,21 +96,26 @@ class UpdateClubModel extends FlutterFlowModel<UpdateClubWidget> {
         'introduction': clubIntroController?.text,
         'eventId': eventId.toString(),
         'maximumMembers': countControllerValue.toString(),
+        'univId': await UserData.getUnivId(),
       });
     } else {
+      // 이미지 파일이 없을 경우.
       formData = FormData.fromMap({
+        'clubId': clubId,
         'memberIdx': await UserData.getMemberIdx(),
         'clubName': clubNameController?.text,
         'price': clubPriceController?.text,
         'introduction': clubIntroController?.text,
         'eventId': eventId.toString(),
         'maximumMembers': countControllerValue.toString(),
+        'univId': await UserData.getUnivId(),
       });
     }
     // 업로드 요청
     var dio = Dio();
-    final response = await dio
-        .post('https://moyoapi.lunaweb.dev/api/v1/club/create', data: formData);
+    final response = await dio.patch(
+        'https://moyoapi.lunaweb.dev/api/v1/club/modify',
+        data: formData);
     return response.statusCode == 200;
   }
 

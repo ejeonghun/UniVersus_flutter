@@ -298,7 +298,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                                   EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  // context.pushNamed('profile');
+                                  Navigator.of(context).pushNamed('/profile');
                                 },
                                 text: '프로필',
                                 options: FFButtonOptions(
@@ -328,7 +328,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                                   EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  // context.pushNamed('profile_edit');
+                                  Navigator.of(context).pushNamed("/profile");
                                 },
                                 text: '프로필 수정',
                                 options: FFButtonOptions(

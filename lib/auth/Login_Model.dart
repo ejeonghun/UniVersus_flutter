@@ -110,6 +110,7 @@ class LoginModel extends FlutterFlowModel<LoginWidget> {
         token: responseBody['data']['tokenDto']['accessToken'].toString(),
         platform: 'email',
         memberIdx: responseBody['data']['memberIdx'].toString(),
+        univId: responseBody['data']['univId'].toString(),
       );
       userdata.saveUser(); // 유저 정보 디바이스 저장
       print(responseBody['data']['tokenDto']['accessToken']

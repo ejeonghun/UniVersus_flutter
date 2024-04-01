@@ -42,6 +42,12 @@ class _UpdateClubWidgetState extends State<UpdateClubWidget> {
     _model.clubIntroFocusNode ??= FocusNode();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    // 1초 후에 setState를 호출하여 UI를 다시 그립니다.
+    Future.delayed(Duration(seconds: 1), () {
+      setState(() {
+        // 여기에 상태를 업데이트하는 코드를 작성합니다.
+      });
+    });
   }
 
   @override
@@ -59,9 +65,8 @@ class _UpdateClubWidgetState extends State<UpdateClubWidget> {
           : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
-          backgroundColor: Colors.white,
           automaticallyImplyLeading: false,
           leading: FlutterFlowIconButton(
             borderColor: Colors.transparent,
@@ -81,7 +86,6 @@ class _UpdateClubWidgetState extends State<UpdateClubWidget> {
             '모임 수정',
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Outfit',
-                  color: Color(0xFF14181B),
                   fontSize: 22,
                   fontWeight: FontWeight.normal,
                 ),

@@ -6,6 +6,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:universus/shared/CustomSnackbar.dart';
 import 'package:universus/shared/EventList.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart';
@@ -58,9 +59,8 @@ class _CreateClubWidgetState extends State<CreateClubWidget> {
           : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
-          backgroundColor: Colors.white,
           automaticallyImplyLeading: false,
           leading: FlutterFlowIconButton(
             borderColor: Colors.transparent,
@@ -80,7 +80,6 @@ class _CreateClubWidgetState extends State<CreateClubWidget> {
             '모임 생성',
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Outfit',
-                  color: Color(0xFF14181B),
                   fontSize: 22,
                   fontWeight: FontWeight.normal,
                 ),
@@ -494,6 +493,10 @@ class _CreateClubWidgetState extends State<CreateClubWidget> {
                                         debugPrint('성공');
                                         // 추후 생성된 클럽으로 이동하는 로직 추가
                                         Navigator.of(context).pop();
+                                      } else {
+                                        debugPrint('실패');
+                                        CustomSnackbar.error(context,
+                                            '모임 생성 실패', '모임 생성에 실패했습니다.', 3);
                                       }
                                     },
                                     text: '모임 생성 ',

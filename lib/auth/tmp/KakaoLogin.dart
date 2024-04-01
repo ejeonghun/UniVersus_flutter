@@ -63,7 +63,8 @@ class KakaoLogin {
             id: email!,
             token: responseBody['data']['tokenDto']['accessToken'].toString(),
             platform: 'kakao',
-            memberIdx: "1");
+            memberIdx: "1",
+            univId: "1");
         await myUser.saveUser();
 
         return true;
@@ -93,7 +94,8 @@ class KakaoLogin {
               token: LoginResponseBody['data']['tokenDto']['accessToken']
                   .toString(),
               platform: 'kakao',
-              memberIdx: "1");
+              memberIdx: "1",
+              univId: "1");
           await myUser.saveUser();
 
           return true;
