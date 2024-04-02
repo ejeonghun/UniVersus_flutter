@@ -20,11 +20,12 @@ class ProfileModel extends FlutterFlowModel<ProfileWidget> {
       return userProfile(
           userName: response['userName'],
           nickname: response['nickname'],
+          memberIdx: response['memberIdx'].toString(),
           univName: response['univId'].toString(),
           deptName: response['deptId'].toString(),
           profileImage: response['profileImage'] != null &&
                   response['profileImage'].isNotEmpty
-              ? response['profileImage']
+              ? response['profileImage'][0]['imageUrl']
               : 'https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-15.png');
     } else {
       // 조회 실패

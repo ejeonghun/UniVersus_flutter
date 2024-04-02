@@ -450,9 +450,11 @@ class _PasswordForgetWidgetState extends State<PasswordForgetWidget> {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) =>
                                           PasswordChangeWidget(
-                                              email: _model
-                                                  .emailAddressController
-                                                  .text, memberIdx: _model.memberIdx,)));
+                                            email: _model
+                                                .emailAddressController.text,
+                                            memberIdx:
+                                                _model.memberIdx.toString(),
+                                          )));
                                 } else {
                                   CustomSnackbar.error(context, "인증 실패",
                                       "인증번호가 일치하지 않습니다. \n다시 확인해주세요.", 3);

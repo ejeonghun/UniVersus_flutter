@@ -4,13 +4,15 @@ class userProfile {
   String univName;
   String deptName;
   String profileImage;
+  String memberIdx;
 
   userProfile(
       {required this.userName,
       required this.nickname,
       required this.univName,
       required this.deptName,
-      required this.profileImage});
+      required this.profileImage,
+      required this.memberIdx});
 
   static userProfile nullPut() {
     return userProfile(
@@ -18,7 +20,8 @@ class userProfile {
         nickname: '재시도',
         univName: '',
         deptName: '',
-        profileImage: '');
+        profileImage: '',
+        memberIdx: '');
   }
 
 // getter
@@ -27,4 +30,5 @@ class userProfile {
   String get getUnivName => univName;
   String get getDeptName => deptName;
   String get getProfileImage => profileImage;
+  String get getMemberIdx => memberIdx;
 }

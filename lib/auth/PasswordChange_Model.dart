@@ -1,7 +1,6 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
-import 'package:universus/class/api/ApiCall.dart';
+import 'package:universus/class/api/DioApiCall.dart';
 import 'PasswordChange_Widget.dart' show PasswordChangeWidget;
-import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,8 +9,6 @@ import 'package:provider/provider.dart';
 class PasswordChangeModel extends FlutterFlowModel<PasswordChangeWidget> {
   ///  State fields for stateful widgets in this page.
 
-  late final String email;
-
   final unfocusNode = FocusNode();
   final formKey = GlobalKey<FormState>();
   // State field(s) for emailAddress widget.
@@ -19,28 +16,33 @@ class PasswordChangeModel extends FlutterFlowModel<PasswordChangeWidget> {
   TextEditingController? emailAddressController1;
   String? Function(BuildContext, String?)? emailAddressController1Validator;
   // State field(s) for emailAddress widget.
-  FocusNode? passwordFocusNode2;
-  TextEditingController? passwordController2;
-  String? Function(BuildContext, String?)? passwordController2Validator;
+  FocusNode? emailAddressFocusNode2;
+  TextEditingController? emailAddressController2;
+  late bool emailAddressVisibility;
+  String? Function(BuildContext, String?)? emailAddressController2Validator;
 
-  late int memberIdx;
+  late String memberIdx;
 
   Future<bool> changePassword() async {
-    // 비밀번호 변경 요청
-    ApiCall api = ApiCall();
-    final response = await api.post('/pwChange', {
+    // 비밀번호 변경 API
+    DioApiCall api = DioApiCall();
+    final response = await api.post('/member/updatePw', {
+      'memberIdx': memberIdx,
       'email': emailAddressController1?.text,
-      'password': passwordController2?.text,
-      'memberIdx': memberIdx
+      'password': emailAddressController2?.text
     });
     if (response['success'] == true) {
+      debugPrint("비밀번호 변경 성공");
       return true;
+    } else {
+      return false;
     }
-    return false;
   }
 
   @override
-  void initState(BuildContext context) {}
+  void initState(BuildContext context) {
+    emailAddressVisibility = false;
+  }
 
   @override
   void dispose() {
@@ -48,11 +50,7 @@ class PasswordChangeModel extends FlutterFlowModel<PasswordChangeWidget> {
     emailAddressFocusNode1?.dispose();
     emailAddressController1?.dispose();
 
-    passwordFocusNode2?.dispose();
-    passwordController2?.dispose();
+    emailAddressFocusNode2?.dispose();
+    emailAddressController2?.dispose();
   }
-
-  /// Action blocks are added here.
-
-  /// Additional helper methods are added here.
 }
