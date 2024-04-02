@@ -30,6 +30,19 @@ class UserData {
     return true;
   }
 
+  static Future<bool> deleteUser() async {
+    final storage = FlutterSecureStorage();
+
+    await storage.delete(key: 'user_id');
+    await storage.delete(key: 'token');
+    await storage.delete(key: 'memberIdx');
+    await storage.delete(key: 'platform');
+    await storage.delete(key: 'univId');
+
+    print("유저 정보 삭제 완료");
+    return true;
+  }
+
   // 사용자 정보를 Secure Storage에서 불러와서 값이 있으면 반환해주는 메소드
   static Future<UserData?> getUser() async {
     String? s_id;

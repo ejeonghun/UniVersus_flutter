@@ -51,4 +51,28 @@ class DioApiCall {
       return {'error': e.toString()};
     }
   }
+
+  Future<Map<String, dynamic>> multipartReq(
+      String url, Map<String, dynamic> data) async {
+    try {
+      var formData = FormData.fromMap(data);
+      Response response = await dio.post((baseUrl + url), data: formData);
+      return response.data;
+    } catch (e) {
+      print(e);
+      return {'error': e.toString()};
+    }
+  }
+
+  Future<Map<String, dynamic>> ImageReq(
+      String url, Map<String, dynamic> data) async {
+    try {
+      var formData = FormData.fromMap(data);
+      Response response = await dio.patch((baseUrl + url), data: formData);
+      return response.data;
+    } catch (e) {
+      print(e);
+      return {'error': e.toString()};
+    }
+  }
 }
