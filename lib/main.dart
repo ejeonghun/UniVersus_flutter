@@ -18,7 +18,8 @@ import 'package:universus/member/updateProfile_Widget.dart';
 import 'package:universus/test/testscreen_Widget.dart';
 import 'package:universus/auth/tmp/KakaoLogin.dart';
 import 'package:universus/shared/placepicker.dart';
-import 'package:universus/moim/jungmo/CreateJungmoWidget.dart';
+import 'package:universus/versus/versusCreate_Widget.dart';
+import 'package:universus/versus/versusList_Widget.dart';
 
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -83,11 +84,12 @@ class _MyAppState extends State<MyApp> {
               '/passwordforgot': (context) => PasswordForgetWidget(),
               '/testscreen': (context) => TestscreenWidget(),
               '/testplacepicker': (context) => new PlacePickerScreen(),
-              '/moim/createjungmo': (context) => CreatejungmoWidget(),
               '/createClub': (context) => CreateClubWidget(),
               '/club/update': (context) => UpdateClubWidget(
                   clubId: "9"), // 테스트용 나중에 clubId 파라미터도 같이 전달해야함
               '/profile': (context) => ProfileWidget(),
+              '/versusList': (context) => VersusListWidget(),
+              '/versusCreate': (context) => versusCreateWidget(),
             },
           );
         });
@@ -136,7 +138,7 @@ class _SplashScreenState extends State<SplashScreen> {
               curve: Curves.easeOutCubic,
               width: _logoSize,
               height: _logoSize,
-              child: Image.asset('images/logo.png'),
+              child: Image.asset('assets/images/logo.png'),
             ),
             SizedBox(height: 20),
             TweenAnimationBuilder(
