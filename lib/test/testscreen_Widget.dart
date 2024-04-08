@@ -535,6 +535,9 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                               child: FFButtonWidget(
                                 onPressed: () async {
                                   Navigator.of(context)
+                                      .pushNamed('/main1');
+                                },
+                                text: '메인',
                                       .pushNamed('/versusList');
                                 },
                                 text: '대항전 리스트',
