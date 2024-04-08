@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:universus/Community/Community_Widget.dart';
+import 'package:universus/Community/Post_Widget.dart';
+import 'package:universus/Community/Write_Widget.dart';
+import 'package:universus/Search/SearchResult_Widget.dart';
+import 'package:universus/Search/Search_Widget.dart';
 import 'package:universus/auth/AdditionalInfo_Widget.dart';
 
 import 'package:universus/class/user/user.dart';
@@ -92,6 +97,11 @@ class _MyAppState extends State<MyApp> {
               '/main1': (context) => MainWidget(),
               '/versusList': (context) => VersusListWidget(),
               '/versusCreate': (context) => versusCreateWidget(),
+              '/Search': (context) => SearchWidget(),
+              '/SearchResult': (context) => SearchResultWidget(),
+              '/Community': (context) => CommunityWidget(),
+              '/Post': (context) => PostWidget(),
+              '/Write': (context) => WriteWidget(),
             },
           );
         });
