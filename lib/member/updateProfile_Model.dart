@@ -52,6 +52,7 @@ class ProfileEditModel extends FlutterFlowModel<updateProfileWidget> {
                 response['oneLineIntro'].isNotEmpty
             ? response['oneLineIntro']
             : '한 줄 소개를 입력해주세요.',
+        univLogoImage: '',
       );
     } else {
       // 조회 실패

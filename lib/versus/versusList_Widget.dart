@@ -1,3 +1,4 @@
+import 'package:universus/class/versus/versusElement.dart';
 import 'package:universus/versus/component/versusElement_Widget.dart';
 import 'package:universus/versus/component/versusSearch_Widget.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
@@ -125,69 +126,91 @@ class _VersusListWidgetState extends State<VersusListWidget> {
           centerTitle: false,
           elevation: 2.0,
         ),
-        body: SafeArea(
-          top: true,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Lottie.asset(
-                  'assets/lottie/vs.json',
-                  width: MediaQuery.sizeOf(context).width * 1.0,
-                  height: 190.0,
-                  fit: BoxFit.fill,
-                  animate: true,
-                ),
-                SingleChildScrollView(
+        body: FutureBuilder(
+            future: _model.getVersusList(),
+            builder: (BuildContext context,
+                AsyncSnapshot<List<versusElement>> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
                   child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (_showVersusSearchWidget)
-                        wrapWithModel(
-                          model: _model.versusSearchModel,
-                          updateCallback: () => setState(() {}),
-                          child: VersusSearchWidget(),
-                        ),
-                      if (responsiveVisibility(
-                        context: context,
-                        phone: false,
-                        tablet: false,
-                      ))
-                        Container(
-                          width: double.infinity,
-                          height: 24.0,
-                          decoration: BoxDecoration(),
-                        ),
-                      ListView(
-                        padding: EdgeInsets.fromLTRB(
-                          0,
-                          0,
-                          0,
-                          44.0,
-                        ),
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        children: [
-                          wrapWithModel(
-                            model: _model.versusElementModel1,
-                            updateCallback: () => setState(() {}),
-                            child: VersusElementWidget(),
-                          ),
-                          wrapWithModel(
-                            model: _model.versusElementModel2,
-                            updateCallback: () => setState(() {}),
-                            child: VersusElementWidget(),
-                          ),
-                        ].divide(SizedBox(height: 1.0)),
-                      ),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CircularProgressIndicator(), // 로딩 바 추가
+                      SizedBox(height: 20), // 로딩 바와 텍스트 사이에 간격 추가
+                      Text('데이터를 불러오는 중...'),
                     ],
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
+                );
+              } else if (snapshot.hasError) {
+                return Text('오류: ${snapshot.error}');
+              } else {
+                return SafeArea(
+                  top: true,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Lottie.asset(
+                          'assets/lottie/vs.json',
+                          width: MediaQuery.sizeOf(context).width * 1.0,
+                          height: 190.0,
+                          fit: BoxFit.fill,
+                          animate: true,
+                        ),
+                        SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (_showVersusSearchWidget)
+                                wrapWithModel(
+                                  model: _model.versusSearchModel,
+                                  updateCallback: () => setState(() {}),
+                                  child: VersusSearchWidget(),
+                                ),
+                              if (responsiveVisibility(
+                                context: context,
+                                phone: false,
+                                tablet: false,
+                              ))
+                                Container(
+                                  width: double.infinity,
+                                  height: 24.0,
+                                  decoration: BoxDecoration(),
+                                ),
+                              ListView(
+                                padding: EdgeInsets.fromLTRB(
+                                  0,
+                                  0,
+                                  0,
+                                  44.0,
+                                ),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                children: snapshot.data!
+                                    .map((versusElement element) {
+                                      return wrapWithModel(
+                                        model: _model.versusElementModel1,
+                                        updateCallback: () => setState(() {}),
+                                        child: VersusElementWidget(
+                                          element: element,
+                                        ),
+                                      );
+                                    })
+                                    .toList()
+                                    .expand((widget) =>
+                                        [widget, SizedBox(height: 1.0)])
+                                    .toList(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+            }),
       ),
     );
   }

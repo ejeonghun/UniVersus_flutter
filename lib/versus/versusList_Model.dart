@@ -1,3 +1,5 @@
+import 'package:universus/class/api/DioApiCall.dart';
+import 'package:universus/class/versus/versusElement.dart';
 import 'package:universus/versus/component/versusElement_Widget.dart';
 import 'package:universus/versus/component/versusSearch_Widget.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
@@ -19,6 +21,35 @@ class VersusListModel extends FlutterFlowModel<VersusListWidget> {
   late VersusElementModel versusElementModel1;
   // Model for versusElement component.
   late VersusElementModel versusElementModel2;
+
+  Future<List<versusElement>> getVersusList() async {
+    // 대결 리스트를 불러오는 메소드
+    DioApiCall api = DioApiCall();
+    final response = await api.get('/univBattle/list?status=${0}');
+    if (response.isNotEmpty) {
+      // response가 null이 아니면
+      // 조회 성공
+      print(response);
+      List<versusElement> versusList = [];
+      for (var item in response['data']) {
+        versusList.add(versusElement(
+          univBattleId: item['univBattleId'],
+          hostTeamName: item['hostUniv'].toString(),
+          // hostTeamDept: item[''],
+          hostTeamUnivLogo: item['hostUnivLogo'],
+          guestTeamName: item['guestUniv'],
+          // guestTeamDept: item['place'],
+          guestTeamUnivLogo: item['guestUnivLogo'],
+          status: item['status'],
+        ));
+      }
+      return versusList;
+    } else {
+      // 조회 실패
+      print(response);
+      return [];
+    }
+  }
 
   @override
   void initState(BuildContext context) {

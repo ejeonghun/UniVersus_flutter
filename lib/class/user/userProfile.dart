@@ -7,6 +7,7 @@ class userProfile {
   String memberIdx;
   String phone; // 사용해도되고 안해도 됨 현재(updateProfile)에서 사용함
   String oneLineIntro;
+  String univLogoImage;
 
   userProfile(
       {required this.userName,
@@ -15,6 +16,7 @@ class userProfile {
       required this.deptName,
       required this.profileImage,
       required this.memberIdx,
+      required this.univLogoImage,
       this.phone = '',
       this.oneLineIntro = ''});
 
@@ -25,7 +27,8 @@ class userProfile {
         univName: '',
         deptName: '',
         profileImage: '',
-        memberIdx: '');
+        memberIdx: '',
+        univLogoImage: '');
   }
 
 // getter
@@ -37,4 +40,5 @@ class userProfile {
   String get getMemberIdx => memberIdx;
   String get getPhone => phone;
   String get getOneLineIntro => oneLineIntro;
+  String get getUnivLogoImage => univLogoImage;
 }
