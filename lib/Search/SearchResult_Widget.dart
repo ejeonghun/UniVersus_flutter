@@ -76,13 +76,6 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
               autofocus: true,
               obscureText: false,
               decoration: InputDecoration(
-                labelText: '풋살',
-                labelStyle: FlutterFlowTheme.of(context).labelMedium.override(
-                      fontFamily: 'Readex Pro',
-                      color: FlutterFlowTheme.of(context).primaryText,
-                      letterSpacing: 1,
-                      fontWeight: FontWeight.w600,
-                    ),
                 hintStyle: FlutterFlowTheme.of(context).labelMedium.override(
                       fontFamily: 'Readex Pro',
                       color: Color(0xFF979797),
@@ -515,7 +508,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
                                           borderRadius:
                                               BorderRadius.circular(18),
                                           child: Image.asset(
-                                            'assets/images/8jzc1_.jpeg',
+                                            'assets/images/soomin1.jpeg',
                                             width: 75,
                                             height: 75,
                                             fit: BoxFit.cover,
@@ -610,7 +603,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
                                           borderRadius:
                                               BorderRadius.circular(18),
                                           child: Image.asset(
-                                            'assets/images/w631q_.jpeg',
+                                            'assets/images/soomin2.jpeg',
                                             width: 75,
                                             height: 75,
                                             fit: BoxFit.cover,
