@@ -11,6 +11,36 @@ class VersusElementModel extends FlutterFlowModel<VersusElementWidget> {
   @override
   void initState(BuildContext context) {}
 
+  String getText(String status) {
+    switch (status) {
+      case 'IN_PROGRESS':
+        return '진행중';
+      case 'RECRUIT':
+        return '모집중';
+      case 'WAITING':
+        return '대기중';
+      case 'COMPLETED':
+        return '종료';
+      default:
+        return '';
+    }
+  }
+
+  Color getColor(String status) {
+    switch (status) {
+      case 'IN_PROGRESS':
+        return Colors.yellow;
+      case 'RECRUIT':
+        return Colors.green;
+      case 'WAITING':
+        return Colors.orange;
+      case 'COMPLETED':
+        return Colors.red;
+      default:
+        return Colors.white;
+    }
+  }
+
   @override
   void dispose() {}
 }

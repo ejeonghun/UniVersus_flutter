@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -457,6 +458,12 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
                                 0.0, 16.0, 0.0, 16.0),
                             child: FFButtonWidget(
                               onPressed: () async {
+                                if (kIsWeb) {
+                                  // 웹일 때
+                                  CustomSnackbar.error(
+                                      context, "위치 허용", "웹에서는 지원하지 않습니다.", 2);
+                                  return;
+                                }
                                 if (await checkPermission() == true) {
                                   // 권한이 허용되어 있을 때 실행됨
                                   // PlacePickerScreen을 표시하고 결과를 기다립니다.
@@ -467,7 +474,6 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
                                         builder: (context) =>
                                             PlacePickerScreen()),
                                   );
-
                                   // 결과를 출력합니다.
                                   if (selectedPlace != null) {
                                     print(

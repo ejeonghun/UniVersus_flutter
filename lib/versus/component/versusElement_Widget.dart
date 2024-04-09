@@ -236,20 +236,19 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
               padding: EdgeInsetsDirectional.fromSTEB(10.0, 5.0, 10.0, 5.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color(0x91FF3232),
+                  color: _model.getColor(widget.element.status!),
                   borderRadius: BorderRadius.circular(8.0),
-                  border: Border.all(
-                    color: FlutterFlowTheme.of(context).tertiary,
-                  ),
+                  border: Border.all(),
                 ),
                 child: Align(
                   alignment: AlignmentDirectional(0.0, 0.0),
                   child: Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(8.0, 4.0, 8.0, 4.0),
                     child: Text(
-                      '진행 중',
+                      _model.getText(widget.element.status!),
                       style: FlutterFlowTheme.of(context).bodySmall.override(
                             fontFamily: 'Readex Pro',
+                            fontSize: 14.0,
                             letterSpacing: 0.0,
                           ),
                     ),

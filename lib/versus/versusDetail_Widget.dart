@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:universus/class/versus/versusDetail.dart';
 import 'package:universus/shared/GoogleMap.dart';
 
 import 'versusDetail_Model.dart';
@@ -39,9 +40,8 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: _model.getVersusDetail(),
-        builder: (BuildContext context,
-            AsyncSnapshot<Map<String, dynamic>> snapshot) {
+        future: _model.getVersusDetail(widget.battleId),
+        builder: (BuildContext context, AsyncSnapshot<versusDetail> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: Column(
@@ -81,7 +81,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                     },
                   ),
                   title: Text(
-                    '대항전 제목',
+                    '대항전 상세',
                     style: FlutterFlowTheme.of(context).headlineMedium.override(
                           fontFamily: 'Outfit',
                           color: FlutterFlowTheme.of(context).primaryText,
@@ -107,12 +107,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(
-                                Icons.sports_soccer,
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                size: 48.0,
-                              ),
+                              _model.getIcon(snapshot.data!.eventId!),
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     3.0, 0.0, 0.0, 0.0),
@@ -178,13 +173,14 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                         shape: BoxShape.circle,
                                       ),
                                       child: Image.network(
-                                        'https://picsum.photos/seed/260/600',
+                                        snapshot.data!.hostTeamUnivLogo ??=
+                                            'https://picsum.photos/seed/260/600',
                                         fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
                                   Text(
-                                    '영진전문대',
+                                    snapshot.data!.hostTeamName ??= ' 오류 ',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -247,7 +243,8 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                         shape: BoxShape.circle,
                                       ),
                                       child: Image.network(
-                                        'https://picsum.photos/seed/161/600',
+                                        snapshot.data!.guestTeamUnivLogo ??=
+                                            'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -256,7 +253,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 0.0, 0.0, 5.0),
                                     child: Text(
-                                      '경북대',
+                                      snapshot.data!.guestTeamName ??= '모집중 ..',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -288,7 +285,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                             width: MediaQuery.sizeOf(context).width * 0.9,
                             height: 30.0,
                             decoration: BoxDecoration(
-                              color: Color(0xD8249689),
+                              color: _model.getColor(),
                               borderRadius: BorderRadius.circular(12.0),
                             ),
                             child: Row(
@@ -296,7 +293,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  '모집 중',
+                                  _model.getText(),
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -307,37 +304,6 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                         letterSpacing: 0.0,
                                         fontWeight: FontWeight.w600,
                                       ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 10.0, 0.0, 0.0),
-                          child: Container(
-                            width: MediaQuery.sizeOf(context).width * 0.85,
-                            height: 30.0,
-                            decoration: BoxDecoration(
-                              color: Color(0xC6ABA4A4),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      5.0, 0.0, 0.0, 0.0),
-                                  child: Text(
-                                    '초대코드 : ',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Readex Pro',
-                                          fontSize: 16.0,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
                                 ),
                               ],
                             ),
@@ -356,7 +322,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   5.0, 5.0, 5.0, 5.0),
                               child: Text(
-                                '내내내내요요요요용요요요요용',
+                                '${snapshot.data!.content} \n참가비 : ${snapshot.data!.cost}원',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -367,6 +333,72 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                             ),
                           ),
                         ),
+                        // "모집중" 일 때만 대결 신청 버튼 활성화
+                        // "모집중"이 아닐 때는 초대코드 표시
+                        if (snapshot.data!.status == 'RECRUIT')
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 5.0, 0.0, 0.0),
+                            child: FFButtonWidget(
+                              onPressed: () {
+                                _model.repAttend(widget.battleId);
+                              },
+                              text: '대결 신청',
+                              options: FFButtonOptions(
+                                height: 40.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    24.0, 0.0, 24.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: FlutterFlowTheme.of(context).error,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'Readex Pro',
+                                      color: Colors.white,
+                                      letterSpacing: 0.0,
+                                    ),
+                                elevation: 3.0,
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                          )
+                        else
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 10.0, 0.0, 0.0),
+                            child: Container(
+                              width: MediaQuery.sizeOf(context).width * 0.85,
+                              height: 30.0,
+                              decoration: BoxDecoration(
+                                color: Color(0xC6ABA4A4),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        5.0, 0.0, 0.0, 0.0),
+                                    child: Text(
+                                      '초대코드 : ${snapshot.data!.invitationCode ??= "모집 중"}',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Readex Pro',
+                                            fontSize: 16.0,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         Padding(
                           padding: EdgeInsets.all(5.0),
                           child: Container(
@@ -379,7 +411,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Text(
-                                  '생성일 : ',
+                                  '생성일 : ${snapshot.data!.getRegDate}',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -418,7 +450,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       5.0, 0.0, 0.0, 0.0),
                                   child: Text(
-                                    '주소 : ',
+                                    '주소 : ${snapshot.data!.place}',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -441,8 +473,8 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                   .secondaryBackground,
                             ),
                             child: GoogleMapWidget(
-                              lat: 37.5866076,
-                              lng: 126.9726223,
+                              lat: snapshot.data!.getLat!,
+                              lng: snapshot.data!.getLng!,
                             )),
                       ],
                     ),
