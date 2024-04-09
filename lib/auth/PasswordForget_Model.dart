@@ -51,7 +51,7 @@ class PasswordForgetModel extends FlutterFlowModel<PasswordForgetWidget> {
     if (response['success'] == true) {
       debugPrint(response.toString());
       debugPrint("인증 성공");
-      memberIdx = response['data']['memberIdx'];
+      memberIdx = response['data'];
       return true;
     }
     debugPrint(response.toString());

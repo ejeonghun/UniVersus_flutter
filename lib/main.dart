@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:universus/Community/Community_Widget.dart';
+import 'package:universus/Community/Post_Widget.dart';
+import 'package:universus/Community/Write_Widget.dart';
+import 'package:universus/Search/SearchResult_Widget.dart';
+import 'package:universus/Search/Search_Widget.dart';
 import 'package:universus/auth/AdditionalInfo_Widget.dart';
 
 import 'package:universus/class/user/user.dart';
@@ -13,12 +18,14 @@ import 'package:universus/club/UpdateClub_Widget.dart';
 import 'package:universus/component/MainPage.dart';
 import 'package:universus/auth/CreateAccount_Widget.dart';
 import 'package:universus/auth/PasswordForget_Widget.dart';
+import 'package:universus/main/main_Widget.dart';
 import 'package:universus/member/profile_Widget.dart';
 import 'package:universus/member/updateProfile_Widget.dart';
 import 'package:universus/test/testscreen_Widget.dart';
 import 'package:universus/auth/tmp/KakaoLogin.dart';
 import 'package:universus/shared/placepicker.dart';
-import 'package:universus/moim/jungmo/CreateJungmoWidget.dart';
+import 'package:universus/versus/versusCreate_Widget.dart';
+import 'package:universus/versus/versusList_Widget.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -84,12 +91,19 @@ class _MyAppState extends State<MyApp> {
               '/passwordforgot': (context) => PasswordForgetWidget(),
               '/testscreen': (context) => TestscreenWidget(),
               '/testplacepicker': (context) => new PlacePickerScreen(),
-              '/moim/createjungmo': (context) => CreatejungmoWidget(),
               '/createClub': (context) => CreateClubWidget(),
               '/club/update': (context) => UpdateClubWidget(
                   clubId: "9"), // 테스트용 나중에 clubId 파라미터도 같이 전달해야함
               '/profile': (context) => ProfileWidget(),
               '/chat/main.dart': (context) => AppBar(),
+              '/main1': (context) => MainWidget(),
+              '/versusList': (context) => VersusListWidget(),
+              '/versusCreate': (context) => versusCreateWidget(),
+              '/Search': (context) => SearchWidget(),
+              '/SearchResult': (context) => SearchResultWidget(),
+              '/Community': (context) => CommunityWidget(),
+              '/Post': (context) => PostWidget(),
+              '/Write': (context) => WriteWidget(),
             },
           );
         });
@@ -138,7 +152,7 @@ class _SplashScreenState extends State<SplashScreen> {
               curve: Curves.easeOutCubic,
               width: _logoSize,
               height: _logoSize,
-              child: Image.asset('images/logo.png'),
+              child: Image.asset('assets/images/logo.png'),
             ),
             SizedBox(height: 20),
             TweenAnimationBuilder(
