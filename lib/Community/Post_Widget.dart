@@ -95,7 +95,7 @@ class _PostWidgetState extends State<PostWidget> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(24),
                           child: Image.asset(
-                            'assets/images/w631q_.jpeg',
+                            'assets/images/soomin1.jpeg',
                             width: 40,
                             height: 40,
                             fit: BoxFit.cover,
@@ -160,7 +160,7 @@ class _PostWidgetState extends State<PostWidget> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.asset(
-                      'assets/images/8jzc1_.jpeg',
+                      'assets/images/soomin2.jpeg',
                       width: MediaQuery.sizeOf(context).width * 0.9,
                       fit: BoxFit.fill,
                     ),

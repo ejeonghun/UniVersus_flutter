@@ -14,7 +14,9 @@ import 'package:universus/class/user/user.dart';
 
 // Widget Import
 import 'package:universus/auth/Login_Widget.dart';
+import 'package:universus/club/ClubMain_Widget.dart';
 import 'package:universus/club/CreateClub_Widget.dart';
+import 'package:universus/club/MyClub_Widget.dart';
 import 'package:universus/club/UpdateClub_Widget.dart';
 import 'package:universus/component/MainPage.dart';
 import 'package:universus/auth/CreateAccount_Widget.dart';
@@ -107,6 +109,9 @@ class _MyAppState extends State<MyApp> {
               '/Community': (context) => CommunityWidget(),
               '/Post': (context) => PostWidget(),
               '/Write': (context) => WriteWidget(),
+              '/ClubMain': (context) => ClubMainWidget(),
+              '/MyClub': (context) => MyClubWidget(),
+
             },
           );
         });
