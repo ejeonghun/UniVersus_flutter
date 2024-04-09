@@ -18,13 +18,15 @@
 <string>This app needs access to location when open and in the background.</string>
 <key>NSLocationAlwaysUsageDescription</key>
 <string>This app needs access to location when in the background.</string>
+<key>NSLocationAlwaysUsageDescription</key>
+<string>This app needs GPS to track near atm-machine</string>
 
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
+	<string>vas</string>
 	<key>NSCameraUsageDescription</key>
-	<string></string>
+	<string>dddd</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string></string>
+	<string>avcd</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
