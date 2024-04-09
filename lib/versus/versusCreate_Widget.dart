@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:universus/shared/CustomSnackbar.dart';
 import 'package:universus/shared/EventList.dart';
 import 'package:universus/shared/placepicker.dart';
 
@@ -45,6 +47,20 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
     _model.dispose();
 
     super.dispose();
+  }
+
+  Future<bool> checkPermission() async {
+    // location 권한 체크 부분
+    var status = await Permission.location.status;
+    var status2 = await Permission.locationWhenInUse.status;
+    var status3 = await Permission.locationAlways.status;
+    if (status.isGranted || status2.isGranted || status3.isGranted) {
+      debugPrint("권한 허용되어 있음 ");
+      return true;
+    } else {
+      debugPrint("권한 허용 필요");
+      return false;
+    }
   }
 
   @override
@@ -441,40 +457,52 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
                                 0.0, 16.0, 0.0, 16.0),
                             child: FFButtonWidget(
                               onPressed: () async {
-                                // PlacePickerScreen을 표시하고 결과를 기다립니다.
-                                PickResult? selectedPlace =
-                                    await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          PlacePickerScreen()),
-                                );
+                                if (await checkPermission() == true) {
+                                  // 권한이 허용되어 있을 때 실행됨
+                                  // PlacePickerScreen을 표시하고 결과를 기다립니다.
+                                  PickResult? selectedPlace =
+                                      await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            PlacePickerScreen()),
+                                  );
 
-                                // 결과를 출력합니다.
-                                if (selectedPlace != null) {
-                                  print(
-                                      'Selected place: ${selectedPlace.formattedAddress}');
-                                  print(
-                                      'Selected place lat: ${selectedPlace.geometry?.location.lat}');
-                                  print(
-                                      'Selected place lng: ${selectedPlace.geometry?.location.lng}');
-                                  print(selectedPlace.name);
-                                  String? placeName = '';
-                                  if (selectedPlace.name != null) {
-                                    // 만약 장소명이 있으면
-                                    placeName = selectedPlace.name; // 장소명 저장
-                                  } else {
-                                    placeName = selectedPlace
-                                        .formattedAddress; // 장소 주소 저장
+                                  // 결과를 출력합니다.
+                                  if (selectedPlace != null) {
+                                    print(
+                                        'Selected place: ${selectedPlace.formattedAddress}');
+                                    print(
+                                        'Selected place lat: ${selectedPlace.geometry?.location.lat}');
+                                    print(
+                                        'Selected place lng: ${selectedPlace.geometry?.location.lng}');
+                                    print(selectedPlace.name);
+                                    String? placeName = '';
+                                    if (selectedPlace.name != null) {
+                                      // 만약 장소명이 있으면
+                                      placeName = selectedPlace.name; // 장소명 저장
+                                    } else {
+                                      placeName = selectedPlace
+                                          .formattedAddress; // 장소 주소 저장
+                                    }
+                                    print(placeName);
+                                    _model.lat =
+                                        selectedPlace.geometry?.location.lat;
+                                    _model.lng =
+                                        selectedPlace.geometry?.location.lng;
+                                    _model.placeName = placeName;
                                   }
-                                  print(placeName);
-                                  _model.lat =
-                                      selectedPlace.geometry?.location.lat;
-                                  _model.lng =
-                                      selectedPlace.geometry?.location.lng;
-                                  _model.placeName = placeName;
+                                  setState(() {}); // UI 리랜더링
+                                } else {
+                                  // 권한이 허용되어 있지 않을 때 실행됨
+                                  CustomSnackbar.error(
+                                      context, "위치 허용", "위치를 허용해 주세요", 2);
+                                  if (await Permission.location.request() ==
+                                      PermissionStatus.granted) {
+                                    CustomSnackbar.success(
+                                        context, "위치 허용", "위치가 허용 되었습니다.", 2);
+                                  }
                                 }
-                                setState(() {}); // UI 리랜더링
                               },
                               text: '장소 선택',
                               icon: Icon(

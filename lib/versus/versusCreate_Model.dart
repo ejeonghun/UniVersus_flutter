@@ -65,11 +65,13 @@ class versusCreateModel extends FlutterFlowModel<versusCreateWidget> {
     Map<String, dynamic> data = {
       "hostLeader": await UserData.getMemberIdx(),
       "eventId": eventId,
-      "location": "${lat}/${lng}/${placeName}",
+      "lat": lat,
+      "lng": lng,
+      "place": placeName,
       "battleDate": DateFormat('yyyyMMdd').format(datePicked!),
       "content": versusIntroController.text,
       "cost": versusPriceController.text,
-      "totalParticipants": countControllerValue
+      "teamPtcLimit": countControllerValue
     };
     debugPrint(data.toString());
     if (radioButtonValue == '대학 vs 대학') {
