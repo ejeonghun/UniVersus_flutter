@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:universus/class/versus/versusElement.dart';
+import 'package:universus/versus/versusDetail_Widget.dart';
 
 import 'versusElement_Model.dart';
 export 'versusElement_Model.dart';
@@ -55,7 +56,14 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
         highlightColor: Colors.transparent,
         onTap: () async {
           // 해당 대항전으로 이동하는 코드 추가
-          debugPrint("클릭");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VersusDetailWidget(
+                battleId: widget.element.univBattleId!,
+              ),
+            ),
+          );
         },
         child: Column(
           mainAxisSize: MainAxisSize.max,
