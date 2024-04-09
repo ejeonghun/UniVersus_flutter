@@ -20,8 +20,9 @@ import 'package:universus/auth/tmp/KakaoLogin.dart';
 import 'package:universus/shared/placepicker.dart';
 import 'package:universus/moim/jungmo/CreateJungmoWidget.dart';
 
-import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+
+import 'package:universus/chat/main.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 1번코드
@@ -88,6 +89,7 @@ class _MyAppState extends State<MyApp> {
               '/club/update': (context) => UpdateClubWidget(
                   clubId: "9"), // 테스트용 나중에 clubId 파라미터도 같이 전달해야함
               '/profile': (context) => ProfileWidget(),
+              '/chat/main.dart': (context) => AppBar(),
             },
           );
         });
