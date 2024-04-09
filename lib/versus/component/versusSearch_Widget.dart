@@ -17,8 +17,7 @@ class VersusSearchWidget extends StatefulWidget {
 class _VersusSearchWidgetState extends State<VersusSearchWidget> {
   late VersusSearchModel _model;
   List<String> options = ['전체', '모집 중', '시작 전', '진행 중', '종료'];
-  List<bool> isSelected = [false, false, false, false, false];
-
+  int selectedIndex = 0;
   @override
   void setState(VoidCallback callback) {
     super.setState(callback);
@@ -30,7 +29,6 @@ class _VersusSearchWidgetState extends State<VersusSearchWidget> {
     super.initState();
     _model = createModel(context, () => VersusSearchModel());
 
-    isSelected = List<bool>.generate(options.length, (index) => false);
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
 
@@ -131,17 +129,16 @@ class _VersusSearchWidgetState extends State<VersusSearchWidget> {
                   runSpacing: 12.0,
                   children: List<Widget>.generate(options.length, (index) {
                     return ChoiceChip(
-                      label: Text(options[index]),
-                      selected: isSelected[index],
-                      onSelected: (bool selected) {
-                        setState(() {
-                          isSelected[index] = selected;
-                        });
-                        if (selected) {
-                          debugPrint('Selected: ${options[index]}');
-                        }
-                      },
-                    );
+                  label: Text(options[index]),
+                  selected: selectedIndex == index,
+                  onSelected: (selected) {
+                    if (selected) {
+                      setState(() {
+                        selectedIndex = index;
+                      });
+                    }
+                  },
+                );
                   }),
                 ),
               ),

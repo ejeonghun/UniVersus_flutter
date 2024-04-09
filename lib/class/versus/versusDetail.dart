@@ -23,8 +23,8 @@ class versusDetail {
   int? eventId;
 
   // 팀 정보
-  List? hostTeamMembers; // 대표 팀 멤버 리스트
-  List? guestTeamMembers; // 게스트 팀 멤버 리스트
+  List<Map<String, dynamic>>? hostTeamMembers; // 대표 팀 멤버 리스트
+  List<Map<String, dynamic>>? guestTeamMembers; // 게스트 팀 멤버 리스트
 
   versusDetail({
     this.hostTeamName,
@@ -75,8 +75,8 @@ class versusDetail {
   }
 
   String? get getInvitationCode => this.invitationCode;
-  List? get getHostTeamMembers => this.hostTeamMembers;
-  List? get getGuestTeamMembers => this.guestTeamMembers;
+  List<Map<String, dynamic>>? get getHostTeamMembers => this.hostTeamMembers;
+  List<Map<String, dynamic>>? get getGuestTeamMembers => this.guestTeamMembers;
   String? get getContent => this.content;
   String? get getCost => this.cost;
   int? get getEventId => this.eventId;

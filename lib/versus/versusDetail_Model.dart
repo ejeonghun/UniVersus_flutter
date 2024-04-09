@@ -68,45 +68,48 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     }
   }
 
-  Future<versusDetail> getVersusDetail(int battleId) async {
-    // 대결 리스트를 불러오는 메소드
-    DioApiCall api = DioApiCall();
-    final response =
-        await api.get('/univBattle/info?univBattleId=${battleId.toString()}');
-    if (response.isNotEmpty) {
-      // response가 null이 아니면
-      // 조회 성공
-      versusDetail res = versusDetail(
-        battleDate: response['data']['univBattle']['battleDate'],
-        lat: response['data']['univBattle']['lat'],
-        lng: response['data']['univBattle']['lng'],
-        hostTeamName: response['data']['univBattle']['hostUniv'].toString(),
-        // hostTeamDept: response['data']['univBattle']['hostDept'],
-        hostTeamUnivLogo: response['data']['univBattle']['hostUnivLogo'],
-        guestTeamName: response['data']['univBattle']['guestUniv'].toString(),
-        // guestTeamDept: response['data']['univBattle']['guestDept'],
-        guestTeamUnivLogo: response['data']['univBattle']['guestUnivLogo'],
-        univBattleId: response['data']['univBattle']['univBattleId'],
-        status: response['data']['univBattle']['status'],
-        hostLeaderId: response['data']['univBattle']['hostLeaderId'],
-        // guestLeaderId: response['data']['univBattle']['guestLeaderId'],
-        place: response['data']['univBattle']['place'],
-        regDate: response['data']['univBattle']['regDt'],
-        invitationCode: response['data']['univBattle']['invitationCode'],
-        // hostTeamMembers: response['data']['hostTeamMembers'],
-        // guestTeamMembers: response['data']['guestTeamMembers']
-        content: response['data']['univBattle']['content'],
-        cost: response['data']['univBattle']['cost'],
-        eventId: response['data']['univBattle']['eventId'],
-      );
-      status = res.status!;
-      return res;
-    } else {
-      // 조회 실패
-      print(response);
-      return versusDetail();
-    }
+Future<versusDetail> getVersusDetail(int battleId) async {
+  // 대결 리스트를 불러오는 메소드
+  DioApiCall api = DioApiCall();
+  final response = await api.get('/univBattle/info?univBattleId=${battleId.toString()}');
+  if (response.isNotEmpty) {
+    // response가 null이 아니면 조회 성공
+    List<dynamic> hostParticipantListData = response['data']['HostparticipantList'];
+    List<dynamic> guestTeamMembersData = response['data']['GuestparticipantList'];
+
+    List<Map<String, dynamic>> hostTeamMembers = List<Map<String, dynamic>>.from(hostParticipantListData);
+    List<Map<String, dynamic>> guestTeamMembers = List<Map<String, dynamic>>.from(guestTeamMembersData);
+
+    versusDetail res = versusDetail(
+      battleDate: response['data']['univBattle']['battleDate'],
+      lat: response['data']['univBattle']['lat'],
+      lng: response['data']['univBattle']['lng'],
+      hostTeamName: response['data']['univBattle']['hostUniv'].toString(),
+      hostTeamUnivLogo: response['data']['univBattle']['hostUnivLogo'],
+      guestTeamName: response['data']['univBattle']['guestUniv'].toString(),
+      guestTeamUnivLogo: response['data']['univBattle']['guestUnivLogo'],
+      univBattleId: response['data']['univBattle']['univBattleId'],
+      status: response['data']['univBattle']['status'],
+      hostLeaderId: response['data']['univBattle']['hostLeaderId'],
+      place: response['data']['univBattle']['place'],
+      regDate: response['data']['univBattle']['regDt'],
+      invitationCode: response['data']['univBattle']['invitationCode'],
+      hostTeamMembers: hostTeamMembers,
+      guestTeamMembers: guestTeamMembers,
+      content: response['data']['univBattle']['content'],
+      cost: response['data']['univBattle']['cost'],
+      eventId: response['data']['univBattle']['eventId'],
+    );
+    debugPrint(res.getHostTeamMembers.toString());
+    status = res.status!;
+    return res;
+  } else {
+    // 조회 실패
+    print(response);
+    return versusDetail();
   }
+}
+
 
   Future<String> repAttend(int battleId) async {
     // 대항전 대표 참가

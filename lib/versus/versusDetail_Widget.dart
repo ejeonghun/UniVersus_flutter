@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:universus/class/versus/versusDetail.dart';
 import 'package:universus/shared/GoogleMap.dart';
+import 'package:universus/versus/component/teamMemberDropdown.dart';
 
 import 'versusDetail_Model.dart';
 export 'versusDetail_Model.dart';
@@ -190,15 +191,16 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                           fontWeight: FontWeight.w600,
                                         ),
                                   ),
-                                  Text(
-                                    '팀원 드롭박스',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Readex Pro',
-                                          letterSpacing: 0.0,
-                                        ),
-                                  ),
+                                  TeamMemberDropdown(teamMembers: snapshot.data!.hostTeamMembers!),
+                                  // Text(
+                                  //   '팀원 드롭박스',
+                                  //   style: FlutterFlowTheme.of(context)
+                                  //       .bodyMedium
+                                  //       .override(
+                                  //         fontFamily: 'Readex Pro',
+                                  //         letterSpacing: 0.0,
+                                  //       ),
+                                  // ),
                                 ],
                               ),
                               ClipRRect(
@@ -264,15 +266,16 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                           ),
                                     ),
                                   ),
-                                  Text(
-                                    '팀원 드롭박스',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Readex Pro',
-                                          letterSpacing: 0.0,
-                                        ),
-                                  ),
+                                  TeamMemberDropdown(teamMembers: snapshot.data!.guestTeamMembers!),
+                                  // Text(
+                                  //   '팀원 드롭박스',
+                                  //   style: FlutterFlowTheme.of(context)
+                                  //       .bodyMedium
+                                  //       .override(
+                                  //         fontFamily: 'Readex Pro',
+                                  //         letterSpacing: 0.0,
+                                  //       ),
+                                  // ),
                                 ],
                               ),
                             ],
