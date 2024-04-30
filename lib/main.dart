@@ -9,8 +9,11 @@ import 'package:universus/Search/SearchResult_Widget.dart';
 import 'package:universus/Search/Search_Widget.dart';
 import 'package:universus/auth/AdditionalInfo_Widget.dart';
 import 'package:universus/chat/ChatListWidget.dart';
-
 import 'package:universus/class/user/user.dart';
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:universus/main/main_Model.dart';
 
 // Widget Import
 import 'package:universus/auth/Login_Widget.dart';
@@ -29,7 +32,6 @@ import 'package:universus/auth/tmp/KakaoLogin.dart';
 import 'package:universus/shared/placepicker.dart';
 import 'package:universus/versus/versusCreate_Widget.dart';
 import 'package:universus/versus/versusList_Widget.dart';
-
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {

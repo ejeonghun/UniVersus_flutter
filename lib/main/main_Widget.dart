@@ -4,13 +4,13 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart'
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-
-import 'main_Model.dart';
+import 'package:universus/class/user/userProfile.dart';
+import 'package:universus/main/main_Model.dart';
+import 'package:universus/main/main_Widget.dart';
 export 'main_Model.dart';
 
 class MainWidget extends StatefulWidget {
+  
   const MainWidget({super.key});
 
   @override
@@ -37,7 +37,23 @@ class _MainWidgetState extends State<MainWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return FutureBuilder(
+      future: _model.getProfile(),
+        builder: (BuildContext context, AsyncSnapshot<userProfile> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CircularProgressIndicator(), // 로딩 바 추가
+                ],
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Text('오류: ${snapshot.error}');
+          } else{
+            String schoolName = snapshot.data!.univName; // 학교 이름 가져오기
+            return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
           : FocusScope.of(context).unfocus(),
@@ -48,7 +64,7 @@ class _MainWidgetState extends State<MainWidget> {
           backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
           automaticallyImplyLeading: false,
           title: Text(
-            '영진전문대',
+            schoolName,
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Noto Serif',
                   color: FlutterFlowTheme.of(context).error,
@@ -1371,4 +1387,6 @@ class _MainWidgetState extends State<MainWidget> {
       ),
     );
   }
+});
+}
 }
