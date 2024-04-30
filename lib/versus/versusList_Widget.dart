@@ -14,14 +14,22 @@ export 'versusList_Model.dart';
 
 class VersusListWidget extends StatefulWidget {
   const VersusListWidget({super.key});
-
+  
   @override
   State<VersusListWidget> createState() => _VersusListWidgetState();
 }
 
 class _VersusListWidgetState extends State<VersusListWidget> {
+  int statusCode = 0; // status 전역 상태값
   late VersusListModel _model;
   bool _showVersusSearchWidget = false; // 검색창 보이기 여부
+
+  //상태값 변경 함수
+  setStatusCode(int Code) {
+    setState(() {
+      statusCode = Code;
+    });
+  }
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -127,7 +135,7 @@ class _VersusListWidgetState extends State<VersusListWidget> {
           elevation: 2.0,
         ),
         body: FutureBuilder(
-            future: _model.getVersusList(),
+            future: _model.getVersusList(statusCode),
             builder: (BuildContext context,
                 AsyncSnapshot<List<versusElement>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -166,7 +174,10 @@ class _VersusListWidgetState extends State<VersusListWidget> {
                                 wrapWithModel(
                                   model: _model.versusSearchModel,
                                   updateCallback: () => setState(() {}),
-                                  child: VersusSearchWidget(),
+                                  child: VersusSearchWidget(
+                                        setStatusCode: setStatusCode,
+                                        selectedIndex: statusCode, // 해당 값을 전해줌으로써 ChoiceChip에 선택이 되어 있게함
+                                      ),
                                 ),
                               if (responsiveVisibility(
                                 context: context,
@@ -178,30 +189,30 @@ class _VersusListWidgetState extends State<VersusListWidget> {
                                   height: 24.0,
                                   decoration: BoxDecoration(),
                                 ),
-                              ListView(
-                                padding: EdgeInsets.fromLTRB(
-                                  0,
-                                  0,
-                                  0,
-                                  44.0,
-                                ),
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                children: snapshot.data!
-                                    .map((versusElement element) {
-                                      return wrapWithModel(
-                                        model: _model.versusElementModel1,
-                                        updateCallback: () => setState(() {}),
-                                        child: VersusElementWidget(
-                                          element: element,
-                                        ),
-                                      );
-                                    })
-                                    .toList()
-                                    .expand((widget) =>
-                                        [widget, SizedBox(height: 1.0)])
-                                    .toList(),
-                              ),
+                              Center(
+  child: snapshot.data != null && snapshot.data!.isNotEmpty
+    ? ListView(
+        padding: EdgeInsets.fromLTRB(
+          0,
+          0,
+          0,
+          44.0,
+        ),
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        children: snapshot.data!.map((versusElement element) {
+          return wrapWithModel(
+            model: _model.versusElementModel1,
+            updateCallback: () => setState(() {}),
+            child: VersusElementWidget(
+              element: element,
+            ),
+          );
+        }).toList().expand((widget) => [widget, SizedBox(height: 1.0)]).toList(),
+      )
+    : Padding(padding: EdgeInsets.fromLTRB(0, 30, 0, 0), child:Text("대항전이 존재하지 않습니다!"),) 
+),
+
                             ],
                           ),
                         ),

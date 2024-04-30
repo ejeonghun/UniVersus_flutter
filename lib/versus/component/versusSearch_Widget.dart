@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:universus/versus/versusList_Model.dart';
+import 'package:universus/versus/versusList_Widget.dart';
 
 import 'versusSearch_Model.dart';
 export 'versusSearch_Model.dart';
 
 class VersusSearchWidget extends StatefulWidget {
-  const VersusSearchWidget({super.key});
+  const VersusSearchWidget({Key? key, required this.setStatusCode, required this.selectedIndex}) : super(key: key);
+  final Function setStatusCode;
+  final int selectedIndex; // Receive the selected index from the parent
 
   @override
   State<VersusSearchWidget> createState() => _VersusSearchWidgetState();
@@ -17,7 +21,7 @@ class VersusSearchWidget extends StatefulWidget {
 class _VersusSearchWidgetState extends State<VersusSearchWidget> {
   late VersusSearchModel _model;
   List<String> options = ['전체', '모집 중', '시작 전', '진행 중', '종료'];
-  int selectedIndex = 0;
+  
   @override
   void setState(VoidCallback callback) {
     super.setState(callback);
@@ -28,7 +32,6 @@ class _VersusSearchWidgetState extends State<VersusSearchWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => VersusSearchModel());
-
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
 
@@ -130,12 +133,10 @@ class _VersusSearchWidgetState extends State<VersusSearchWidget> {
                   children: List<Widget>.generate(options.length, (index) {
                     return ChoiceChip(
                   label: Text(options[index]),
-                  selected: selectedIndex == index,
+                  selected: widget.selectedIndex == index, // Set the selected state based on the received index
                   onSelected: (selected) {
                     if (selected) {
-                      setState(() {
-                        selectedIndex = index;
-                      });
+                      widget.setStatusCode(index);
                     }
                   },
                 );

@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:universus/class/versus/versusDetail.dart';
+import 'package:universus/shared/CustomSnackbar.dart';
 import 'package:universus/shared/GoogleMap.dart';
 import 'package:universus/versus/component/teamMemberDropdown.dart';
 
@@ -343,8 +344,15 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 5.0, 0.0, 0.0),
                             child: FFButtonWidget(
-                              onPressed: () {
-                                _model.repAttend(widget.battleId);
+                              onPressed: () async {
+                                if(await _model.repAttend(widget.battleId) == true) {
+                                  CustomSnackbar.success(context, "성공", "참가가 완료되었습니다.", 2);
+                                } else {
+                                  CustomSnackbar.error(context, "실패", "같은 학교는 참가할 수 없습니다.", 2);
+                                }
+                                setState(() {
+                                  
+                                });
                               },
                               text: '대결 신청',
                               options: FFButtonOptions(

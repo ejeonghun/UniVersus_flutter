@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:universus/class/api/DioApiCall.dart';
 
 class TeamMemberDropdown extends StatefulWidget {
@@ -146,6 +149,11 @@ class _TeamMemberDropdownState extends State<TeamMemberDropdown> {
           selectedMemberId = newValue;
           if (selectedMemberId != null) {
             showMemberDetailsModal(context, selectedMemberId!);
+            Timer(Duration(seconds: 1), () { // 1초 후 선택 해제
+              setState(() {
+                selectedMemberId = null;
+              });
+            });            
           }
         });
       },
@@ -157,7 +165,7 @@ class _TeamMemberDropdownState extends State<TeamMemberDropdown> {
                 children: [
                   Icon(Icons.person),
                   SizedBox(width: 10),
-                  Text('${member['name']} (${member['memberIdx']})'),
+                  Text('${member['nickName']}'),
                 ],
               ),
             );
@@ -166,7 +174,7 @@ class _TeamMemberDropdownState extends State<TeamMemberDropdown> {
           .toList(),
       style: TextStyle(
         fontSize: 16,
-        color: Colors.black,
+        color: FlutterFlowTheme.of(context).primaryText,
       ),
       underline: Container(
         height: 2,

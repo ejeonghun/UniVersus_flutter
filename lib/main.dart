@@ -66,6 +66,7 @@ class _MyAppState extends State<MyApp> {
         valueListenable: MyApp.themeNotifier,
         builder: (context, ThemeMode value, child) {
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             darkTheme: ThemeData.dark(),
             theme: ThemeData.light(),
             themeMode: value,

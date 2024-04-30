@@ -76,9 +76,10 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     if (response.isNotEmpty) {
       // response가 null이 아니면 조회 성공
       List<dynamic> hostParticipantListData =
-          response['data']['GuestTeam']['guestPtcList'];
-      List<dynamic> guestTeamMembersData =
           response['data']['HostTeam']['hostPtcList'];
+      List<dynamic> guestTeamMembersData =
+          response['data']['GuestTeam']['guestPtcList'];
+          
 
       List<Map<String, dynamic>> hostTeamMembers =
           List<Map<String, dynamic>>.from(hostParticipantListData);
@@ -117,18 +118,19 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     }
   }
 
-  Future<String> repAttend(int battleId) async {
+  Future<bool> repAttend(int battleId) async {
     // 대항전 대표 참가
     DioApiCall api = DioApiCall();
     final response = await api.post('/univBattle/repAttend', {
       'univBattleId': battleId,
-      'guestLeader': UserData.getMemberIdx(),
+      'guestLeader': await UserData.getMemberIdx(),
     });
-    if (response['success'] == true) {
-      return response['message'];
-    } else {
-      return response['message'];
-    }
+    return response['success'];
+    // if (response['success'] == true) {
+    //   return response['message'];
+    // } else {
+    //   return response['message'];
+    // }
   }
 
   String getText() {

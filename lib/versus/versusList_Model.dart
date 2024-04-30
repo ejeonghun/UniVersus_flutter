@@ -22,10 +22,10 @@ class VersusListModel extends FlutterFlowModel<VersusListWidget> {
   // Model for versusElement component.
   late VersusElementModel versusElementModel2;
 
-  Future<List<versusElement>> getVersusList() async {
+  Future<List<versusElement>> getVersusList(int statusCode) async {
     // 대결 리스트를 불러오는 메소드
     DioApiCall api = DioApiCall();
-    final response = await api.get('/univBattle/list?status=${0}');
+    final response = await api.get('/univBattle/list?status=${statusCode}');
     if (response.isNotEmpty) {
       // response가 null이 아니면
       // 조회 성공
@@ -34,10 +34,10 @@ class VersusListModel extends FlutterFlowModel<VersusListWidget> {
       for (var item in response['data']) {
         versusList.add(versusElement(
           univBattleId: item['univBattleId'],
-          hostTeamName: item['hostUniv'].toString(),
+          hostTeamName: item['hostUnivName'].toString(),
           // hostTeamDept: item[''],
           hostTeamUnivLogo: item['hostUnivLogo'],
-          guestTeamName: item['guestUniv'].toString(),
+          guestTeamName: item['guestUnivName'],
           // guestTeamDept: item['place'],
           guestTeamUnivLogo: item['guestUnivLogo'],
           status: item['status'],

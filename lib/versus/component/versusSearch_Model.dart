@@ -7,8 +7,6 @@ import 'package:provider/provider.dart';
 
 class VersusSearchModel extends FlutterFlowModel<VersusSearchWidget> {
   ///  State fields for stateful widgets in this component.
-
-  // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
@@ -17,6 +15,8 @@ class VersusSearchModel extends FlutterFlowModel<VersusSearchWidget> {
   List<String>? get choiceChipsValues => choiceChipsValueController?.value;
   set choiceChipsValues(List<String>? val) =>
       choiceChipsValueController?.value = val;
+
+  int selectedIndex = 0;
 
   @override
   void initState(BuildContext context) {}

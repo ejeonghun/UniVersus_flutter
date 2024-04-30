@@ -620,6 +620,7 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
                               }
                               if (await _model.createBattle()) {
                                 debugPrint("대항전 생성 성공");
+                                Navigator.of(context).pop();
                               }
                             },
                             text: '대항전 생성 ',
