@@ -98,8 +98,8 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
         guestTeamUnivLogo: response['data']['univBattle']['guestUnivLogo'],
         univBattleId: response['data']['univBattle']['univBattleId'],
         status: response['data']['univBattle']['status'],
-        hostLeaderId: response['data']['univBattle']['hostLeaderId'],
-        place: response['data']['univBattle']['place'],
+        hostLeaderId: response['data']['univBattle']['hostLeader'],
+        place: response['data']['univBattle']['place'] ?? '없음',
         regDate: response['data']['univBattle']['regDt'],
         invitationCode: response['data']['univBattle']['invitationCode'],
         hostTeamMembers: hostTeamMembers,
@@ -107,9 +107,11 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
         content: response['data']['univBattle']['content'],
         cost: response['data']['univBattle']['cost'],
         eventId: response['data']['univBattle']['eventId'],
+        guestLeaderId: response['data']['univBattle']['guestLeader'],
       );
       // debugPrint(res.getHostTeamMembers.toString());
       status = res.status!;
+      debugPrint(res.toString());
       return res;
     } else {
       // 조회 실패

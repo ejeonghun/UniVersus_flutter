@@ -7,6 +7,7 @@ class versusElement {
   String? guestTeamUnivLogo; // 게스트 팀 로고
   int? univBattleId; // 대항전 id
   String? status; // 대항전 상태
+  String? content; // 대항전 내용
 
   versusElement(
       {this.hostTeamName,
@@ -16,7 +17,8 @@ class versusElement {
       this.guestTeamDept,
       this.guestTeamUnivLogo,
       this.univBattleId,
-      this.status});
+      this.status,
+      this.content});
 
   // Getter methods
   String? get getHostTeamName => this.hostTeamName;
@@ -27,4 +29,5 @@ class versusElement {
   String? get getGuestTeamUnivLogo => this.guestTeamUnivLogo;
   int? get getUnivBattleId => this.univBattleId;
   String? get getStatus => this.status;
+  String? get getContent => this.content;
 }

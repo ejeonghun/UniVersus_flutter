@@ -620,6 +620,8 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
                               }
                               if (await _model.createBattle()) {
                                 debugPrint("대항전 생성 성공");
+                                CustomSnackbar.success(
+                                    context, "대항전 생성", "대항전이 생성되었습니다.", 2);
                                 Navigator.of(context).pop();
                               }
                             },

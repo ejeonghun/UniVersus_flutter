@@ -68,6 +68,20 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
+            Align(
+  alignment: AlignmentDirectional(-1, 0),
+  child: Padding(
+    padding: EdgeInsetsDirectional.fromSTEB(20, 5, 0, 0),
+    child: Text(
+      '${widget.element.content}',
+      style: FlutterFlowTheme.of(context).bodyMedium.override(
+            fontFamily: 'Readex Pro',
+            letterSpacing: 0,
+            fontWeight: FontWeight.w600,
+          ),
+    ),
+  ),
+),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
               child: Row(

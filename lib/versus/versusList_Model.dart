@@ -39,6 +39,7 @@ class VersusListModel extends FlutterFlowModel<VersusListWidget> {
           hostTeamUnivLogo: item['hostUnivLogo'],
           guestTeamName: item['guestUnivName'],
           // guestTeamDept: item['place'],
+          content: item['content'],
           guestTeamUnivLogo: item['guestUnivLogo'],
           status: item['status'],
         ));
