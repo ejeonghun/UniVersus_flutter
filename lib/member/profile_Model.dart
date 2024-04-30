@@ -30,7 +30,7 @@ class ProfileModel extends FlutterFlowModel<ProfileWidget> {
         profileImage: response['profileImage'] != null &&
                 response['profileImage'].isNotEmpty
             ? response['profileImage'][0]['imageUrl']
-            : 'https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-15.png',
+            : 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/default/df_profile.jpg',
       );
     } else {
       // 조회 실패

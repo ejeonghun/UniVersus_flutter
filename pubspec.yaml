@@ -1,5 +1,5 @@
 name: universus
-description: "A new Flutter project."
+description: "Universus"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -71,7 +71,7 @@ dependencies:
   lottie: ^3.1.0
   geolocator: ^10.0.1
   google_maps_flutter: ^2.6.0
-
+  google_maps_flutter_web: ^0.5.6+2
 
 dev_dependencies:
   flutter_test:
@@ -98,6 +98,10 @@ flutter:
     - assets/
     - assets/images/
     - assets/lottie/
+  fonts:
+    - family: Ownglyph
+      fonts:
+        - asset: assets/fonts/Ownglyph_Regular.ttf
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
