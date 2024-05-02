@@ -2,6 +2,7 @@ import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/user/user.dart';
 import 'package:universus/class/user/userProfile.dart';
+import 'package:universus/club/Components/recommendclub_Model.dart';
 import 'main_Widget.dart' show MainWidget;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart'
     as smooth_page_indicator;
@@ -12,6 +13,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class MainModel extends FlutterFlowModel<MainWidget> {
+  late RecommendclubModel recommendclubModel;
+;
+
 Future<userProfile> getProfile() async {
     String? memberIdx = await UserData.getMemberIdx();
     // 사용자 정보를 불러오는 메소드

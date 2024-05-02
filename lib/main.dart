@@ -13,6 +13,7 @@ import 'package:universus/class/user/user.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:universus/club/ClubList_Widget.dart';
 import 'package:universus/main/main_Model.dart';
 
 // Widget Import
@@ -33,6 +34,7 @@ import 'package:universus/shared/placepicker.dart';
 import 'package:universus/versus/versusCreate_Widget.dart';
 import 'package:universus/versus/versusList_Widget.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:universus/club/ClubList_Widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 1번코드
@@ -113,6 +115,7 @@ class _MyAppState extends State<MyApp> {
               '/Write': (context) => WriteWidget(),
               '/ClubMain': (context) => ClubMainWidget(),
               '/MyClub': (context) => MyClubWidget(),
+              '/ClubList': (context) => ClubListWidget(),
 
             },
           );
