@@ -97,7 +97,7 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
             : '참가 학교 없음',
         guestTeamUnivLogo: response['data']['univBattle']['guestUnivLogo'],
         univBattleId: response['data']['univBattle']['univBattleId'],
-        status: response['data']['univBattle']['status'],
+        status: response['data']['univBattle']['matchStatus'],
         hostLeaderId: response['data']['univBattle']['hostLeader'],
         place: response['data']['univBattle']['place'] ?? '없음',
         regDate: response['data']['univBattle']['regDt'],

@@ -151,9 +151,15 @@ class _MyAppState extends State<MyApp> {
         valueListenable: MyApp.themeNotifier,
         builder: (context, ThemeMode value, child) {
           return MaterialApp(
-            darkTheme: ThemeData.dark(),
-            theme: ThemeData.light(),
-            themeMode: value,
+            darkTheme: ThemeData(
+          brightness: Brightness.dark,
+          fontFamily: 'Ownglyph', // 다크모드에 대한 글꼴
+        ),
+        theme: ThemeData(
+          brightness: Brightness.light,
+          fontFamily: 'Ownglyph', // 라이트모드에 대한 글꼴
+        ),
+        themeMode: value,
             initialRoute: '/',
             routes: {
               '/': (context) => FutureBuilder(

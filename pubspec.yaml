@@ -107,6 +107,19 @@ flutter:
     - family: Ownglyph
       fonts:
         - asset: assets/fonts/Ownglyph_Regular.ttf
+
+    - family: Outfit
+      fonts:
+        - asset: assets/fonts/Ownglyph_Regular.ttf
+
+    - family: Readex Pro
+      fonts:
+        - asset: assets/fonts/Ownglyph_Regular.ttf
+        
+    - family: Plus Jakarta Sans
+      fonts:
+        - asset: assets/fonts/Ownglyph_Regular.ttf
+        
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

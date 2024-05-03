@@ -103,21 +103,6 @@ class _VersusListWidgetState extends State<VersusListWidget> {
               },
             ),
             FlutterFlowIconButton(
-              borderColor: Colors.transparent,
-              borderRadius: 20.0,
-              borderWidth: 1.0,
-              buttonSize: 40.0,
-              fillColor: Colors.transparent,
-              icon: Icon(
-                Icons.add,
-                color: FlutterFlowTheme.of(context).primaryText,
-                size: 24.0,
-              ),
-              onPressed: () {
-                print('IconButton pressed ...');
-              },
-            ),
-            FlutterFlowIconButton(
               borderRadius: 20.0,
               borderWidth: 1.0,
               buttonSize: 40.0,
