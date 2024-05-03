@@ -1,7 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:universus/shared/PermissonManage.dart';
+import 'firebase_options.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
 import 'package:universus/Community/Community_Widget.dart';
 import 'package:universus/Community/Post_Widget.dart';
 import 'package:universus/Community/Write_Widget.dart';
@@ -32,12 +38,57 @@ import 'package:universus/versus/versusList_Widget.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("백그라운드 메시지 처리.. ${message.notification!.body!}");
+}
+
+void initializeNotification() async {
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  final InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid, iOS: null); // ios 설정은 안함
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(
+    'Universus',
+    '알림',
+    importance: Importance.max,
+    priority: Priority.high,
+  );
+  const NotificationDetails platformChannelSpecifics =
+      NotificationDetails(android: androidPlatformChannelSpecifics);
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(const AndroidNotificationChannel(
+          'high_importance_channel', 'high_importance_notification',
+          importance: Importance.max));
+
+  await flutterLocalNotificationsPlugin.initialize(const InitializationSettings(
+    android: AndroidInitializationSettings("@mipmap/ic_launcher"),
+  ));
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 1번코드
   KakaoSdk.init(
       nativeAppKey: 'c42d4f7154f511f29ae715dc77565878',
       javaScriptAppKey: '240cc5ab531ff61f42c8e0a1723a4f96');
   await dotenv.load(fileName: ".env"); // 2번코드
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
@@ -52,10 +103,44 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  var messageTitle = "";
+  var messageBody = "";
+
+  void getMyDeviceToken() async {
+    final token = await FirebaseMessaging.instance.getToken();
+    print("내 디바이스 토큰: $token");
+  }
+
   late Future<bool> _loginInfo;
 
   @override
   void initState() {
+    getMyDeviceToken();
+    initializeNotification();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      RemoteNotification? notification = message.notification;
+
+      if (notification != null) {
+        FlutterLocalNotificationsPlugin().show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          const NotificationDetails(
+            android: AndroidNotificationDetails(
+              'high_importance_channel',
+              'high_importance_notification',
+              importance: Importance.max,
+            ),
+          ),
+        );
+
+        setState(() {
+          messageBody = message.notification!.body!;
+          messageTitle = message.notification!.title!;
+          print("Foreground 메시지 수신: $messageBody, $messageTitle");
+        });
+      }
+    });
     super.initState();
     _loginInfo = checkLoginInfo();
   }
@@ -66,7 +151,6 @@ class _MyAppState extends State<MyApp> {
         valueListenable: MyApp.themeNotifier,
         builder: (context, ThemeMode value, child) {
           return MaterialApp(
-            debugShowCheckedModeBanner: false,
             darkTheme: ThemeData.dark(),
             theme: ThemeData.light(),
             themeMode: value,
@@ -112,7 +196,6 @@ class _MyAppState extends State<MyApp> {
               '/Write': (context) => WriteWidget(),
               '/ClubMain': (context) => ClubMainWidget(),
               '/MyClub': (context) => MyClubWidget(),
-
             },
           );
         });
@@ -133,12 +216,32 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   double _logoSize = 0.0;
+  PermissionManage _permissionManage = PermissionManage();
 
   @override
   void initState() {
     super.initState();
     _animateLogo();
+    // _requestAllPermissions();
   }
+
+  // void _requestAllPermissions() async {
+  //   bool cameraPermission =
+  //       await _permissionManage.requestCameraPermission(context);
+  //   bool storagePermission =
+  //       await _permissionManage.requestStoragePermission(context);
+  //   bool locationPermission =
+  //       await _permissionManage.requestLocationPermission(context);
+  //   bool notificationPermission =
+  //       await _permissionManage.requestNotificationPermission(context);
+
+  //   if (!cameraPermission ||
+  //       !storagePermission ||
+  //       !locationPermission ||
+  //       !notificationPermission) {
+  //     // 하나 이상의 권한이 허용되지 않았을 경우, 추가적인 처리를 할 수 있습니다.
+  //   }
+  // }
 
   void _animateLogo() {
     Future.delayed(Duration(milliseconds: 50), () {

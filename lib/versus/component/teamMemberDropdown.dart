@@ -9,7 +9,11 @@ class TeamMemberDropdown extends StatefulWidget {
   final int hostLeader;
   final int? guestLeader;
 
-  const TeamMemberDropdown({Key? key, required this.teamMembers, required this.hostLeader, required this.guestLeader})
+  const TeamMemberDropdown(
+      {Key? key,
+      required this.teamMembers,
+      required this.hostLeader,
+      required this.guestLeader})
       : super(key: key);
 
   @override
@@ -115,10 +119,7 @@ class _TeamMemberDropdownState extends State<TeamMemberDropdown> {
         return {
           'name': response['nickname'] ?? '알 수 없음',
           'deptName': response['deptName'] ?? '학과 정보 없음',
-          'logoImgUrl': (response['profileImage'] != null &&
-                  response['profileImage'].isNotEmpty)
-              ? response['profileImage'][0]['imageUrl']
-              : 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/default/df_profile.jpg',
+          'logoImgUrl': response['imageUrl'],
           'oneLineIntro': response['oneLineIntro'] ?? "한 줄 소개가 없습니다."
         };
       } else {
@@ -151,11 +152,12 @@ class _TeamMemberDropdownState extends State<TeamMemberDropdown> {
           selectedMemberId = newValue;
           if (selectedMemberId != null) {
             showMemberDetailsModal(context, selectedMemberId!);
-            Timer(Duration(seconds: 1), () { // 1초 후 선택 해제
+            Timer(Duration(seconds: 1), () {
+              // 1초 후 선택 해제
               setState(() {
                 selectedMemberId = null;
               });
-            });            
+            });
           }
         });
       },
@@ -165,10 +167,10 @@ class _TeamMemberDropdownState extends State<TeamMemberDropdown> {
               value: member['memberIdx'].toString(),
               child: Row(
                 children: [
-                  member['memberIdx'] == widget.hostLeader || member['memberIdx'] == widget.guestLeader
+                  member['memberIdx'] == widget.hostLeader ||
+                          member['memberIdx'] == widget.guestLeader
                       ? Icon(Icons.star, color: Colors.yellow)
-                      :
-                  Icon(Icons.person),
+                      : Icon(Icons.person),
                   SizedBox(width: 10),
                   Text('${member['nickName']}'),
                 ],

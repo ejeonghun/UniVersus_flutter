@@ -14,7 +14,7 @@ export 'versusList_Model.dart';
 
 class VersusListWidget extends StatefulWidget {
   const VersusListWidget({super.key});
-  
+
   @override
   State<VersusListWidget> createState() => _VersusListWidgetState();
 }
@@ -59,7 +59,7 @@ class _VersusListWidgetState extends State<VersusListWidget> {
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            print('FloatingActionButton pressed ...');
+            Navigator.of(context).pushNamed('/versusCreate');
           },
           backgroundColor: Color(0xFFFFBE98),
           elevation: 6.0,
@@ -175,9 +175,10 @@ class _VersusListWidgetState extends State<VersusListWidget> {
                                   model: _model.versusSearchModel,
                                   updateCallback: () => setState(() {}),
                                   child: VersusSearchWidget(
-                                        setStatusCode: setStatusCode,
-                                        selectedIndex: statusCode, // 해당 값을 전해줌으로써 ChoiceChip에 선택이 되어 있게함
-                                      ),
+                                    setStatusCode: setStatusCode,
+                                    selectedIndex:
+                                        statusCode, // 해당 값을 전해줌으로써 ChoiceChip에 선택이 되어 있게함
+                                  ),
                                 ),
                               if (responsiveVisibility(
                                 context: context,
@@ -190,29 +191,41 @@ class _VersusListWidgetState extends State<VersusListWidget> {
                                   decoration: BoxDecoration(),
                                 ),
                               Center(
-  child: snapshot.data != null && snapshot.data!.isNotEmpty
-    ? ListView(
-        padding: EdgeInsets.fromLTRB(
-          0,
-          0,
-          0,
-          44.0,
-        ),
-        shrinkWrap: true,
-        scrollDirection: Axis.vertical,
-        children: snapshot.data!.map((versusElement element) {
-          return wrapWithModel(
-            model: _model.versusElementModel1,
-            updateCallback: () => setState(() {}),
-            child: VersusElementWidget(
-              element: element,
-            ),
-          );
-        }).toList().expand((widget) => [widget, SizedBox(height: 1.0)]).toList(),
-      )
-    : Padding(padding: EdgeInsets.fromLTRB(0, 30, 0, 0), child:Text("대항전이 존재하지 않습니다!"),) 
-),
-
+                                  child: snapshot.data != null &&
+                                          snapshot.data!.isNotEmpty
+                                      ? ListView(
+                                          padding: EdgeInsets.fromLTRB(
+                                            0,
+                                            0,
+                                            0,
+                                            44.0,
+                                          ),
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.vertical,
+                                          children: snapshot.data!
+                                              .map((versusElement element) {
+                                                return wrapWithModel(
+                                                  model: _model
+                                                      .versusElementModel1,
+                                                  updateCallback: () =>
+                                                      setState(() {}),
+                                                  child: VersusElementWidget(
+                                                    element: element,
+                                                  ),
+                                                );
+                                              })
+                                              .toList()
+                                              .expand((widget) => [
+                                                    widget,
+                                                    SizedBox(height: 1.0)
+                                                  ])
+                                              .toList(),
+                                        )
+                                      : Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(0, 30, 0, 0),
+                                          child: Text("대항전이 존재하지 않습니다!"),
+                                        )),
                             ],
                           ),
                         ),
