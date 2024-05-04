@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:universus/component/MainPage.dart';
-import 'package:universus/component/MyGroupPage.dart';
-import 'package:universus/component/MyPage.dart';
-import 'package:universus/component/MainPageLikeCardLayout.dart';
-import 'package:universus/component/TodayWhatDoing.dart';
+import 'package:flutterflow_ui/flutterflow_ui.dart';
 
 class BottomBar2 extends StatefulWidget {
   const BottomBar2({Key? key}) : super(key: key);
@@ -27,33 +23,22 @@ class _BottomBar2State extends State<BottomBar2> {
           case 0:
             if (_selectedIndex != 0) {
               debugPrint("메인으로 이동");
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => MainPage()),
-                (route) => false,
-              );
+              Navigator.of(context).pushNamed('/main');
             } else {
               debugPrint("현재 메인임");
             }
             break;
           case 1:
-            debugPrint('내 모임으로 이동');
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MyGroupPage()),
-            );
+            debugPrint('대항전으로 이동');
+            Navigator.of(context).pushNamed('/versusList');
             break;
           case 2:
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MyPage()),
-            );
+            Navigator.of(context).pushNamed('/community');
             debugPrint('내 정보 클릭');
             break;
           case 3:
+            Navigator.of(context).pushNamed('/profile');
             debugPrint('3');
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => TodayWhatDoing()));
             break;
           default:
             debugPrint('의도하지 않은 버튼');
@@ -61,15 +46,15 @@ class _BottomBar2State extends State<BottomBar2> {
         }
       },
       items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.group), label: '내 모임'),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: '내 정보'),
-        BottomNavigationBarItem(icon: Icon(Icons.book), label: '오뭐했')
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
+        BottomNavigationBarItem(icon: Icon(Icons.leaderboard), label: '대항전'),
+        BottomNavigationBarItem(icon: Icon(Icons.school), label: '커뮤니티'),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: '프로필')
       ],
       type: BottomNavigationBarType.fixed,
-      backgroundColor: Colors.blue[200],
-      unselectedItemColor: Colors.white.withOpacity(.60),
-      selectedItemColor: Colors.amber[800],
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+      unselectedItemColor: FlutterFlowTheme.of(context).primaryText,
+      selectedItemColor: FlutterFlowTheme.of(context).tertiary,
       // unselectedItemColor: const Color.fromARGB(255, 0, 0, 0),
       currentIndex: _selectedIndex,
       selectedLabelStyle: TextStyle(color: Colors.amber[800]),

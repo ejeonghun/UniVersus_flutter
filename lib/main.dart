@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:universus/chat/test.dart';
 import 'package:universus/shared/PermissonManage.dart';
 import 'firebase_options.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -24,7 +25,6 @@ import 'package:universus/club/ClubMain_Widget.dart';
 import 'package:universus/club/CreateClub_Widget.dart';
 import 'package:universus/club/MyClub_Widget.dart';
 import 'package:universus/club/UpdateClub_Widget.dart';
-import 'package:universus/component/MainPage.dart';
 import 'package:universus/auth/CreateAccount_Widget.dart';
 import 'package:universus/auth/PasswordForget_Widget.dart';
 import 'package:universus/main/main_Widget.dart';
@@ -187,11 +187,7 @@ class _MyAppState extends State<MyApp> {
               '/club/update': (context) => UpdateClubWidget(
                   clubId: "9"), // 테스트용 나중에 clubId 파라미터도 같이 전달해야함
               '/profile': (context) => ProfileWidget(),
-              '/chat/main.dart': (context) => ChatListScreen(chatItems: [
-                    ChatItem(title: '채팅방 1', subtitle: '채팅방 1 설명'),
-                    ChatItem(title: '채팅방 2', subtitle: '채팅방 2 설명'),
-                    ChatItem(title: '채팅방 3', subtitle: '채팅방 3 설명'),
-                  ]),
+              '/chat/main': (context) => ChatScreen(),
               '/main1': (context) => MainWidget(),
               '/versusList': (context) => VersusListWidget(),
               '/versusCreate': (context) => versusCreateWidget(),

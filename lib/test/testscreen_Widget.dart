@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:universus/BottomBar2.dart';
 import 'package:universus/auth/AdditionalInfo_Widget.dart';
 
 import 'testscreen_Model.dart';
@@ -48,7 +49,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
           backgroundColor: FlutterFlowTheme.of(context).tertiary,
           automaticallyImplyLeading: false,
           title: Text(
-            '> 현재 지역',
+            '테스트 페이지',
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Outfit',
                   color: Colors.white,
@@ -97,7 +98,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                 size: 24,
               ),
               onPressed: () async {
-                Navigator.pushNamed(context, '/chatting');
+                Navigator.pushNamed(context, '/chat/main');
               },
             ),
           ],
@@ -923,6 +924,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
             ),
           ),
         ),
+        bottomNavigationBar: BottomBar2(),
       ),
     );
   }
