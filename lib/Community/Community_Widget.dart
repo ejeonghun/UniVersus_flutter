@@ -9,7 +9,9 @@ import 'Community_Model.dart';
 export 'Community_Model.dart';
 
 class CommunityWidget extends StatefulWidget {
-  const CommunityWidget({super.key});
+  final int initialTabIndex; // 초기 탭 인덱스를 받을 필드 추가
+
+  const CommunityWidget({super.key, this.initialTabIndex = 0}); // 초기 탭 인덱스의 기본값은 0
 
   @override
   State<CommunityWidget> createState() => _CommunityWidgetState();
@@ -29,7 +31,7 @@ class _CommunityWidgetState extends State<CommunityWidget>
     _model.tabBarController = TabController(
       vsync: this,
       length: 4,
-      initialIndex: 0,
+      initialIndex: widget.initialTabIndex, // 인자로 받은 초기 탭 인덱스 설정
     )..addListener(() => setState(() {}));
   }
 
