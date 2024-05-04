@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:universus/class/user/user.dart';
 import 'package:universus/class/versus/versusDetail.dart';
 import 'package:universus/shared/CustomSnackbar.dart';
 import 'package:universus/shared/GoogleMap.dart';
@@ -21,6 +22,7 @@ class VersusDetailWidget extends StatefulWidget {
 
 class _VersusDetailWidgetState extends State<VersusDetailWidget> {
   late VersusDetailModel _model;
+  late String? memberIdx;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -28,15 +30,18 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => VersusDetailModel());
-
+    getMemberIdx();
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
+  }
+
+  Future<void> getMemberIdx() async {
+    memberIdx = await UserData.getMemberIdx();
   }
 
   @override
@@ -428,6 +433,47 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                     ),
                                   ),
                                 ],
+                              ),
+                            ),
+                          ),
+                          if (snapshot.data!.status == 'WAITING' && snapshot.data!.hostLeaderId == int.parse(memberIdx!))
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 5.0, 0.0, 0.0),
+                            child: FFButtonWidget(
+                              onPressed: () async {
+                                if (await _model.matchStart(widget.battleId) ==
+                                    true) {
+                                  CustomSnackbar.success(
+                                      context, "성공", "경기가 시작되었습니다.", 2);
+                                } else {
+                                  CustomSnackbar.error(
+                                      context, "실패", "경기를 시작 할 수 없습니다.", 2);
+                                }
+                                setState(() {});
+                              },
+                              text: '경기 시작',
+                              options: FFButtonOptions(
+                                height: 40.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    24.0, 0.0, 24.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: FlutterFlowTheme.of(context).error,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'Readex Pro',
+                                      color: Colors.white,
+                                      letterSpacing: 0.0,
+                                      useGoogleFonts: false,
+                                    ),
+                                elevation: 3.0,
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
                           ),

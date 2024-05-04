@@ -120,7 +120,7 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     }
   }
 
-  Future<bool> repAttend(int battleId) async {
+  Future<bool> repAttend(int battleId) async { 
     // 대항전 대표 참가
     DioApiCall api = DioApiCall();
     final response = await api.post('/univBattle/repAttend', {
@@ -134,6 +134,19 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     //   return response['message'];
     // }
   }
+
+    Future<bool> matchStart(int battleId) async { // 경기시작 API
+    // 대항전 대표 참가
+    DioApiCall api = DioApiCall();
+    final response = await api.get('/univBattle/matchStart?univBattleId=${battleId.toString()}');
+    return response['success'];
+    // if (response['success'] == true) {
+    //   return response['message'];
+    // } else {
+    //   return response['message'];
+    // }
+  }
+
 
   String getText() {
     switch (status) {
