@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:universus/class/versus/versusDetail.dart';
+import 'package:universus/shared/CustomSnackbar.dart';
 import 'package:universus/shared/GoogleMap.dart';
 import 'package:universus/versus/component/teamMemberDropdown.dart';
 
@@ -89,6 +90,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                           fontSize: 22.0,
                           letterSpacing: 0.0,
                           fontWeight: FontWeight.normal,
+                          useGoogleFonts: false,
                         ),
                   ),
                   actions: [],
@@ -113,7 +115,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     3.0, 0.0, 0.0, 0.0),
                                 child: Text(
-                                  '축구',
+                                  "${_model.getEventText(snapshot.data!.eventId!)}",
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -121,6 +123,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                         fontSize: 32.0,
                                         letterSpacing: 0.0,
                                         fontWeight: FontWeight.w600,
+                                        useGoogleFonts: false,
                                       ),
                                 ),
                               ),
@@ -155,6 +158,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                             fontSize: 18.0,
                                             letterSpacing: 0.0,
                                             fontWeight: FontWeight.w600,
+                                            useGoogleFonts: false,
                                           ),
                                     ),
                                   ),
@@ -189,9 +193,15 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                           fontSize: 16.0,
                                           letterSpacing: 0.0,
                                           fontWeight: FontWeight.w600,
+                                          useGoogleFonts: false,
                                         ),
                                   ),
-                                  TeamMemberDropdown(teamMembers: snapshot.data!.hostTeamMembers!),
+                                  TeamMemberDropdown(
+                                      teamMembers:
+                                          snapshot.data!.hostTeamMembers!,
+                                      hostLeader: snapshot.data!.hostLeaderId!,
+                                      guestLeader:
+                                          snapshot.data!.guestLeaderId),
                                   // Text(
                                   //   '팀원 드롭박스',
                                   //   style: FlutterFlowTheme.of(context)
@@ -226,6 +236,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                             fontSize: 18.0,
                                             letterSpacing: 0.0,
                                             fontWeight: FontWeight.w600,
+                                            useGoogleFonts: false,
                                           ),
                                     ),
                                   ),
@@ -263,10 +274,16 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                             fontSize: 16.0,
                                             letterSpacing: 0.0,
                                             fontWeight: FontWeight.w600,
+                                            useGoogleFonts: false,
                                           ),
                                     ),
                                   ),
-                                  TeamMemberDropdown(teamMembers: snapshot.data!.guestTeamMembers!),
+                                  TeamMemberDropdown(
+                                      teamMembers:
+                                          snapshot.data!.guestTeamMembers!,
+                                      hostLeader: snapshot.data!.hostLeaderId!,
+                                      guestLeader:
+                                          snapshot.data!.guestLeaderId),
                                   // Text(
                                   //   '팀원 드롭박스',
                                   //   style: FlutterFlowTheme.of(context)
@@ -306,6 +323,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                         fontSize: 16.0,
                                         letterSpacing: 0.0,
                                         fontWeight: FontWeight.w600,
+                                        useGoogleFonts: false,
                                       ),
                                 ),
                               ],
@@ -331,6 +349,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                     .override(
                                       fontFamily: 'Readex Pro',
                                       letterSpacing: 0.0,
+                                      useGoogleFonts: false,
                                     ),
                               ),
                             ),
@@ -343,8 +362,16 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 5.0, 0.0, 0.0),
                             child: FFButtonWidget(
-                              onPressed: () {
-                                _model.repAttend(widget.battleId);
+                              onPressed: () async {
+                                if (await _model.repAttend(widget.battleId) ==
+                                    true) {
+                                  CustomSnackbar.success(
+                                      context, "성공", "참가가 완료되었습니다.", 2);
+                                } else {
+                                  CustomSnackbar.error(
+                                      context, "실패", "같은 학교는 참가할 수 없습니다.", 2);
+                                }
+                                setState(() {});
                               },
                               text: '대결 신청',
                               options: FFButtonOptions(
@@ -360,6 +387,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                       fontFamily: 'Readex Pro',
                                       color: Colors.white,
                                       letterSpacing: 0.0,
+                                      useGoogleFonts: false,
                                     ),
                                 elevation: 3.0,
                                 borderSide: BorderSide(
@@ -395,6 +423,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                             fontSize: 16.0,
                                             letterSpacing: 0.0,
                                             fontWeight: FontWeight.bold,
+                                            useGoogleFonts: false,
                                           ),
                                     ),
                                   ),
@@ -420,6 +449,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                       .override(
                                         fontFamily: 'Readex Pro',
                                         letterSpacing: 0.0,
+                                        useGoogleFonts: false,
                                       ),
                                 ),
                                 Text(
@@ -428,57 +458,66 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                       .bodyMedium
                                       .override(
                                         fontFamily: 'Readex Pro',
-                                        letterSpacing: 0.0,
+                                        letterSpacing: 0.0,useGoogleFonts: false,
                                       ),
                                 ),
                               ],
                             ),
                           ),
                         ),
+
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 10.0, 0.0, 5.0),
-                          child: Container(
-                            width: MediaQuery.sizeOf(context).width * 0.85,
-                            height: 30.0,
-                            decoration: BoxDecoration(
-                              color: Color(0xC6ABA4A4),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      5.0, 0.0, 0.0, 0.0),
-                                  child: Text(
-                                    '주소 : ${snapshot.data!.place}',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Readex Pro',
-                                          fontSize: 15.0,
-                                          letterSpacing: 0.0,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                          child: snapshot.data!.getPlace != '없음'
+                              ? Container(
+                                  width:
+                                      MediaQuery.sizeOf(context).width * 0.85,
+                                  height: 30.0,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xC6ABA4A4),
                                   ),
-                                ),
-                              ].divide(SizedBox(width: 0.0)),
-                            ),
-                          ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            5.0, 0.0, 0.0, 0.0),
+                                        child: Text(
+                                          '주소 : ${snapshot.data!.place}',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Readex Pro',
+                                                fontSize: 15.0,
+                                                letterSpacing: 0.0,
+                                                fontWeight: FontWeight.w600,
+                                                useGoogleFonts: false,
+                                              ),
+                                        ),
+                                      ),
+                                    ].divide(SizedBox(width: 0.0)),
+                                  ),
+                                )
+                              : SizedBox(), // Render an empty SizedBox if any of the values are null
                         ),
                         Container(
-                            width: MediaQuery.sizeOf(context).width * 0.8,
-                            height: 200.0,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                            ),
-                            child: GoogleMapWidget(
-                              lat: snapshot.data!.getLat!,
-                              lng: snapshot.data!.getLng!,
-                            )),
+                          width: MediaQuery.sizeOf(context).width * 0.8,
+                          height: 200.0,
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                          ),
+                          child: snapshot.data!.place != '없음'
+                              ? GoogleMapWidget(
+                                  lat: snapshot.data!.getLat!,
+                                  lng: snapshot.data!.getLng!,
+                                )
+                              : SizedBox(), // Render an empty SizedBox if any of the values are null
+                        ),
                       ],
                     ),
                   ),

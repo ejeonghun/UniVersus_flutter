@@ -60,7 +60,7 @@ class versusDetail {
   int? get getUnivBattleId => this.univBattleId;
   String? get getStatus => this.status;
   int? get getHostLeaderId => this.hostLeaderId;
-  int? get getGuestLeaderId => this.guestLeaderId;
+  int? get getGuestLeaderId => this.guestLeaderId ?? 0;
   double? get getLat => double.parse(this.lat!);
   double? get getLng => double.parse(this.lng!);
   String? get getPlace => this.place;

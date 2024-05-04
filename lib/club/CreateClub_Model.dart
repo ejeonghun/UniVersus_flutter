@@ -100,8 +100,8 @@ class CreateClubModel extends FlutterFlowModel<CreateClubWidget> {
         'clubName': clubNameController?.text,
         'price': clubPriceController?.text,
         'introduction': clubIntroController?.text,
-        'eventId': eventId.toString(),
-        'maximumMembers': countControllerValue.toString(),
+        'eventId': eventId,
+        'maximumMembers': countControllerValue,
         'univId': await UserData.getUnivId(),
       });
 

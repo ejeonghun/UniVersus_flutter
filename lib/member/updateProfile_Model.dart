@@ -43,10 +43,7 @@ class ProfileEditModel extends FlutterFlowModel<updateProfileWidget> {
         memberIdx: response['memberIdx'].toString(),
         univName: response['univId'].toString(),
         deptName: response['deptId'].toString(),
-        profileImage: response['profileImage'] != null &&
-                response['profileImage'].isNotEmpty
-            ? response['profileImage'][0]['imageUrl']
-            : 'https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-15.png',
+        profileImage: response['imageUrl'],
         phone: response['phone'],
         oneLineIntro: response['oneLineIntro'] != null &&
                 response['oneLineIntro'].isNotEmpty

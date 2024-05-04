@@ -68,6 +68,21 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
+            Align(
+  alignment: AlignmentDirectional(-1, 0),
+  child: Padding(
+    padding: EdgeInsetsDirectional.fromSTEB(20, 5, 0, 0),
+    child: Text(
+      '${widget.element.content}',
+      style: FlutterFlowTheme.of(context).bodyMedium.override(
+            fontFamily: 'Readex Pro',
+            letterSpacing: 0,
+            fontWeight: FontWeight.w600,
+            useGoogleFonts: false,
+          ),
+    ),
+  ),
+),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
               child: Row(
@@ -91,10 +106,10 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
                               width: 44.0,
                               height: 44.0,
                               decoration: BoxDecoration(
-                                color: Color(0x4D9489F5),
+                                color: Color.fromARGB(50, 0, 0, 0),
                                 borderRadius: BorderRadius.circular(12.0),
                                 border: Border.all(
-                                  color: Color(0xFF6F61EF),
+                                  color: Color.fromARGB(0, 0, 0, 0),
                                   width: 2.0,
                                 ),
                               ),
@@ -126,6 +141,7 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
                                         fontFamily: 'Readex Pro',
                                         fontSize: 15.0,
                                         letterSpacing: 0.0,
+                                        useGoogleFonts: false,
                                       ),
                                   minFontSize: 13.0,
                                 ),
@@ -141,6 +157,7 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
                                     fontSize: 12.0,
                                     letterSpacing: 0.0,
                                     fontWeight: FontWeight.w500,
+                                    useGoogleFonts: false,
                                   ),
                             ),
                           ],
@@ -172,10 +189,10 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
                               width: 44.0,
                               height: 44.0,
                               decoration: BoxDecoration(
-                                color: Color(0x4D9489F5),
+                                color: Color.fromARGB(50, 0, 0, 0),
                                 borderRadius: BorderRadius.circular(12.0),
                                 border: Border.all(
-                                  color: Color(0xFF6F61EF),
+                                  color: Color.fromARGB(0, 255, 255, 255),
                                   width: 2.0,
                                 ),
                               ),
@@ -207,6 +224,7 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
                                         fontFamily: 'Readex Pro',
                                         fontSize: 15.0,
                                         letterSpacing: 0.0,
+                                        useGoogleFonts: false,
                                       ),
                                   minFontSize: 13.0,
                                 ),
@@ -222,6 +240,7 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
                                     fontSize: 12.0,
                                     letterSpacing: 0.0,
                                     fontWeight: FontWeight.w500,
+                                    useGoogleFonts: false,
                                   ),
                             ),
                           ],
@@ -250,6 +269,7 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
                             fontFamily: 'Readex Pro',
                             fontSize: 14.0,
                             letterSpacing: 0.0,
+                            useGoogleFonts: false,
                           ),
                     ),
                   ),

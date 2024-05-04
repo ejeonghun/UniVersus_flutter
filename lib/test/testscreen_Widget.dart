@@ -97,7 +97,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                 size: 24,
               ),
               onPressed: () async {
-                Navigator.pushNamed(context, '/chat/main.dart');
+                Navigator.pushNamed(context, '/chatting');
               },
             ),
           ],
@@ -614,8 +614,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                                   EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  Navigator.of(context)
-                                      .pushNamed('/Search');
+                                  Navigator.of(context).pushNamed('/Search');
                                 },
                                 text: '검색창',
                                 options: FFButtonOptions(
@@ -654,8 +653,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                                   EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  Navigator.of(context)
-                                      .pushNamed('/Community');
+                                  Navigator.of(context).pushNamed('/Community');
                                 },
                                 text: '커뮤니티',
                                 options: FFButtonOptions(
@@ -774,8 +772,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                                   EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  Navigator.of(context)
-                                      .pushNamed('/Write');
+                                  Navigator.of(context).pushNamed('/Write');
                                 },
                                 text: '글쓰기',
                                 options: FFButtonOptions(
@@ -814,8 +811,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                                   EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  Navigator.of(context)
-                                      .pushNamed('/Post');
+                                  Navigator.of(context).pushNamed('/Post');
                                 },
                                 text: '작성글',
                                 options: FFButtonOptions(
@@ -843,7 +839,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                           ],
                         ),
                       ),
-                                            Padding(
+                      Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
@@ -854,8 +850,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                                   EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  Navigator.of(context)
-                                      .pushNamed('/ClubMain');
+                                  Navigator.of(context).pushNamed('/ClubMain');
                                 },
                                 text: '클럽메인',
                                 options: FFButtonOptions(
@@ -883,7 +878,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                           ],
                         ),
                       ),
-                                            Padding(
+                      Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
@@ -894,8 +889,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                                   EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  Navigator.of(context)
-                                      .pushNamed('/MyClub');
+                                  Navigator.of(context).pushNamed('/MyClub');
                                 },
                                 text: '내 클럽',
                                 options: FFButtonOptions(

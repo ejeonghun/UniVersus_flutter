@@ -18,20 +18,16 @@ class ProfileModel extends FlutterFlowModel<ProfileWidget> {
       // 조회 성공
       print(response);
       return userProfile(
-        userName: response['userName'],
-        nickname: response['nickname'],
-        memberIdx: response['memberIdx'].toString(),
-        univName: response['schoolName'].toString(),
-        deptName: response['deptName'].toString(),
-        univLogoImage: response['logoImg'] != null &&
-                response['logoImg'].isNotEmpty
-            ? response['logoImg']
-            : 'https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-15.png',
-        profileImage: response['profileImage'] != null &&
-                response['profileImage'].isNotEmpty
-            ? response['profileImage'][0]['imageUrl']
-            : 'https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-15.png',
-      );
+          userName: response['userName'],
+          nickname: response['nickname'],
+          memberIdx: response['memberIdx'].toString(),
+          univName: response['schoolName'].toString(),
+          deptName: response['deptName'].toString(),
+          univLogoImage: response['logoImg'] != null &&
+                  response['logoImg'].isNotEmpty
+              ? response['logoImg']
+              : 'https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-15.png',
+          profileImage: response['imageUrl']);
     } else {
       // 조회 실패
       print(response);
