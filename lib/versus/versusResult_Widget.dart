@@ -4,6 +4,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:universus/class/versus/versusDetail.dart';
+import 'package:universus/shared/CustomSnackbar.dart';
 
 import 'versusResult_Model.dart';
 export 'versusResult_Model.dart';
@@ -37,24 +39,29 @@ class _VersusResultWidgetState extends State<VersusResultWidget>
 
     _model.textController2 ??= TextEditingController();
     _model.textFieldFocusNode2 ??= FocusNode();
-
-    _model.textController3 ??= TextEditingController();
-    _model.textFieldFocusNode3 ??= FocusNode();
-
-    _model.textController4 ??= TextEditingController();
-    _model.textFieldFocusNode4 ??= FocusNode();
+    _model.isWinGuestUniv = false;
   }
 
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return FutureBuilder(
+        future: _model.getVersusDetail(widget.battleId),
+        builder: (BuildContext context, AsyncSnapshot<versusDetail> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            return Text('오류: ${snapshot.error}');
+          } else { 
+            _model.winUnivId = snapshot.data!.getHostUnivId!;
+            return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
           : FocusScope.of(context).unfocus(),
@@ -76,7 +83,7 @@ class _VersusResultWidgetState extends State<VersusResultWidget>
                           EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 12.0),
                       child: Container(
                         width: double.infinity,
-                        height: 500.0,
+                        height: 550.0,
                         constraints: BoxConstraints(
                           maxWidth: 770.0,
                         ),
@@ -130,7 +137,7 @@ class _VersusResultWidgetState extends State<VersusResultWidget>
                                             size: 24.0,
                                           ),
                                           onPressed: () {
-                                            print('IconButton pressed ...');
+                                            Navigator.of(context).pop();
                                           },
                                         ),
                                       ),
@@ -151,6 +158,7 @@ class _VersusResultWidgetState extends State<VersusResultWidget>
                                         fontSize: 33.0,
                                         letterSpacing: 0.0,
                                         fontWeight: FontWeight.w300,
+                                        useGoogleFonts: false,
                                       ),
                                 ),
                               ),
@@ -187,13 +195,14 @@ class _VersusResultWidgetState extends State<VersusResultWidget>
                                                         .override(
                                                           fontFamily:
                                                               'Readex Pro',
-                                                          fontSize: 24.0,
+                                                          fontSize: 18.0,
                                                           letterSpacing: 0.0,
                                                           fontWeight:
                                                               FontWeight.bold,
+                                                              useGoogleFonts: false,
                                                         ),
                                                     unselectedLabelStyle:
-                                                        TextStyle(),
+                                                        TextStyle(fontFamily: 'Readex Pro'),
                                                     labelColor:
                                                         FlutterFlowTheme.of(
                                                                 context)
@@ -229,18 +238,28 @@ class _VersusResultWidgetState extends State<VersusResultWidget>
                                                         EdgeInsets.all(4.0),
                                                     tabs: [
                                                       Tab(
-                                                        text: '영진대',
+                                                        text: '${snapshot.data!.hostTeamName}',
                                                       ),
                                                       Tab(
-                                                        text: '경북대',
+                                                        text: '${snapshot.data!.guestTeamName}',
                                                       ),
                                                     ],
                                                     controller:
                                                         _model.tabBarController,
                                                     onTap: (i) async {
                                                       [
-                                                        () async {},
-                                                        () async {}
+                                                        () async {
+                                                          debugPrint("1번째");
+                                                          _model.winUnivId = snapshot.data!.getHostUnivId!;
+                                                          debugPrint(_model.winUnivId.toString());
+                                                          _model.isWinGuestUniv = false;
+                                                        },
+                                                        () async {
+                                                          debugPrint("2번째");
+                                                          _model.winUnivId = snapshot.data!.getGuestUnivId!;
+                                                          debugPrint(_model.winUnivId.toString());
+                                                          _model.isWinGuestUniv = true; // 게스트 팀이 우승하였을 경우 API 전송을 위한 변수
+                                                          }
                                                       ][i]();
                                                     },
                                                   ),
@@ -489,9 +508,14 @@ class _VersusResultWidgetState extends State<VersusResultWidget>
                                                                           5.0),
                                                               child:
                                                                   FFButtonWidget(
-                                                                onPressed: () {
-                                                                  print(
-                                                                      'Button pressed ...');
+                                                                onPressed: () async {
+                                                                  if (await _model.sendVersusRes(widget.battleId) == true) {
+                                                                    CustomSnackbar.success(context, "전송 성공", "경기 결과가 전송되었습니다.", 3);
+                                                                    print("전송 성공");
+                                                                  } else {
+                                                                    CustomSnackbar.error(context, "전송 실패", "경기 결과 전송에 실패하였습니다.", 3);
+                                                                    print("전송 실패");
+                                                                  }
                                                                 },
                                                                 text:
                                                                     '경기 결과 전송',
@@ -680,7 +704,7 @@ class _VersusResultWidgetState extends State<VersusResultWidget>
                                                                           TextInputType
                                                                               .number,
                                                                       validator: _model
-                                                                          .textController3Validator
+                                                                          .textController1Validator
                                                                           .asValidator(
                                                                               context),
                                                                     ),
@@ -785,7 +809,7 @@ class _VersusResultWidgetState extends State<VersusResultWidget>
                                                                           TextInputType
                                                                               .number,
                                                                       validator: _model
-                                                                          .textController4Validator
+                                                                          .textController2Validator
                                                                           .asValidator(
                                                                               context),
                                                                     ),
@@ -803,9 +827,14 @@ class _VersusResultWidgetState extends State<VersusResultWidget>
                                                                           5.0),
                                                               child:
                                                                   FFButtonWidget(
-                                                                onPressed: () {
-                                                                  print(
-                                                                      'Button pressed ...');
+                                                                onPressed: () async {
+                                                                  if (await _model.sendVersusRes(widget.battleId) == true) {
+                                                                    CustomSnackbar.success(context, "전송 성공", "경기 결과가 전송되었습니다.", 3);
+                                                                    print("전송 성공");
+                                                                  } else {
+                                                                    CustomSnackbar.error(context, "전송 실패", "경기 결과 전송에 실패하였습니다.", 3);
+                                                                    print("전송 실패");
+                                                                  }
                                                                 },
                                                                 text:
                                                                     '경기 결과 전송',
@@ -882,5 +911,7 @@ class _VersusResultWidgetState extends State<VersusResultWidget>
         ),
       ),
     );
+          }
+        });
   }
 }

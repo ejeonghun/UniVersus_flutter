@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -35,7 +36,6 @@ class _versusProceedingWidgetState extends State<versusProceedingWidget> {
     super.initState();
     _model = createModel(context, () => ProceedingModel());
     matchStartTime = DateTime.now();
-    // Timer.periodic을 직접 호출하여 타이머를 시작합니다.
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
       setState(() {
         elapsedTime = DateTime.now().difference(matchStartTime);
@@ -65,8 +65,9 @@ class _versusProceedingWidgetState extends State<versusProceedingWidget> {
             matchStartTime = snapshot.data!.matchStartDt!;
             // 경과 시간을 mm:ss 형식으로 표시합니다.
             String formattedTime =
-                '${(elapsedTime.inMinutes % 60).toString().padLeft(2, '0')}:'
-                '${(elapsedTime.inSeconds % 60).toString().padLeft(2, '0')}';
+                '${(elapsedTime.inHours % 24).toString().padLeft(2, '0')}시간:'
+                '${(elapsedTime.inMinutes % 60).toString().padLeft(2, '0')}분:'
+                '${(elapsedTime.inSeconds % 60).toString().padLeft(2, '0')}초';
 
             return GestureDetector(
               onTap: () => _model.unfocusNode.canRequestFocus
@@ -397,15 +398,38 @@ class _versusProceedingWidgetState extends State<versusProceedingWidget> {
                                       alignment: AlignmentDirectional(0.0, 1.0),
                                       child: FFButtonWidget(
                                         onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      VersusResultWidget(
-                                                        battleId:
-                                                            widget.battleId,
-                                                      )));
-                                        },
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: Text("확인"),
+        content: Text("경기를 종료하시겠습니까?"),
+        actions: [
+          CupertinoDialogAction(
+            child: Text("취소"),
+            onPressed: () {
+              Navigator.pop(context); // 다이얼로그 닫기
+            },
+          ),
+          CupertinoDialogAction(
+            child: Text("확인"),
+            onPressed: () {
+              Navigator.pop(context); // 다이얼로그 닫기
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => VersusResultWidget(
+                    battleId: widget.battleId,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      );
+    },
+  );
+},
                                         text: '종료',
                                         options: FFButtonOptions(
                                           width: double.infinity,
