@@ -8,6 +8,7 @@ import 'package:universus/class/versus/versusDetail.dart';
 import 'package:universus/shared/CustomSnackbar.dart';
 import 'package:universus/shared/GoogleMap.dart';
 import 'package:universus/versus/component/teamMemberDropdown.dart';
+import 'package:universus/versus/versusProceeding_Widget.dart';
 
 import 'versusDetail_Model.dart';
 export 'versusDetail_Model.dart';
@@ -141,6 +142,14 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                           endIndent: 30.0,
                           color: FlutterFlowTheme.of(context).secondaryText,
                         ),
+                        /* 
+                        만약 winUnivName(이긴 대학)이 존재한다면 출력
+                        */
+                        if (snapshot.data!.winUnivName != 'null')
+                          Text(
+                            "승리팀 : ${snapshot.data!.winUnivName}",
+                            style: TextStyle(fontSize: 22),
+                          ),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 10.0, 0.0, 0.0),
@@ -436,7 +445,12 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                               ),
                             ),
                           ),
-                          if (snapshot.data!.status == 'WAITING' && snapshot.data!.hostLeaderId == int.parse(memberIdx!))
+                        /* 
+                          현재 "대기중" 상태이고 host리더만이 경기를 시작할 수 있다.
+                          */
+                        if (snapshot.data!.status == 'WAITING' &&
+                            snapshot.data!.hostLeaderId ==
+                                int.parse(memberIdx!))
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 5.0, 0.0, 0.0),
@@ -446,13 +460,68 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                     true) {
                                   CustomSnackbar.success(
                                       context, "성공", "경기가 시작되었습니다.", 2);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              versusProceedingWidget(
+                                                battleId: widget.battleId,
+                                              )));
                                 } else {
                                   CustomSnackbar.error(
-                                      context, "실패", "경기를 시작 할 수 없습니다.", 2);
+                                      context,
+                                      "실패",
+                                      "경기를 시작 할 수 없습니다. \n 경기시작에 필요한 인원이 부족합니다.",
+                                      2);
                                 }
                                 setState(() {});
                               },
                               text: '경기 시작',
+                              options: FFButtonOptions(
+                                height: 40.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    24.0, 0.0, 24.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: FlutterFlowTheme.of(context).error,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'Readex Pro',
+                                      color: Colors.white,
+                                      letterSpacing: 0.0,
+                                      useGoogleFonts: false,
+                                    ),
+                                elevation: 3.0,
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                          ),
+                        /* 
+                          이 상태는 경기가 시작하였지만 host리더가 경기 진행창을 벗어났을경우를 대처해
+                          다시 들어갈 수 있도록 만들어놈
+                          */
+                        if (snapshot.data!.status == 'IN_PROGRESS' &&
+                            snapshot.data!.hostLeaderId ==
+                                int.parse(memberIdx!))
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 5.0, 0.0, 0.0),
+                            child: FFButtonWidget(
+                              onPressed: () async {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            versusProceedingWidget(
+                                              battleId: widget.battleId,
+                                            )));
+                              },
+                              text: '경기로 돌아가기',
                               options: FFButtonOptions(
                                 height: 40.0,
                                 padding: EdgeInsetsDirectional.fromSTEB(
@@ -504,7 +573,8 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                       .bodyMedium
                                       .override(
                                         fontFamily: 'Readex Pro',
-                                        letterSpacing: 0.0,useGoogleFonts: false,
+                                        letterSpacing: 0.0,
+                                        useGoogleFonts: false,
                                       ),
                                 ),
                               ],

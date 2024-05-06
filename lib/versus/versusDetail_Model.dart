@@ -79,7 +79,6 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
           response['data']['HostTeam']['hostPtcList'];
       List<dynamic> guestTeamMembersData =
           response['data']['GuestTeam']['guestPtcList'];
-          
 
       List<Map<String, dynamic>> hostTeamMembers =
           List<Map<String, dynamic>>.from(hostParticipantListData);
@@ -87,28 +86,28 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
           List<Map<String, dynamic>>.from(guestTeamMembersData);
 
       versusDetail res = versusDetail(
-        battleDate: response['data']['univBattle']['battleDate'],
-        lat: response['data']['univBattle']['lat'],
-        lng: response['data']['univBattle']['lng'],
-        hostTeamName: response['data']['HostTeam']['hostUvName'],
-        hostTeamUnivLogo: response['data']['univBattle']['hostUnivLogo'],
-        guestTeamName: response['data']['GuestTeam'] != null
-            ? response['data']['GuestTeam']['guestUvName']
-            : '참가 학교 없음',
-        guestTeamUnivLogo: response['data']['univBattle']['guestUnivLogo'],
-        univBattleId: response['data']['univBattle']['univBattleId'],
-        status: response['data']['univBattle']['matchStatus'],
-        hostLeaderId: response['data']['univBattle']['hostLeader'],
-        place: response['data']['univBattle']['place'] ?? '없음',
-        regDate: response['data']['univBattle']['regDt'],
-        invitationCode: response['data']['univBattle']['invitationCode'],
-        hostTeamMembers: hostTeamMembers,
-        guestTeamMembers: guestTeamMembers,
-        content: response['data']['univBattle']['content'],
-        cost: response['data']['univBattle']['cost'],
-        eventId: response['data']['univBattle']['eventId'],
-        guestLeaderId: response['data']['univBattle']['guestLeader'],
-      );
+          battleDate: response['data']['univBattle']['battleDate'],
+          lat: response['data']['univBattle']['lat'],
+          lng: response['data']['univBattle']['lng'],
+          hostTeamName: response['data']['HostTeam']['hostUvName'],
+          hostTeamUnivLogo: response['data']['univBattle']['hostUnivLogo'],
+          guestTeamName: response['data']['GuestTeam'] != null
+              ? response['data']['GuestTeam']['guestUvName']
+              : '참가 학교 없음',
+          guestTeamUnivLogo: response['data']['univBattle']['guestUnivLogo'],
+          univBattleId: response['data']['univBattle']['univBattleId'],
+          status: response['data']['univBattle']['matchStatus'],
+          hostLeaderId: response['data']['univBattle']['hostLeader'],
+          place: response['data']['univBattle']['place'] ?? '없음',
+          regDate: response['data']['univBattle']['regDt'],
+          invitationCode: response['data']['univBattle']['invitationCode'],
+          hostTeamMembers: hostTeamMembers,
+          guestTeamMembers: guestTeamMembers,
+          content: response['data']['univBattle']['content'],
+          cost: response['data']['univBattle']['cost'],
+          eventId: response['data']['univBattle']['eventId'],
+          guestLeaderId: response['data']['univBattle']['guestLeader'],
+          winUnivName: response['data']['winUnivName'] ??= "null");
       // debugPrint(res.getHostTeamMembers.toString());
       status = res.status!;
       debugPrint(res.toString());
@@ -120,7 +119,7 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     }
   }
 
-  Future<bool> repAttend(int battleId) async { 
+  Future<bool> repAttend(int battleId) async {
     // 대항전 대표 참가
     DioApiCall api = DioApiCall();
     final response = await api.post('/univBattle/repAttend', {
@@ -135,10 +134,12 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     // }
   }
 
-    Future<bool> matchStart(int battleId) async { // 경기시작 API
+  Future<bool> matchStart(int battleId) async {
+    // 경기시작 API
     // 대항전 대표 참가
     DioApiCall api = DioApiCall();
-    final response = await api.get('/univBattle/matchStart?univBattleId=${battleId.toString()}');
+    final response = await api
+        .get('/univBattle/matchStart?univBattleId=${battleId.toString()}');
     return response['success'];
     // if (response['success'] == true) {
     //   return response['message'];
@@ -146,7 +147,6 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     //   return response['message'];
     // }
   }
-
 
   String getText() {
     switch (status) {

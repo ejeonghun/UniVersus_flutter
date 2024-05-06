@@ -21,6 +21,8 @@ class versusDetail {
   String? content; // 대항전 내용
   String? cost; // 비용
   int? eventId;
+  DateTime? matchStartDt; // 대항전 시작 시간
+  String? winUnivName; // 이긴 대학교 이름
 
   // 팀 정보
   List<Map<String, dynamic>>? hostTeamMembers; // 대표 팀 멤버 리스트
@@ -48,6 +50,8 @@ class versusDetail {
     this.content,
     this.cost,
     this.eventId,
+    this.matchStartDt,
+    this.winUnivName,
   });
 
   // Getter methods
