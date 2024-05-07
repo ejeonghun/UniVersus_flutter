@@ -72,7 +72,7 @@ class _RecommendclubWidgetState extends State<RecommendclubWidget> {
                   '축구',
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Readex Pro',
-                        color: Color(0xFF00F627),
+                        color: Color.fromARGB(255, 42, 7, 237),
                         fontSize: 15,
                         letterSpacing: 0,
                         fontWeight: FontWeight.w600,

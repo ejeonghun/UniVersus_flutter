@@ -13,13 +13,11 @@
     <string>remote-notification</string>
 </array>
 <key>NSLocationWhenInUseUsageDescription</key>
-<string>This app needs access to location when open.</string>
+<string>위치 정보를 사용하여 근처의 장소를 찾습니다.</string>
+<key>NSLocationAlwaysUsageDescription</key>
+<string>항상 위치를 사용하여 근처의 장소를 찾습니다.</string>
 <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 <string>This app needs access to location when open and in the background.</string>
-<key>NSLocationAlwaysUsageDescription</key>
-<string>This app needs access to location when in the background.</string>
-<key>NSLocationAlwaysUsageDescription</key>
-<string>This app needs GPS to track near atm-machine</string>
 
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>vas</string>
