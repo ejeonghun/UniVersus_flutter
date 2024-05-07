@@ -11,6 +11,8 @@ class clubInfo {
   int price; // 클럽 회비
   int currentMembers; // 현재 클럽 인원
   int maximumMembers; // 클럽 최대 인원
+  String? LeaderProfileImg; // 클럽 개설자 프로필 이미지
+  String? LeaderNickname; // 클럽 개설자 닉네임
 
   clubInfo({
     required this.clubId,
@@ -23,6 +25,8 @@ class clubInfo {
     required this.price,
     required this.currentMembers,
     required this.maximumMembers,
+    this.LeaderNickname,
+    this.LeaderProfileImg,
   });
 
   String? get getRegDate {
