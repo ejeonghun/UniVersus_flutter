@@ -144,8 +144,24 @@ class _TeamMemberDropdownState extends State<TeamMemberDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      hint: Text('멤버 목록'),
+    return SizedBox(
+      width: 100,
+      child: DropdownButton<String>(
+      hint: Text.rich(
+  TextSpan(
+    text: '멤버 선택', // 텍스트
+    style: TextStyle(fontSize: 14), // 텍스트 스타일
+    children: [
+      WidgetSpan(
+        child: Padding(
+          padding: EdgeInsets.only(left: 3, top: 5), // 아이콘과 텍스트 사이에 간격 추가
+          child: Icon(Icons.arrow_drop_down), // 화살표 아이콘
+        ),
+      ),
+    ],
+  ),
+),
+
       value: selectedMemberId,
       onChanged: (String? newValue) {
         setState(() {
@@ -165,30 +181,32 @@ class _TeamMemberDropdownState extends State<TeamMemberDropdown> {
           .map<DropdownMenuItem<String>>((Map<String, dynamic> member) {
             return DropdownMenuItem<String>(
               value: member['memberIdx'].toString(),
-              child: Row(
+              child: Container ( width: 100, child: Row(
                 children: [
                   member['memberIdx'] == widget.hostLeader ||
                           member['memberIdx'] == widget.guestLeader
                       ? Icon(Icons.star, color: Colors.yellow)
                       : Icon(Icons.person),
-                  SizedBox(width: 10),
-                  Text('${member['nickName']}'),
+                  SizedBox(width: 5),
+                  Text('${member['nickName']}', overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 14)),
                 ],
-              ),
+              ),),
             );
           })
           .toSet()
           .toList(),
       style: TextStyle(
-        fontSize: 16,
+        fontSize: 14,
+        overflow: TextOverflow.ellipsis,
         color: FlutterFlowTheme.of(context).primaryText,
       ),
       underline: Container(
-        height: 2,
+        width: 100,
+        height: 1,
         color: Colors.blueAccent,
       ),
       icon: Icon(Icons.arrow_drop_down),
-      iconSize: 36,
-    );
+      iconSize: 0,
+    ),);
   }
 }

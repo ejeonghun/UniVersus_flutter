@@ -23,6 +23,8 @@ class versusDetail {
   int? eventId;
   DateTime? matchStartDt; // 대항전 시작 시간
   String? winUnivName; // 이긴 대학교 이름
+  int? hostUnivId; // 대표 팀 대학 id
+  int? guestUnivId; // 게스트 팀 대학 id
 
   // 팀 정보
   List<Map<String, dynamic>>? hostTeamMembers; // 대표 팀 멤버 리스트
@@ -52,6 +54,8 @@ class versusDetail {
     this.eventId,
     this.matchStartDt,
     this.winUnivName,
+    this.hostUnivId,
+    this.guestUnivId,
   });
 
   // Getter methods
@@ -84,4 +88,6 @@ class versusDetail {
   String? get getContent => this.content;
   String? get getCost => this.cost;
   int? get getEventId => this.eventId;
+  int? get getHostUnivId => this.hostUnivId;
+  int? get getGuestUnivId => this.guestUnivId;
 }
