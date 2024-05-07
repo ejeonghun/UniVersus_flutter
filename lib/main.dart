@@ -199,7 +199,7 @@ class _MyAppState extends State<MyApp> {
               '/Search': (context) => SearchWidget(),
               '/SearchResult': (context) => SearchResultWidget(),
               '/Community': (context) => CommunityWidget(),
-              '/Post': (context) => PostWidget(),
+              '/Post': (context) => PostWidget(univBoardId: 1),
               '/Write': (context) => WriteWidget(),
               '/ClubMain': (context) => ClubMainWidget(clubId: 1),
               '/MyClub': (context) => MyClubWidget(),

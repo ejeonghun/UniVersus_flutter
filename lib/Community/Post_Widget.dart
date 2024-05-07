@@ -8,7 +8,8 @@ import 'Post_Model.dart';
 export 'Post_Model.dart';
 
 class PostWidget extends StatefulWidget {
-  const PostWidget({super.key});
+  final int univBoardId;
+  const PostWidget({super.key, required this.univBoardId});
 
   @override
   State<PostWidget> createState() => _PostWidgetState();

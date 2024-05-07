@@ -6,6 +6,7 @@ import 'package:universus/class/user/userProfile.dart';
 import 'package:universus/club/Components/recommendclub_Model.dart';
 import 'package:universus/main/Components/clubElement_Model.dart';
 import 'package:universus/main/Components/recruit_Model.dart';
+import 'package:universus/main/Components/recruitmentElement.dart';
 import 'main_Widget.dart' show MainWidget;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart'
     as smooth_page_indicator;
@@ -46,31 +47,30 @@ class MainModel extends FlutterFlowModel<MainWidget> {
       return userProfile.nullPut();
     }
   }
-
-  Future<List<ClubElement>> getClubList() async {
+  
+    Future<List<ClubElement>> getClubList() async {
     try {
-      // API 호출을 위한 URL 설정
-      String url =
-          'https://moyoapi.lunaweb.dev/api/v1/club/suggest?memberIdx=${await UserData.getMemberIdx()}';
-
-      // Dio를 사용하여 데이터 가져오기
-      Response response = await _dio.get(url);
+      DioApiCall api = DioApiCall();
+      final response = await api
+          .get('/club/suggest?memberIdx=${await UserData.getMemberIdx()}');
 
       // 가져온 데이터가 null이거나 List가 아닌 경우 처리
-      if (response.data == null || !(response.data is List)) {
+      if (!response.isNotEmpty) {
         print('Failed to fetch club list');
         return [];
       }
 
       // 클럽 목록 생성
       List<ClubElement> clubList = [];
-      for (var clubData in response.data) {
+      for (var clubData in response['data']) {
         clubList.add(ClubElement(
           clubId: clubData['clubId'],
           eventName: clubData['eventName'],
           clubName: clubData['clubName'],
           currentMembers: clubData['currentMembers'],
-          imageUrl: clubData['imageUrl'],
+          imageUrl: clubData['imageUrl'] == ""
+              ? 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png'
+              : clubData['imageUrl'],
         ));
       }
 
@@ -80,6 +80,36 @@ class MainModel extends FlutterFlowModel<MainWidget> {
     } catch (e) {
       // 오류 처리
       print('Error fetching club list: $e');
+      return [];
+    }
+  }
+
+    Future<List<RecruitmentElement>> getrecuitmentElement() async {
+    // 대결 리스트를 불러오는 메소드
+    DioApiCall api = DioApiCall();
+    final response = await api.get('/club/mercenary?memberIdx=${await UserData.getMemberIdx()}');
+    if (response.isNotEmpty) {
+      // response가 null이 아니면
+      // 조회 성공
+      print(response);
+      List<RecruitmentElement> recruitmentlist = [];
+      for (var item in response['data']) {
+        recruitmentlist.add(RecruitmentElement(
+          univBoardId: item['univBoardId'],
+          title: item['title'].toString(),
+          // hostTeamDept: item[''],
+          eventName: item['eventName']??'',
+          latitude: item['lat'] ?? '',
+          // guestTeamDept: item['place'],
+          longitude: item['lng']??'',
+          place: item['place']??'',
+        ));
+      
+      }
+      return recruitmentlist;
+    } else {
+      // 조회 실패
+      print(response);
       return [];
     }
   }
