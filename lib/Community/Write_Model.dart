@@ -5,22 +5,48 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class WriteModel extends FlutterFlowModel<WriteWidget> {
-  ///  State fields for stateful widgets in this page.
-
   final unfocusNode = FocusNode();
-  // State field(s) for DropDown widget.
   String? dropDownValue;
   FormFieldController<String>? dropDownValueController;
-  // State field(s) for Checkbox widget.
   bool? checkboxValue;
-  // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode1;
   TextEditingController? textController1;
   String? Function(BuildContext, String?)? textController1Validator;
-  // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode2;
   TextEditingController? textController2;
   String? Function(BuildContext, String?)? textController2Validator;
+  String? sportDropdownValue;
+  DateTime? _datePicked;
+  double? lat; // 위도
+  double? lng; // 경도
+  String? placeName; // 장소명
+  DateTime? get datePicked => _datePicked;
+
+  set datePicked(DateTime? value) {
+    _datePicked = value;
+    // Custom listener mechanism
+    notifyDatePickedListeners();
+  }
+
+  // List of listeners for datePicked changes
+  final List<VoidCallback> _datePickedListeners = [];
+
+  // Method to add a listener for datePicked changes
+  void addDatePickedListener(VoidCallback listener) {
+    _datePickedListeners.add(listener);
+  }
+
+  // Method to remove a listener for datePicked changes
+  void removeDatePickedListener(VoidCallback listener) {
+    _datePickedListeners.remove(listener);
+  }
+
+  // Method to notify all listeners when datePicked changes
+  void notifyDatePickedListeners() {
+    for (final listener in _datePickedListeners) {
+      listener();
+    }
+  }
 
   @override
   void initState(BuildContext context) {}
@@ -30,7 +56,6 @@ class WriteModel extends FlutterFlowModel<WriteWidget> {
     unfocusNode.dispose();
     textFieldFocusNode1?.dispose();
     textController1?.dispose();
-
     textFieldFocusNode2?.dispose();
     textController2?.dispose();
   }

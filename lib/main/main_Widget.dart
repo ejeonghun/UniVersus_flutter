@@ -284,7 +284,7 @@ class _MainWidgetState extends State<MainWidget> {
                                     TextSpan(
                                       text: '팀',
                                       style: TextStyle(
-                                        color: Color(0xFFEF0F1C),
+                                        color: Color.fromARGB(255, 15, 239, 60),
                                       ),
                                     ),
                                     TextSpan(
