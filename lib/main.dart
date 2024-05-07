@@ -7,6 +7,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:universus/chat/test.dart';
 import 'package:universus/club/ClubList_Model.dart';
 import 'package:universus/club/ClubList_Widget.dart';
+import 'package:universus/main/Components/clubElement_Widget.dart';
+import 'package:universus/main/Components/clubelement_widget.dart';
 import 'package:universus/shared/PermissonManage.dart';
 import 'firebase_options.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -37,6 +39,7 @@ import 'package:universus/auth/tmp/KakaoLogin.dart';
 import 'package:universus/shared/placepicker.dart';
 import 'package:universus/versus/versusCreate_Widget.dart';
 import 'package:universus/versus/versusList_Widget.dart';
+import 'package:universus/main/Components/clubElement_Widget.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -198,7 +201,7 @@ class _MyAppState extends State<MyApp> {
               '/Community': (context) => CommunityWidget(),
               '/Post': (context) => PostWidget(),
               '/Write': (context) => WriteWidget(),
-              '/ClubMain': (context) => ClubMainWidget(),
+              '/ClubMain': (context) => ClubMainWidget(clubId: 1),
               '/MyClub': (context) => MyClubWidget(),
               '/clubList': (context) => ClubListWidget(),
             },
