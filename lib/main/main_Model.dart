@@ -2,11 +2,9 @@ import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/user/user.dart';
 import 'package:universus/class/user/userProfile.dart';
-import 'package:universus/club/Components/recommendclub_Model.dart';
+import 'package:universus/club/Components/recommendclub_model.dart';
 import 'package:universus/main/Components/recruit_Model.dart';
 import 'main_Widget.dart' show MainWidget;
-import 'package:smooth_page_indicator/smooth_page_indicator.dart'
-    as smooth_page_indicator;
 import 'package:flutter/material.dart';
 
 class MainModel extends FlutterFlowModel<MainWidget> {
@@ -56,7 +54,6 @@ Future<userProfile> getProfile() async {
 
   @override
   void initState(BuildContext context) {
-    recommendclubModel = createModel(context, () => RecommendclubModel());
     recruitModel = createModel(context, () => RecruitModel());
 
   }
