@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:universus/BottomBar2.dart';
 import 'package:universus/auth/AdditionalInfo_Widget.dart';
+import 'package:universus/main/Components/clubElement_Widget.dart';
 
 import 'testscreen_Model.dart';
 export 'testscreen_Model.dart';
@@ -693,8 +694,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                                   EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  Navigator.of(context)
-                                      .pushNamed('/ClubList');
+                                  Navigator.of(context).pushNamed('/ClubList');
                                 },
                                 text: '인기모임',
                                 options: FFButtonOptions(
@@ -932,6 +932,46 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                                   Navigator.of(context).pushNamed('/main1');
                                 },
                                 text: '메인페이지',
+                                options: FFButtonOptions(
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  Navigator.of(context)
+                                      .pushNamed('/clubElement');
+                                },
+                                text: '클럽요소',
                                 options: FFButtonOptions(
                                   height: 40,
                                   padding: EdgeInsetsDirectional.fromSTEB(

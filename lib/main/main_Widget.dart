@@ -7,9 +7,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:universus/Community/Community_Widget.dart';
 import 'package:universus/class/user/userProfile.dart';
 import 'package:universus/club/ClubList_Widget.dart';
-import 'package:universus/club/Components/recommendclub_Widget.dart';
+import 'package:universus/class/club/clubElement.dart';
+import 'package:universus/main/Components/clubElement_Widget.dart';
 import 'package:universus/main/Components/recruit_Widget.dart';
-import 'package:universus/main/main_Model.dart';
+import 'main_Model.dart';
 import 'package:universus/main/main_Widget.dart';
 export 'main_Model.dart';
 
@@ -33,15 +34,15 @@ class _MainWidgetState extends State<MainWidget> {
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: _model.getProfile(),
-        builder: (BuildContext context, AsyncSnapshot<userProfile> snapshot) {
+        future: _model.getClubList(),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<ClubElement>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: Column(
@@ -54,7 +55,7 @@ class _MainWidgetState extends State<MainWidget> {
           } else if (snapshot.hasError) {
             return Text('오류: ${snapshot.error}');
           } else {
-            String schoolName = snapshot.data!.univName; // 학교 이름 가져오기
+            String schoolName = "영진"; // 학교 이름 가져오기
             return GestureDetector(
               onTap: () => _model.unfocusNode.canRequestFocus
                   ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -329,23 +330,24 @@ class _MainWidgetState extends State<MainWidget> {
                               ),
                             ),
                             // Generated code for this Row Widget...
-                            Align(
-                              alignment: AlignmentDirectional(0, -1),
-                              child: Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      wrapWithModel(
-                                        model: _model.recommendclubModel,
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 30),
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: snapshot.data!.map((club) {
+                                    return Padding(
+                                      padding: EdgeInsets.only(
+                                          right: 15), // 오른쪽 여백 추가
+                                      child: wrapWithModel(
+                                        model: _model.clubElementModel,
                                         updateCallback: () => setState(() {}),
-                                        child: RecommendclubWidget(),
+                                        child: ClubElementWidget(
+                                            clubElement: club),
                                       ),
-                                    ].divide(SizedBox(width: 20)),
-                                  ),
+                                    );
+                                  }).toList(),
                                 ),
                               ),
                             ),
