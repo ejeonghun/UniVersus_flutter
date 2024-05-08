@@ -1,51 +1,51 @@
-import 'dart:ui';
-
 class PostElement {
   int univBoardId;
-  int memberIdx;
   String nickname;
   String categoryName;
-  String clubName;
+  String? clubName;
   String title;
   String content;
   String regDt;
-  String udtDt; // This is nullable
-  List postImageUrls;
-  String lat; // These are nullable
-  String lng;
-  String place;
-  String eventName;
+  String? udtDt; // Nullable
+  List<String> postImageUrls; // Specify type as List<String>
+  String? lat; // Nullable
+  String? lng; // Nullable
+  String? place;
+  String? eventName;
+  String? profileImgUrl;
 
   PostElement({
     required this.univBoardId,
-    required this.memberIdx,
     required this.nickname,
     required this.categoryName,
-    required this.clubName,
+    this.clubName, // Make nullable
     required this.title,
     required this.content,
     required this.regDt,
-    required this.udtDt,
+    this.udtDt, // Make nullable
     required this.postImageUrls,
-    required this.lat,
-    required this.lng,
-    required this.place,
-    required this.eventName,
+    this.lat, // Make nullable
+    this.lng, // Make nullable
+    this.place,
+    this.eventName,
+    this.profileImgUrl,
   });
 
-   PostElement.empty()
+  get getProfileImgUrl =>
+      profileImgUrl ??
+      'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png';
+
+  PostElement.empty()
       : univBoardId = 0,
-        memberIdx = 0,
         nickname = '',
         categoryName = '',
-        clubName = '',
+        clubName = null, // Initialize as null
         title = '',
         content = '',
         regDt = '',
-        udtDt = '',
         postImageUrls = [],
-        lat = '',
-        lng = '',
-        place = '',
-        eventName = '';
+        lat = null, // Initialize as null
+        lng = null, // Initialize as null
+        place = null,
+        eventName = null;
 }
