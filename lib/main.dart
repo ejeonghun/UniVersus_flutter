@@ -40,6 +40,7 @@ import 'package:universus/shared/placepicker.dart';
 import 'package:universus/versus/versusCreate_Widget.dart';
 import 'package:universus/versus/versusList_Widget.dart';
 import 'package:universus/main/Components/clubElement_Widget.dart';
+import 'package:universus/Community/Post_Widget.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
 

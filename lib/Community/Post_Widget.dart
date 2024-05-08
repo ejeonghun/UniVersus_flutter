@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:universus/Community/PostElement.dart';
 
 import 'Post_Model.dart';
 export 'Post_Model.dart';
@@ -24,7 +25,7 @@ class _PostWidgetState extends State<PostWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => PostModel());
-
+    debugPrint(widget.univBoardId.toString());
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
   }
@@ -38,7 +39,24 @@ class _PostWidgetState extends State<PostWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return FutureBuilder(
+        future: Future.wait([_model.getPost(widget.univBoardId)]),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CircularProgressIndicator(), // 로딩 바 추가
+                ],
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Text('오류: ${snapshot.error}');
+          } else { 
+            PostElement post = snapshot.data![0];
+            return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
           : FocusScope.of(context).unfocus(),
@@ -65,7 +83,7 @@ class _PostWidgetState extends State<PostWidget> {
           title: Align(
             alignment: AlignmentDirectional(-1, -1),
             child: Text(
-              '[자유] 안녕하세요',
+              post.title,
               textAlign: TextAlign.start,
               style: FlutterFlowTheme.of(context).headlineMedium.override(
                     fontFamily: 'Outfit',
@@ -111,7 +129,7 @@ class _PostWidgetState extends State<PostWidget> {
                               Align(
                                 alignment: AlignmentDirectional(0, 0),
                                 child: Text(
-                                  '수민',
+                                  post.nickname,
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -125,7 +143,7 @@ class _PostWidgetState extends State<PostWidget> {
                                 ),
                               ),
                               Text(
-                                '03/27 15:03',
+                                post.regDt,
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -146,7 +164,7 @@ class _PostWidgetState extends State<PostWidget> {
                   child: Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(20, 15, 0, 0),
                     child: AutoSizeText(
-                      '반가워요^*^',
+                      post.content,
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             fontFamily: 'Readex Pro',
                             fontSize: 18,
@@ -161,7 +179,7 @@ class _PostWidgetState extends State<PostWidget> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.asset(
-                      'assets/images/soomin2.jpeg',
+                      post.postImageUrls.toString(),
                       width: MediaQuery.sizeOf(context).width * 0.9,
                       fit: BoxFit.fill,
                     ),
@@ -350,5 +368,8 @@ class _PostWidgetState extends State<PostWidget> {
         ),
       ),
     );
+  }
+}
+);
   }
 }
