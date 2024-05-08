@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/user/user.dart';
@@ -6,7 +7,6 @@ import 'package:universus/class/user/userProfile.dart';
 import 'package:universus/club/Components/recommendclub_Model.dart';
 import 'package:universus/main/Components/clubElement_Model.dart';
 import 'package:universus/main/Components/recruit_Model.dart';
-import 'package:universus/main/Components/recruitmentElement.dart';
 import 'main_Widget.dart' show MainWidget;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart'
     as smooth_page_indicator;
@@ -47,12 +47,13 @@ class MainModel extends FlutterFlowModel<MainWidget> {
       return userProfile.nullPut();
     }
   }
-  
-    Future<List<ClubElement>> getClubList() async {
+
+  Future<List<ClubElement>> getClubList() async {
     try {
       DioApiCall api = DioApiCall();
-      final response = await api
-          .get('/club/suggest?memberIdx=${await UserData.getMemberIdx()}');
+      final token = await FirebaseMessaging.instance.getToken();
+      final response = await api.get(
+          '/club/suggest?memberIdx=${await UserData.getMemberIdx()}&fcmToken=${token}');
 
       // 가져온 데이터가 null이거나 List가 아닌 경우 처리
       if (!response.isNotEmpty) {
@@ -80,36 +81,6 @@ class MainModel extends FlutterFlowModel<MainWidget> {
     } catch (e) {
       // 오류 처리
       print('Error fetching club list: $e');
-      return [];
-    }
-  }
-
-    Future<List<RecruitmentElement>> getrecuitmentElement() async {
-    // 대결 리스트를 불러오는 메소드
-    DioApiCall api = DioApiCall();
-    final response = await api.get('/club/mercenary?memberIdx=${await UserData.getMemberIdx()}');
-    if (response.isNotEmpty) {
-      // response가 null이 아니면
-      // 조회 성공
-      print(response);
-      List<RecruitmentElement> recruitmentlist = [];
-      for (var item in response['data']) {
-        recruitmentlist.add(RecruitmentElement(
-          univBoardId: item['univBoardId'],
-          title: item['title'].toString(),
-          // hostTeamDept: item[''],
-          eventName: item['eventName']??'',
-          latitude: item['lat'] ?? '',
-          // guestTeamDept: item['place'],
-          longitude: item['lng']??'',
-          place: item['place']??'',
-        ));
-      
-      }
-      return recruitmentlist;
-    } else {
-      // 조회 실패
-      print(response);
       return [];
     }
   }

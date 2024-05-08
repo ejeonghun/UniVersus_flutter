@@ -4,6 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:universus/class/club/clubInfo.dart';
+import 'package:universus/class/club/clubPost.dart';
+import 'package:universus/club/Components/clubPost_Widget.dart';
 
 import 'ClubMain_Model.dart';
 export 'ClubMain_Model.dart';
@@ -37,8 +39,11 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: _model.getClubInfo(widget.clubId),
-        builder: (BuildContext context, AsyncSnapshot<clubInfo> snapshot) {
+        future: Future.wait([
+          _model.getClubInfo(widget.clubId),
+          _model.getClubPosts(widget.clubId),
+        ]),
+        builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: Column(
@@ -51,6 +56,8 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
           } else if (snapshot.hasError) {
             return Text('오류: ${snapshot.error}');
           } else {
+            clubInfo clubInfoValue = snapshot.data![0];
+            List<ClubPost> clubPosts = snapshot.data![1];
             return GestureDetector(
               onTap: () => _model.unfocusNode.canRequestFocus
                   ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -84,7 +91,7 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                         title: Align(
                           alignment: AlignmentDirectional(-1, -1),
                           child: Text(
-                            snapshot.data!.clubName,
+                            clubInfoValue.clubName,
                             textAlign: TextAlign.start,
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
@@ -154,11 +161,12 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                         padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8),
-                          child: Image.asset(
-                            'assets/images/Rectangle_8_(1).png',
+                          child: Image.network(
+                            clubInfoValue.imageUrl ??
+                                'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
                             width: 370,
                             height: 200,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fitWidth,
                           ),
                         ),
                       ),
@@ -229,7 +237,7 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                                         size: 24,
                                                       ),
                                                       Text(
-                                                        '${snapshot.data!.currentMembers}/${snapshot.data!.maximumMembers}',
+                                                        '${clubInfoValue.currentMembers}/${clubInfoValue.maximumMembers}',
                                                         style: FlutterFlowTheme
                                                                 .of(context)
                                                             .bodyMedium
@@ -292,7 +300,7 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                                         size: 24,
                                                       ),
                                                       Text(
-                                                        '50',
+                                                        '글 : ${clubPosts.length.toString()}',
                                                         style: FlutterFlowTheme
                                                                 .of(context)
                                                             .bodyMedium
@@ -300,6 +308,8 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                                               fontFamily:
                                                                   'Readex Pro',
                                                               letterSpacing: 0,
+                                                              useGoogleFonts:
+                                                                  false,
                                                             ),
                                                       ),
                                                     ].divide(
@@ -342,7 +352,7 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                                               .fromSTEB(
                                                                   0, 0, 0, 1),
                                                       child: Text(
-                                                        '₩${f.format(snapshot.data!.price)}원',
+                                                        '₩${f.format(clubInfoValue.price)}원',
                                                         style: FlutterFlowTheme
                                                                 .of(context)
                                                             .bodyLarge
@@ -417,7 +427,7 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                                       .alternate,
                                             ),
                                             Text(
-                                              snapshot.data!.clubIntro,
+                                              clubInfoValue.clubIntro,
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .labelMedium
@@ -490,8 +500,9 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                                                         24),
                                                             child:
                                                                 Image.network(
-                                                              _model.LeaderInfo
-                                                                  .profileImage,
+                                                              clubInfoValue
+                                                                      .LeaderProfileImg ??
+                                                                  'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
                                                               width: 40,
                                                               height: 40,
                                                               fit: BoxFit.cover,
@@ -510,8 +521,9 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                                                 .start,
                                                         children: [
                                                           Text(
-                                                            _model.LeaderInfo
-                                                                .nickname,
+                                                            clubInfoValue
+                                                                    .LeaderNickname ??
+                                                                '김철수',
                                                             style: FlutterFlowTheme
                                                                     .of(context)
                                                                 .bodyLarge
@@ -550,7 +562,7 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                                       ),
                                             ),
                                             Text(
-                                              '2024년 3월 13일',
+                                              '${clubInfoValue.getRegDate}',
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyLarge
@@ -567,589 +579,59 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                   ),
                                 ),
                                 Align(
-                                  alignment: AlignmentDirectional(0, 0),
+                                  alignment: AlignmentDirectional(0.0, 0.0),
                                   child: Padding(
-                                    padding: EdgeInsets.all(12),
+                                    padding: EdgeInsets.all(12.0),
                                     child: Container(
                                       width: double.infinity,
                                       constraints: BoxConstraints(
-                                        maxWidth: 800,
+                                        maxWidth: 800.0,
                                       ),
                                       decoration: BoxDecoration(
                                         color: FlutterFlowTheme.of(context)
                                             .secondaryBackground,
                                         boxShadow: [
                                           BoxShadow(
-                                            blurRadius: 3,
+                                            blurRadius: 3.0,
                                             color: Color(0x33000000),
                                             offset: Offset(
-                                              0,
-                                              1,
+                                              0.0,
+                                              1.0,
                                             ),
                                           )
                                         ],
-                                        borderRadius: BorderRadius.circular(12),
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
                                       ),
                                       child: Padding(
-                                        padding: EdgeInsets.all(12),
+                                        padding: EdgeInsets.all(12.0),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 5, 0, 0),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                10, 0, 0, 0),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          24),
-                                                              child:
-                                                                  Image.asset(
-                                                                'assets/images/Rectangle_19.png',
-                                                                width: 40,
-                                                                height: 40,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          10,
-                                                                          0,
-                                                                          0,
-                                                                          0),
-                                                              child: Text(
-                                                                '김철수',
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Readex Pro',
-                                                                      fontSize:
-                                                                          16,
-                                                                      letterSpacing:
-                                                                          0,
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          130,
-                                                                          0,
-                                                                          0,
-                                                                          0),
-                                                              child: Text(
-                                                                '2024.04.08 22:30',
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Readex Pro',
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .secondaryText,
-                                                                      letterSpacing:
-                                                                          0,
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Align(
-                                                                  alignment:
-                                                                      AlignmentDirectional(
-                                                                          -1,
-                                                                          -1),
-                                                                  child: Text(
-                                                                    '4.9 화요일 풋살 정모',
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .override(
-                                                                          fontFamily:
-                                                                              'Readex Pro',
-                                                                          fontSize:
-                                                                              17,
-                                                                          letterSpacing:
-                                                                              0,
-                                                                          fontWeight:
-                                                                              FontWeight.w900,
-                                                                        ),
-                                                                  ),
-                                                                ),
-                                                                Text(
-                                                                  '오늘은 복현동에서 진행했어요~',
-                                                                  maxLines: 1,
-                                                                  style: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .override(
-                                                                        fontFamily:
-                                                                            'Readex Pro',
-                                                                        letterSpacing:
-                                                                            0,
-                                                                      ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            Align(
-                                                              alignment:
-                                                                  AlignmentDirectional(
-                                                                      0, 0),
-                                                              child: ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8),
-                                                                child:
-                                                                    Image.asset(
-                                                                  'assets/images/Rectangle_8_(1).png',
-                                                                  width: 100,
-                                                                  height: 70,
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ].divide(SizedBox(
-                                                              width: 50)),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Divider(
-                                              height: 16,
-                                              thickness: 1,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .alternate,
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 5, 0, 0),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                10, 0, 0, 0),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          24),
-                                                              child:
-                                                                  Image.asset(
-                                                                'assets/images/Rectangle_19.png',
-                                                                width: 40,
-                                                                height: 40,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          10,
-                                                                          0,
-                                                                          0,
-                                                                          0),
-                                                              child: Text(
-                                                                '김철수',
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Readex Pro',
-                                                                      fontSize:
-                                                                          16,
-                                                                      letterSpacing:
-                                                                          0,
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          130,
-                                                                          0,
-                                                                          0,
-                                                                          0),
-                                                              child: Text(
-                                                                '2024.04.08 22:30',
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Readex Pro',
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .secondaryText,
-                                                                      letterSpacing:
-                                                                          0,
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Align(
-                                                                  alignment:
-                                                                      AlignmentDirectional(
-                                                                          -1,
-                                                                          -1),
-                                                                  child: Text(
-                                                                    '4.9 화요일 풋살 정모',
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .override(
-                                                                          fontFamily:
-                                                                              'Readex Pro',
-                                                                          fontSize:
-                                                                              17,
-                                                                          letterSpacing:
-                                                                              0,
-                                                                          fontWeight:
-                                                                              FontWeight.w900,
-                                                                        ),
-                                                                  ),
-                                                                ),
-                                                                Text(
-                                                                  '오늘은 복현동에서 진행했어요~',
-                                                                  maxLines: 1,
-                                                                  style: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .override(
-                                                                        fontFamily:
-                                                                            'Readex Pro',
-                                                                        letterSpacing:
-                                                                            0,
-                                                                      ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            Align(
-                                                              alignment:
-                                                                  AlignmentDirectional(
-                                                                      0, 0),
-                                                              child: ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8),
-                                                                child:
-                                                                    Image.asset(
-                                                                  'assets/images/Rectangle_8_(1).png',
-                                                                  width: 100,
-                                                                  height: 70,
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ].divide(SizedBox(
-                                                              width: 50)),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Divider(
-                                              height: 16,
-                                              thickness: 1,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .alternate,
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 5, 0, 0),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                10, 0, 0, 0),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          24),
-                                                              child:
-                                                                  Image.asset(
-                                                                'assets/images/Rectangle_19.png',
-                                                                width: 40,
-                                                                height: 40,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          10,
-                                                                          0,
-                                                                          0,
-                                                                          0),
-                                                              child: Text(
-                                                                '김철수',
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Readex Pro',
-                                                                      fontSize:
-                                                                          16,
-                                                                      letterSpacing:
-                                                                          0,
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          130,
-                                                                          0,
-                                                                          0,
-                                                                          0),
-                                                              child: Text(
-                                                                '2024.04.08 22:30',
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Readex Pro',
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .secondaryText,
-                                                                      letterSpacing:
-                                                                          0,
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Align(
-                                                                  alignment:
-                                                                      AlignmentDirectional(
-                                                                          -1,
-                                                                          -1),
-                                                                  child: Text(
-                                                                    '4.9 화요일 풋살 정모',
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .override(
-                                                                          fontFamily:
-                                                                              'Readex Pro',
-                                                                          fontSize:
-                                                                              17,
-                                                                          letterSpacing:
-                                                                              0,
-                                                                          fontWeight:
-                                                                              FontWeight.w900,
-                                                                        ),
-                                                                  ),
-                                                                ),
-                                                                Text(
-                                                                  '오늘은 복현동에서 진행했어요~',
-                                                                  maxLines: 1,
-                                                                  style: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .override(
-                                                                        fontFamily:
-                                                                            'Readex Pro',
-                                                                        letterSpacing:
-                                                                            0,
-                                                                      ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            Align(
-                                                              alignment:
-                                                                  AlignmentDirectional(
-                                                                      0, 0),
-                                                              child: ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            8),
-                                                                child:
-                                                                    Image.asset(
-                                                                  'assets/images/Rectangle_8_(1).png',
-                                                                  width: 100,
-                                                                  height: 70,
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ].divide(SizedBox(
-                                                              width: 50)),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Divider(
-                                              height: 16,
-                                              thickness: 1,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .alternate,
-                                            ),
-                                          ].divide(SizedBox(height: 4)),
+                                          children: clubPosts.isEmpty
+                                              ? [
+                                                  Text(
+                                                    '작성된 게시글이 없습니다',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyText1,
+                                                  )
+                                                ]
+                                              : clubPosts
+                                                  .map((post) {
+                                                    return wrapWithModel(
+                                                      model:
+                                                          _model.clubPostModel,
+                                                      updateCallback: () =>
+                                                          setState(() {}),
+                                                      child: ClubPostWidget(
+                                                          clubPost: post),
+                                                    );
+                                                  })
+                                                  .toList()
+                                                  .divide(
+                                                      SizedBox(height: 4.0)),
                                         ),
                                       ),
                                     ),
