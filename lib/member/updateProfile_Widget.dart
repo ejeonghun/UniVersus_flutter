@@ -174,6 +174,10 @@ class _updateProfileWidgetState extends State<updateProfileWidget> {
                                                       3);
                                                   setState(
                                                       () {}); // 이미지가 선택되었으므로 화면을 다시 그립니다.
+                                                  // Future.delayed(
+                                                  //     Duration(seconds: 1), () {
+                                                  //   Navigator.of(context).pop();
+                                                  // }); 1초 뒤 뒤로가기
                                                 }
                                               },
                                             ),

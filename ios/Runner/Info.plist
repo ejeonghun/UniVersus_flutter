@@ -2,16 +2,33 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+<key>NSAppTransportSecurity</key>
+<dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <true/>
+</dict>
+<key>UIBackgroundModes</key>
+<array>
+    <string>fetch</string>
+    <string>remote-notification</string>
+</array>
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>위치 정보를 사용하여 근처의 장소를 찾습니다.</string>
+<key>NSLocationAlwaysUsageDescription</key>
+<string>항상 위치를 사용하여 근처의 장소를 찾습니다.</string>
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>This app needs access to location when open and in the background.</string>
+
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
+	<string>vas</string>
 	<key>NSCameraUsageDescription</key>
-	<string></string>
+	<string>dddd</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string></string>
+	<string>avcd</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Moyo</string>
+	<string>Universus</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

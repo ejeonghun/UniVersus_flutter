@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:universus/BottomBar2.dart';
 import 'package:universus/auth/AdditionalInfo_Widget.dart';
+import 'package:universus/main/Components/clubElement_Widget.dart';
 
 import 'testscreen_Model.dart';
 export 'testscreen_Model.dart';
@@ -48,7 +50,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
           backgroundColor: FlutterFlowTheme.of(context).tertiary,
           automaticallyImplyLeading: false,
           title: Text(
-            '> 현재 지역',
+            '테스트 페이지',
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Outfit',
                   color: Colors.white,
@@ -96,8 +98,8 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                 color: FlutterFlowTheme.of(context).primaryText,
                 size: 24,
               ),
-              onPressed: () {
-                print('IconButton pressed ...');
+              onPressed: () async {
+                Navigator.pushNamed(context, '/chat/main');
               },
             ),
           ],
@@ -523,6 +525,478 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                           ],
                         ),
                       ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  Navigator.of(context)
+                                      .pushNamed('/versusList');
+                                },
+                                text: '대항전 리스트',
+                                options: FFButtonOptions(
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  Navigator.of(context)
+                                      .pushNamed('/SearchResult');
+                                },
+                                text: '검색결과',
+                                options: FFButtonOptions(
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  Navigator.of(context).pushNamed('/Search');
+                                },
+                                text: '검색창',
+                                options: FFButtonOptions(
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  Navigator.of(context).pushNamed('/Community');
+                                },
+                                text: '커뮤니티',
+                                options: FFButtonOptions(
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  Navigator.of(context).pushNamed('/ClubList');
+                                },
+                                text: '인기모임',
+                                options: FFButtonOptions(
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  Navigator.of(context)
+                                      .pushNamed('/versusCreate');
+                                },
+                                text: '대항전 생성',
+                                options: FFButtonOptions(
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  Navigator.of(context).pushNamed('/Write');
+                                },
+                                text: '글쓰기',
+                                options: FFButtonOptions(
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  Navigator.of(context).pushNamed('/Post');
+                                },
+                                text: '작성글',
+                                options: FFButtonOptions(
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  Navigator.of(context).pushNamed('/ClubMain');
+                                },
+                                text: '클럽메인',
+                                options: FFButtonOptions(
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  Navigator.of(context).pushNamed('/MyClub');
+                                },
+                                text: '내 클럽',
+                                options: FFButtonOptions(
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  Navigator.of(context).pushNamed('/main1');
+                                },
+                                text: '메인페이지',
+                                options: FFButtonOptions(
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  Navigator.of(context)
+                                      .pushNamed('/clubElement');
+                                },
+                                text: '클럽요소',
+                                options: FFButtonOptions(
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -530,6 +1004,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
             ),
           ),
         ),
+        bottomNavigationBar: BottomBar2(),
       ),
     );
   }

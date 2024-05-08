@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1082954968772",
+    "project_id": "universealert-1345f",
+    "storage_bucket": "universealert-1345f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1082954968772:android:de5c0573338892ef47e391",
+        "android_client_info": {
+          "package_name": "com.example.universus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH65csmjInrhy-oq4ean7TaavvCTLIEHk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

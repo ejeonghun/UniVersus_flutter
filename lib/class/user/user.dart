@@ -7,7 +7,7 @@ class UserData {
   String token; // JWT토큰값
   String platform; // 플랫폼 -> 'kakao' , 'email'
   String memberIdx; // 회원번호
-  String univId; // 대학 Id값
+  int univId; // 대학 Id값
 
   UserData(
       {required this.id,
@@ -24,7 +24,7 @@ class UserData {
     await storage.write(key: 'token', value: this.token);
     await storage.write(key: 'memberIdx', value: this.memberIdx);
     await storage.write(key: 'platform', value: this.platform);
-    await storage.write(key: 'univId', value: this.univId);
+    await storage.write(key: 'univId', value: this.univId.toString());
 
     print("유저 정보 저장 완료");
     return true;
@@ -70,7 +70,7 @@ class UserData {
           token: s_token,
           memberIdx: s_memberIdx,
           platform: s_platform,
-          univId: s_univId);
+          univId: int.parse(s_univId));
     } else {
       return null;
     }
