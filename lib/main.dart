@@ -40,6 +40,7 @@ import 'package:universus/shared/placepicker.dart';
 import 'package:universus/versus/versusCreate_Widget.dart';
 import 'package:universus/versus/versusList_Widget.dart';
 import 'package:universus/main/Components/clubElement_Widget.dart';
+import 'package:universus/Community/Post_Widget.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -199,7 +200,7 @@ class _MyAppState extends State<MyApp> {
               '/Search': (context) => SearchWidget(),
               '/SearchResult': (context) => SearchResultWidget(),
               '/Community': (context) => CommunityWidget(),
-              '/Post': (context) => PostWidget(),
+              '/Post': (context) => PostWidget(univBoardId: 1),
               '/Write': (context) => WriteWidget(),
               '/ClubMain': (context) => ClubMainWidget(clubId: 1),
               '/MyClub': (context) => MyClubWidget(),

@@ -1,21 +1,51 @@
-import 'package:flutterflow_ui/flutterflow_ui.dart';
-import 'Post_Widget.dart' show PostWidget;
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:universus/Community/PostElement.dart';
+import 'package:universus/class/api/DioApiCall.dart';
+import 'package:universus/class/user/user.dart';
+import 'Post_Widget.dart' show PostWidget;
 
 class PostModel extends FlutterFlowModel<PostWidget> {
-  ///  State fields for stateful widgets in this page.
-
   final unfocusNode = FocusNode();
-  // State field(s) for TextField widget.
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
 
   @override
   void initState(BuildContext context) {}
+
+  Future<PostElement> getPost(int univBoardId) async {
+      DioApiCall api = DioApiCall();
+      final response =
+          await api.get('/univBoard/info?univBoardId=${univBoardId}');
+        // 조회 성공
+        print(response);
+        if(response['success'] == true) {
+          return PostElement(
+            univBoardId: response['data']['univBoardId'] ?? 0,
+            title: response['data']['title']?.toString() ?? '',
+            content: response['data']['content'] ?? '',
+            nickname: response['data']['nickname'] ?? '',
+            regDt: response['data']['regDt'] ?? '',
+            place: response['data']['place'] ?? '',
+            udtDt: response['data']['udtDt'] ?? '', // 이 값이 없을 경우 빈 문자열로 처리됨
+            lat: response['data']['lat'] ?? '',
+            lng: response['data']['lng'] ?? '',
+            eventName: response['data']['eventName'] ?? '',
+            memberIdx: response['data']['memberIdx'],
+            categoryName: response['data']['categoryName'] ?? '',
+            clubName: response['data']['clubName'] ?? '',
+            postImageUrls: response['data']['postImageUrls'] ?? [],
+          );}
+      else {
+        // 조회 실패
+        print(response);
+        return PostElement.empty(); // 빈 리스트 반환
+      }
+    }
 
   @override
   void dispose() {

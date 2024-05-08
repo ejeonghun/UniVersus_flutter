@@ -10,6 +10,7 @@ import 'package:universus/club/ClubList_Widget.dart';
 import 'package:universus/class/club/clubElement.dart';
 import 'package:universus/main/Components/clubElement_Widget.dart';
 import 'package:universus/main/Components/recruit_Widget.dart';
+import 'package:universus/main/Components/recruitmentElement.dart';
 import 'main_Model.dart';
 import 'package:universus/main/main_Widget.dart';
 export 'main_Model.dart';
@@ -40,9 +41,9 @@ class _MainWidgetState extends State<MainWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: _model.getClubList(),
+        future: Future.wait([_model.getClubList(), _model.getProfile(),_model.getrecuitmentElement()]),
         builder:
-            (BuildContext context, AsyncSnapshot<List<ClubElement>> snapshot) {
+            (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: Column(
@@ -55,7 +56,10 @@ class _MainWidgetState extends State<MainWidget> {
           } else if (snapshot.hasError) {
             return Text('오류: ${snapshot.error}');
           } else {
-            String schoolName = "영진"; // 학교 이름 가져오기
+            List<ClubElement> clubList = snapshot.data![0];
+            userProfile userInfo = snapshot.data![1];
+            List<RecruitmentElement> recruitList = snapshot.data![2];
+            String schoolName = "${userInfo.getUnivName}"; // 학교 이름 가져오기
             return GestureDetector(
               onTap: () => _model.unfocusNode.canRequestFocus
                   ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -336,7 +340,7 @@ class _MainWidgetState extends State<MainWidget> {
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
-                                  children: snapshot.data!.map((club) {
+                                  children: clubList.map((club) {
                                     return Padding(
                                       padding: EdgeInsets.only(
                                           right: 15), // 오른쪽 여백 추가
@@ -430,16 +434,20 @@ class _MainWidgetState extends State<MainWidget> {
                                     EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                                 child: SingleChildScrollView(
                                   child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      wrapWithModel(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: recruitList.map((recruit) {
+                                    return Padding(
+                                      padding: EdgeInsets.only(
+                                          right: 15), // 오른쪽 여백 추가
+                                      child: wrapWithModel(
                                         model: _model.recruitModel,
                                         updateCallback: () => setState(() {}),
-                                        child:
-                                            RecruitWidget(), // recruit_Widget 컴포넌트 사용
+                                        child: RecruitWidget(recruitmentElement: recruit
+                                        ),
                                       ),
-                                    ],
-                                  ),
+                                    );
+                                  }).toList(),
+                                ),
                                 ),
                                 // 필요에 따라 추가적인 recruit_Widget를 여기에 반복해서 추가하세요.
                               ),
