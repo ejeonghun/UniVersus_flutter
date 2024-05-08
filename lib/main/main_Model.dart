@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/user/user.dart';
@@ -50,8 +51,9 @@ class MainModel extends FlutterFlowModel<MainWidget> {
   Future<List<ClubElement>> getClubList() async {
     try {
       DioApiCall api = DioApiCall();
-      final response = await api
-          .get('/club/suggest?memberIdx=${await UserData.getMemberIdx()}');
+      final token = await FirebaseMessaging.instance.getToken();
+      final response = await api.get(
+          '/club/suggest?memberIdx=${await UserData.getMemberIdx()}&fcmToken=${token}');
 
       // 가져온 데이터가 null이거나 List가 아닌 경우 처리
       if (!response.isNotEmpty) {
