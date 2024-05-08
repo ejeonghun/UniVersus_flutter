@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:universus/class/club/clubInfo.dart';
 import 'package:universus/class/club/clubPost.dart';
 import 'package:universus/club/Components/clubPost_Widget.dart';
+import 'package:universus/shared/CustomSnackbar.dart';
 
 import 'ClubMain_Model.dart';
 export 'ClubMain_Model.dart';
@@ -366,8 +368,55 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                                   ].divide(SizedBox(width: 4)),
                                                 ),
                                                 FFButtonWidget(
-                                                  onPressed: () {
-                                                    print('Button pressed ...');
+                                                  onPressed: () async {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return CupertinoAlertDialog(
+                                                          title: Text("확인"),
+                                                          content: Text(
+                                                              "모임에 가입하시겠습니까?"),
+                                                          actions: [
+                                                            CupertinoDialogAction(
+                                                              child: Text("취소"),
+                                                              onPressed: () {
+                                                                Navigator.pop(
+                                                                    context); // 다이얼로그 닫기
+                                                              },
+                                                            ),
+                                                            CupertinoDialogAction(
+                                                              child: Text("확인"),
+                                                              onPressed:
+                                                                  () async {
+                                                                if (await _model
+                                                                        .joinClub(
+                                                                            widget.clubId) ==
+                                                                    true) {
+                                                                  CustomSnackbar
+                                                                      .success(
+                                                                          context,
+                                                                          "성공",
+                                                                          '가입되었습니다',
+                                                                          3);
+                                                                  setState(
+                                                                      () {});
+                                                                } else {
+                                                                  CustomSnackbar
+                                                                      .error(
+                                                                          context,
+                                                                          "실패",
+                                                                          '이미 가입된 모임입니다',
+                                                                          3);
+                                                                }
+                                                                Navigator.pop(
+                                                                    context); // 다이얼로그 닫기
+                                                              },
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
                                                   },
                                                   text: '가입하기\n',
                                                   options: FFButtonOptions(

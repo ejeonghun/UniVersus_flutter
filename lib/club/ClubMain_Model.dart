@@ -68,6 +68,19 @@ class ClubMainModel extends FlutterFlowModel<ClubMainWidget> {
     }
   }
 
+  Future<bool> joinClub(int clubId) async {
+    DioApiCall api = DioApiCall();
+    final response = await api.post('/club/join', {
+      'memberIdx': await UserData.getMemberIdx(),
+      'clubId': clubId,
+    });
+    if (response['success'] == true) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   void initState(BuildContext context) {
     clubPostModel = createModel(context, () => ClubPostModel());
