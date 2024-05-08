@@ -5,6 +5,7 @@ class RecruitmentElement {
   String latitude;
   String longitude;
   String place;
+  String? imageUrl;
 
   RecruitmentElement({
     required this.univBoardId,
@@ -13,5 +14,10 @@ class RecruitmentElement {
     required this.latitude,
     required this.longitude,
     required this.place,
+    this.imageUrl,
   });
+
+  get getImageUrl =>
+      imageUrl ??
+      'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png';
 }

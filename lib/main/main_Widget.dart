@@ -41,9 +41,12 @@ class _MainWidgetState extends State<MainWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Future.wait([_model.getClubList(), _model.getProfile(),_model.getrecuitmentElement()]),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
+        future: Future.wait([
+          _model.getClubList(),
+          _model.getProfile(),
+          _model.getrecuitmentElement()
+        ]),
+        builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: Column(
@@ -433,23 +436,26 @@ class _MainWidgetState extends State<MainWidget> {
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                                 child: SingleChildScrollView(
-                                  child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: recruitList.map((recruit) {
-                                    return Padding(
-                                      padding: EdgeInsets.only(
-                                          right: 15), // 오른쪽 여백 추가
-                                      child: wrapWithModel(
-                                        model: _model.recruitModel,
-                                        updateCallback: () => setState(() {}),
-                                        child: RecruitWidget(recruitmentElement: recruit
+                                  child: recruitList.isEmpty
+                                      ? Text("해당 학교에 게시글이 존재하지 않음")
+                                      : Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: recruitList.map((recruit) {
+                                            return Padding(
+                                              padding: EdgeInsets.only(
+                                                  right: 15), // 오른쪽 여백 추가
+                                              child: wrapWithModel(
+                                                model: _model.recruitModel,
+                                                updateCallback: () =>
+                                                    setState(() {}),
+                                                child: RecruitWidget(
+                                                  recruitmentElement: recruit,
+                                                ),
+                                              ),
+                                            );
+                                          }).toList(),
                                         ),
-                                      ),
-                                    );
-                                  }).toList(),
                                 ),
-                                ),
-                                // 필요에 따라 추가적인 recruit_Widget를 여기에 반복해서 추가하세요.
                               ),
                             ],
                           ),

@@ -7,6 +7,7 @@ import 'package:universus/class/user/userProfile.dart';
 import 'package:universus/club/Components/recommendclub_Model.dart';
 import 'package:universus/main/Components/clubElement_Model.dart';
 import 'package:universus/main/Components/recruit_Model.dart';
+import 'package:universus/main/Components/recruitmentElement.dart';
 import 'main_Widget.dart' show MainWidget;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart'
     as smooth_page_indicator;
@@ -81,6 +82,35 @@ class MainModel extends FlutterFlowModel<MainWidget> {
     } catch (e) {
       // 오류 처리
       print('Error fetching club list: $e');
+      return [];
+    }
+  }
+
+  Future<List<RecruitmentElement>> getrecuitmentElement() async {
+    // 대결 리스트를 불러오는 메소드
+    DioApiCall api = DioApiCall();
+    final response = await api
+        .get('/club/mercenary?memberIdx=${await UserData.getMemberIdx()}');
+    if (response.isNotEmpty) {
+      // response가 null이 아니면
+      // 조회 성공
+      print(response);
+      List<RecruitmentElement> recruitmentlist = [];
+      for (var item in response['data']) {
+        recruitmentlist.add(RecruitmentElement(
+          univBoardId: item['univBoardId'],
+          title: item['title'].toString(),
+          eventName: item['eventName'] ?? '',
+          latitude: item['lat'] ?? '',
+          longitude: item['lng'] ?? '',
+          place: item['place'] ?? '',
+          imageUrl: item['imageUrl'],
+        ));
+      }
+      return recruitmentlist;
+    } else {
+      // 조회 실패
+      print(response);
       return [];
     }
   }
