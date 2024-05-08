@@ -50,9 +50,9 @@ class MainModel extends FlutterFlowModel<MainWidget> {
   }
 
   Future<List<ClubElement>> getClubList() async {
+    final token = await FirebaseMessaging.instance.getToken();
     try {
       DioApiCall api = DioApiCall();
-      final token = await FirebaseMessaging.instance.getToken();
       final response = await api.get(
           '/club/suggest?memberIdx=${await UserData.getMemberIdx()}&fcmToken=${token}');
 
