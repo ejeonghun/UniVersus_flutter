@@ -53,12 +53,11 @@ class ClubMainModel extends FlutterFlowModel<ClubMainWidget> {
         clubPosts.add(ClubPost(
           univBoardId: item['univBoardId'],
           clubName: item['clubName'],
-          memberIdx: item['memberIdx'],
-          memberProfileImg: item['memberProfileImg'],
+          memberProfileImg: item['profileImgUrl'],
           title: item['title'],
           content: item['content'],
           regDt: item['regDt'],
-          imageUrl: item['imageUrl'],
+          imageUrl: item['postImageUrls'][0],
           categoryName: item['categoryName'],
           nickname: item['nickname'],
         ));

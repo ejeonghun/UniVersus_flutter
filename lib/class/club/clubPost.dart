@@ -2,7 +2,6 @@ import 'package:flutterflow_ui/flutterflow_ui.dart';
 
 class ClubPost {
   int univBoardId; // 게시글 id
-  int memberIdx; // 게시글 작성자
   String categoryName; // 카테고리 이름
   String clubName; // 동아리 이름
   String title; // 게시글 제목
@@ -14,7 +13,6 @@ class ClubPost {
 
   ClubPost({
     required this.univBoardId,
-    required this.memberIdx,
     required this.categoryName,
     required this.clubName,
     required this.title,
