@@ -55,7 +55,13 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
     var status = await Permission.location.status;
     var status2 = await Permission.locationWhenInUse.status;
     var status3 = await Permission.locationAlways.status;
-    if (status.isGranted || status2.isGranted || status3.isGranted) {
+    var statusIos = await Permission.locationWhenInUse.serviceStatus;
+    var statusIos2 = await Permission.location.request();
+    if (status.isGranted ||
+        status2.isGranted ||
+        status3.isGranted ||
+        statusIos2.isGranted ||
+        statusIos == ServiceStatus.enabled) {
       debugPrint("권한 허용되어 있음 ");
       return true;
     } else {

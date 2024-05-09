@@ -21,6 +21,8 @@ class VersusElementModel extends FlutterFlowModel<VersusElementWidget> {
         return '대기중';
       case 'COMPLETED':
         return '종료';
+      case "PREPARED":
+        return '준비중';
       default:
         return '';
     }
@@ -36,6 +38,8 @@ class VersusElementModel extends FlutterFlowModel<VersusElementWidget> {
         return Colors.orange;
       case 'COMPLETED':
         return Colors.red;
+      case "PREPARED":
+        return Colors.blue;
       default:
         return Colors.white;
     }

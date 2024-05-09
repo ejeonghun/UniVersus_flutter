@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/user/user.dart';
 import 'package:universus/class/versus/versusDetail.dart';
+import 'package:universus/shared/CustomSnackbar.dart';
 import 'versusDetail_Widget.dart' show VersusDetailWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -181,6 +183,8 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
         return '대기중';
       case 'COMPLETED':
         return '종료';
+      case "PREPARED":
+        return '준비완료';
       default:
         return '';
     }
@@ -200,8 +204,76 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
         return Colors.orange;
       case 'COMPLETED':
         return Colors.red;
+      case "PREPARED":
+        return Colors.blue;
       default:
         return Colors.white;
+    }
+  }
+
+
+  /*
+  * 대항전 일반 참가 코드입력 팝업창
+  * @param univBattleId: 대항전 id, context: BuildContext
+  * 생성자 : 이정훈
+  * */
+  Future<void> showInputDialog(BuildContext context, int univBattleId) async {
+    String userInput = '';
+    return showCupertinoDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text('대항전 참가'),
+
+          content: CupertinoTextField(
+            onChanged: (value) {
+              userInput = value;
+            },
+            placeholder: '초대 코드 입력',
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.of(context).pop(); // 다이얼로그 닫기
+              },
+              child: Text('취소'),
+            ),
+            CupertinoDialogAction(
+              onPressed: () async {
+                // 사용자 입력을 처리하는 로직을 추가할 수 있습니다.
+                print('사용자 입력: $userInput');
+                if (await versusAttend(univBattleId, userInput) == true) {
+                  CustomSnackbar.success(context, "성공", "참가가 되었습니다.", 2);
+                } else {
+                  CustomSnackbar.error(context, "실패", "참가에 실패했습니다.", 2);
+                }
+                Navigator.of(context).pop(); // 다이얼로그 닫기
+              },
+              child: Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  /*
+  * 대항전 일반 참가 API
+  * @param univBattleId: 대항전 id, invitationCode: 초대 코드
+  * @return bool : 성공 or 실패
+  * 생성자 : 이정훈
+  * */
+  Future<bool> versusAttend(int univBattleId, String invitationCode) async {
+    DioApiCall api = DioApiCall();
+    final response = await api.post('/univBattle/attend', {
+      'univBattleId': univBattleId,
+      'guestLeader': await UserData.getMemberIdx(),
+      'invitationCode': invitationCode,
+    });
+    if (response['success']) {
+      return true;
+    } else {
+      return false;
     }
   }
 

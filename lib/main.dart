@@ -9,7 +9,8 @@ import 'package:universus/club/ClubList_Model.dart';
 import 'package:universus/club/ClubList_Widget.dart';
 import 'package:universus/main/Components/clubElement_Widget.dart';
 import 'package:universus/main/Components/clubelement_widget.dart';
-import 'package:universus/shared/PermissonManage.dart';
+import 'package:universus/permissonManage.dart';
+import 'package:universus/permissonManage.dart';
 import 'firebase_options.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -231,6 +232,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     _animateLogo();
+    _permissionManage.requestPermissions(context); // 권한 요청
     // _requestAllPermissions();
   }
 

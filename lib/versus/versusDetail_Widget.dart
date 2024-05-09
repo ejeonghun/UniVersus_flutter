@@ -9,6 +9,7 @@ import 'package:universus/shared/CustomSnackbar.dart';
 import 'package:universus/shared/GoogleMap.dart';
 import 'package:universus/versus/component/teamMemberDropdown.dart';
 import 'package:universus/versus/versusProceeding_Widget.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../shared/Template.dart';
 import 'versusDetail_Model.dart';
@@ -74,21 +75,9 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                 appBar: AppBar(
                   backgroundColor:
                       FlutterFlowTheme.of(context).primaryBackground,
-                  automaticallyImplyLeading: false,
-                  leading: FlutterFlowIconButton(
-                    borderColor: Colors.transparent,
-                    borderRadius: 30.0,
-                    borderWidth: 1.0,
-                    buttonSize: 60.0,
-                    icon: Icon(
-                      Icons.arrow_back_rounded,
-                      color: FlutterFlowTheme.of(context).primaryText,
-                      size: 30.0,
-                    ),
-                    onPressed: () async {
-                      Navigator.of(context).pop();
-                    },
-                  ),
+                  iconTheme: IconThemeData(
+                      color: FlutterFlowTheme.of(context).primaryText),
+                  automaticallyImplyLeading: true,
                   title: Text(
                     '대항전 상세',
                     style: FlutterFlowTheme.of(context).headlineMedium.override(
@@ -97,10 +86,26 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                           fontSize: 22.0,
                           letterSpacing: 0.0,
                           fontWeight: FontWeight.normal,
-                          useGoogleFonts: false,
                         ),
                   ),
-                  actions: [],
+                  actions: [
+                    // 대항전 일반 참가
+                    FlutterFlowIconButton(
+                      borderColor: Color(0x004B39EF),
+                      borderRadius: 20.0,
+                      borderWidth: 1.0,
+                      buttonSize: 40.0,
+                      fillColor: Color(0x00FFFFFF),
+                      icon: Icon(
+                        Icons.login,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 24.0,
+                      ),
+                      onPressed: () {
+                        _model.showInputDialog(context, widget.battleId);
+                      },
+                    ),
+                  ],
                   centerTitle: false,
                   elevation: 2.0,
                 ),
@@ -299,15 +304,6 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                       hostLeader: snapshot.data!.hostLeaderId!,
                                       guestLeader:
                                           snapshot.data!.guestLeaderId),
-                                  // Text(
-                                  //   '팀원 드롭박스',
-                                  //   style: FlutterFlowTheme.of(context)
-                                  //       .bodyMedium
-                                  //       .override(
-                                  //         fontFamily: 'Readex Pro',
-                                  //         letterSpacing: 0.0,
-                                  //       ),
-                                  // ),
                                 ],
                               ),
                             ],
@@ -447,9 +443,9 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                             ),
                           ),
                         /* 
-                          현재 "대기중" 상태이고 host리더만이 경기를 시작할 수 있다.
+                          현재 "준비완료" 상태이고 host리더만이 경기를 시작할 수 있다.
                           */
-                        if (snapshot.data!.status == 'WAITING' &&
+                        if (snapshot.data!.status == "PREPARED" &&
                             snapshot.data!.hostLeaderId ==
                                 int.parse(memberIdx!))
                           Padding(

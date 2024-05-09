@@ -512,6 +512,7 @@ class _VersusResultWidgetState extends State<VersusResultWidget>
                                                                   if (await _model.sendVersusRes(widget.battleId) == true) {
                                                                     CustomSnackbar.success(context, "전송 성공", "경기 결과가 전송되었습니다.", 3);
                                                                     print("전송 성공");
+                                                                    Navigator.of(context).pushNamed('/main');
                                                                   } else {
                                                                     CustomSnackbar.error(context, "전송 실패", "경기 결과 전송에 실패하였습니다.", 3);
                                                                     print("전송 실패");
