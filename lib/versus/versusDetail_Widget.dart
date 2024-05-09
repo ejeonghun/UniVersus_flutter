@@ -10,6 +10,7 @@ import 'package:universus/shared/GoogleMap.dart';
 import 'package:universus/versus/component/teamMemberDropdown.dart';
 import 'package:universus/versus/versusProceeding_Widget.dart';
 
+import '../shared/Template.dart';
 import 'versusDetail_Model.dart';
 export 'versusDetail_Model.dart';
 
@@ -116,7 +117,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              _model.getIcon(snapshot.data!.eventId!),
+                              Template.getIcon(snapshot.data!.eventId!),
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     3.0, 0.0, 0.0, 0.0),

@@ -5,11 +5,6 @@ import 'package:universus/versus/component/versusSearch_Widget.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'versusList_Widget.dart' show VersusListWidget;
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 
 class VersusListModel extends FlutterFlowModel<VersusListWidget> {
   ///  State fields for stateful widgets in this page.
@@ -22,6 +17,13 @@ class VersusListModel extends FlutterFlowModel<VersusListWidget> {
   // Model for versusElement component.
   late VersusElementModel versusElementModel2;
 
+
+  /*
+  * @param statusCode: 0 - 모집중 , 1 - 대기중 , 2 - 진행중, 3 - 경기 준비완료 , 4 - 경기 종료
+  * @return List<versusElement>: 대결 리스트
+  * @throws Exception: 대결 리스트 조회 실패 시 예외 발생
+  * 생성자 : 이정훈
+  * */
   Future<List<versusElement>> getVersusList(int statusCode) async {
     // 대결 리스트를 불러오는 메소드
     DioApiCall api = DioApiCall();
@@ -54,6 +56,7 @@ class VersusListModel extends FlutterFlowModel<VersusListWidget> {
 
   @override
   void initState(BuildContext context) {
+    // 불러온 컴포넌트의 Model들을 생성함
     versusSearchModel = createModel(context, () => VersusSearchModel());
     versusElementModel1 = createModel(context, () => VersusElementModel());
     versusElementModel2 = createModel(context, () => VersusElementModel());

@@ -31,6 +31,7 @@ class versusCreateModel extends FlutterFlowModel<versusCreateWidget> {
   String? placeName; // 장소명
   DateTime? datePicked; // 날짜
 
+
   Future<bool> inputCheck(BuildContext context) async {
     if (radioButtonValueController == null ||
         versusPriceController.text == null ||
@@ -60,6 +61,12 @@ class versusCreateModel extends FlutterFlowModel<versusCreateWidget> {
     return true;
   }
 
+  /*
+ * 대항전 생성
+ * @return bool: 성공 or 실패
+ * @throws Exception: 대항전 생성 실패 시 스낵바를 띄움.
+ * 생성자 : 이정훈
+ * */
   Future<bool> createBattle() async {
     ApiCall api = ApiCall();
     Map<String, dynamic> data = {

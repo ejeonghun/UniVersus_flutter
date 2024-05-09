@@ -15,6 +15,9 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
 
   late String status;
 
+  /*
+ * eventId를 넣으면 Icon을 반환함
+ * */
   Icon getIcon(int eventId) {
     switch (eventId) {
       case 1:
@@ -43,6 +46,9 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     }
   }
 
+  /*
+  * eventId를 넣으면 텍스트를 반환함
+   */
   String getEventText(int eventId) {
     switch (eventId) {
       case 1:
@@ -68,6 +74,12 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     }
   }
 
+  /*
+ * 대항전 조회
+ * @param battleId: 대항전 id
+ * @return versusDetail : 대항전 정보 클래스
+ * 생성자 : 이정훈
+ * */
   Future<versusDetail> getVersusDetail(int battleId) async {
     // 대결 리스트를 불러오는 메소드
     DioApiCall api = DioApiCall();
@@ -80,8 +92,11 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
       List<dynamic> guestTeamMembersData =
           response['data']['GuestTeam']['guestPtcList'];
 
+      // hostTeam 멤버 리스트를 가져온다.
       List<Map<String, dynamic>> hostTeamMembers =
           List<Map<String, dynamic>>.from(hostParticipantListData);
+
+      // guestTeam 멤버 리스트를 가져온다.
       List<Map<String, dynamic>> guestTeamMembers =
           List<Map<String, dynamic>>.from(guestTeamMembersData);
 
@@ -119,6 +134,12 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     }
   }
 
+  /*
+  * @param battleId: 대항전 id
+  * @return bool : 성공 or 실패 -> 스낵바 표시 -> 새로고침
+  * @throws Exception: 대항전 참가 실패 시 스낵바를 띄움.
+  * 생성자 : 이정훈
+  *  */
   Future<bool> repAttend(int battleId) async {
     // 대항전 대표 참가
     DioApiCall api = DioApiCall();
@@ -126,28 +147,30 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
       'univBattleId': battleId,
       'guestLeader': await UserData.getMemberIdx(),
     });
-    return response['success'];
-    // if (response['success'] == true) {
-    //   return response['message'];
-    // } else {
-    //   return response['message'];
-    // }
+    return response['success']; // true or false
   }
 
+  /*
+  * @param battleId: 대항전 id
+  * @return bool : 성공 or 실패 -> 스낵바 표시 -> 새로고침
+  * @throws Exception: 대항전 시작 실패 시 스낵바를 띄움.
+  * 생성자 : 이정훈
+  *
+  * 대항전을 만든 hostLeader만이 경기를 시작할 수 있음.
+  * */
   Future<bool> matchStart(int battleId) async {
     // 경기시작 API
-    // 대항전 대표 참가
     DioApiCall api = DioApiCall();
     final response = await api
         .get('/univBattle/matchStart?univBattleId=${battleId.toString()}');
     return response['success'];
-    // if (response['success'] == true) {
-    //   return response['message'];
-    // } else {
-    //   return response['message'];
-    // }
   }
 
+
+  /*
+  * Enum -> String
+  * 대항전 상태의 Enum 값을 String으로 변환함
+   */
   String getText() {
     switch (status) {
       case 'IN_PROGRESS':
@@ -163,6 +186,10 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     }
   }
 
+  /*
+  * Enum -> String
+  * 대항전 상태의 Enum 값을 상황에 맞는 Color으로 변환함
+   */
   Color getColor() {
     switch (status) {
       case 'IN_PROGRESS':

@@ -76,6 +76,12 @@ class ProceedingModel extends FlutterFlowModel<versusProceedingWidget> {
     }
   }
 
+  /*
+  * @param battleId: 대결 아이디
+  * @return versusDetail: 대결 상세 정보 클래스
+  * @throws Exception: 대결 상세 정보 조회 실패 시 예외 발생
+  * 생성자 : 이정훈
+  * */
   Future<versusDetail> getVersusDetail(int battleId) async {
     // 대결 리스트를 불러오는 메소드
     DioApiCall api = DioApiCall();
