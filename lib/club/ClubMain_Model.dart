@@ -28,16 +28,16 @@ class ClubMainModel extends FlutterFlowModel<ClubMainWidget> {
           clubName: response['data']['clubName'],
           clubIntro: response['data']['introduction'],
           price: response['data']['price'],
-          clubLeader: response['data']['memberIdx'],
-          imageUrl: response['data']['clubImage'].isNotEmpty
-              ? response['data']['clubImage'][0]['imageUrl']
+          clubLeader: 0,
+          imageUrl: response['data']['clubImageUrls'].isNotEmpty
+              ? response['data']['clubImageUrls'][0]
               : 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
-          eventId: response['data']['eventId'],
+          eventId: response['data']['eventName'],
           regDate: response['data']['regDt'],
           currentMembers: response['data']['currentMembers'],
           maximumMembers: response['data']['maximumMembers'],
-          LeaderNickname: response['data']['leaderNickname'],
-          LeaderProfileImg: response['data']['leaderProfileImg']);
+          LeaderNickname: response['data']['nickname'],
+          LeaderProfileImg: response['data']['memberImageUrl']);
     } else {
       return clubInfo.nullPut();
     }
