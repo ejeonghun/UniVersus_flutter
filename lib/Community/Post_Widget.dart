@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:universus/Community/PostElement.dart';
+import 'package:universus/Community/replyElement.dart';
+import 'package:universus/Community/reply_Widget.dart';
 
 import 'Post_Model.dart';
 export 'Post_Model.dart';
@@ -40,7 +42,10 @@ class _PostWidgetState extends State<PostWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Future.wait([_model.getPost(widget.univBoardId)]),
+        future: Future.wait([
+          _model.getPost(widget.univBoardId),
+          _model.getReply(widget.univBoardId)
+        ]),
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -55,6 +60,7 @@ class _PostWidgetState extends State<PostWidget> {
             return Text('오류: ${snapshot.error}');
           } else {
             PostElement post = snapshot.data![0];
+            List<Reply> replies = snapshot.data![1];
             return GestureDetector(
               onTap: () => _model.unfocusNode.canRequestFocus
                   ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -217,81 +223,17 @@ class _PostWidgetState extends State<PostWidget> {
                                 ),
                         ),
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
+                          padding: EdgeInsets.only(left: 15), // 왼쪽 마진 추가
                           child: Column(
-                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment:
+                                CrossAxisAlignment.start, // 왼쪽 정렬
                             children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Container(
-                                    width: 30,
-                                    height: 30,
-                                    clipBehavior: Clip.antiAlias,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Image.asset(
-                                      'assets/images/Rectangle_19.png',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        5, 0, 0, 0),
-                                    child: Text(
-                                      '이정훈',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            fontSize: 15,
-                                            letterSpacing: 0,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-1, 0),
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      35, 0, 0, 0),
-                                  child: Text(
-                                    '누나 이뻐요',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Readex Pro',
-                                          fontSize: 15,
-                                          letterSpacing: 0,
-                                        ),
-                                  ),
+                              for (var reply in replies)
+                                Padding(
+                                  padding:
+                                      EdgeInsets.only(bottom: 15), // 아래 여백 추가
+                                  child: ReplyWidget(reply: reply),
                                 ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-1, 0),
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      35, 0, 0, 0),
-                                  child: Text(
-                                    '03/28 16:44',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Readex Pro',
-                                          color: Color(0xFF979797),
-                                          fontSize: 10,
-                                          letterSpacing: 0,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                              Divider(
-                                thickness: 1,
-                                color: FlutterFlowTheme.of(context).tertiary,
-                              ),
                             ],
                           ),
                         ),

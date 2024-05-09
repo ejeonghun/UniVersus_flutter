@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:universus/Community/PostElement.dart';
+import 'package:universus/Community/replyElement.dart';
 import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/user/user.dart';
 import 'Post_Widget.dart' show PostWidget;
@@ -13,6 +14,8 @@ class PostModel extends FlutterFlowModel<PostWidget> {
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
+
+
 
   @override
   void initState(BuildContext context) {}
@@ -50,6 +53,36 @@ class PostModel extends FlutterFlowModel<PostWidget> {
       return PostElement.empty(); // 빈 리스트 반환
     }
   }
+
+    
+
+  Future<List<Reply>> getReply(int univBoardId) async {
+    List<Reply> comments = [];
+    DioApiCall api = DioApiCall();
+    final response =
+        await api.get('/reply/list?univBoardId=${univBoardId}');
+  List<Reply> replies = [];
+  
+  // 조회 성공
+  if (response['success'] == true) {
+    
+    for (var data in response['data']) {
+      Reply reply = Reply(
+        profileImageUrl: data['profileImageUrl'] ?? '',
+        nickname: data['nickname'] ?? '',
+        content: data['content'] ?? '',
+        timestamp: data['lastDt'] ?? '',
+      );
+      
+      replies.add(reply);
+    }
+  } else {
+    // 조회 실패
+    print('Failed to load replies');
+  }
+  
+  return replies;
+}
 
   @override
   void dispose() {
