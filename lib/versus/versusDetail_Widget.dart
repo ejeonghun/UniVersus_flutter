@@ -117,7 +117,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Template.getIcon(snapshot.data!.eventId!),
+                              _model.getIcon(snapshot.data!.eventId!),
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     3.0, 0.0, 0.0, 0.0),
