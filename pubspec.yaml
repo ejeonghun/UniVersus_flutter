@@ -106,19 +106,19 @@ flutter:
   fonts:
     - family: Ownglyph
       fonts:
-        - asset: assets/fonts/Ownglyph_Regular.ttf
+        - asset: assets/fonts/NanumGothicBold.ttf
 
     - family: Outfit
       fonts:
-        - asset: assets/fonts/Ownglyph_Regular.ttf
+        - asset: assets/fonts/NanumGothicBold.ttf
 
     - family: Readex Pro
       fonts:
-        - asset: assets/fonts/Ownglyph_Regular.ttf
+        - asset: assets/fonts/NanumGothicBold.ttf
         
     - family: Plus Jakarta Sans
       fonts:
-        - asset: assets/fonts/Ownglyph_Regular.ttf
+        - asset: assets/fonts/NanumGothicBold.ttf
         
   # To add assets to your application, add an assets section, like this:
   # assets:

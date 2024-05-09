@@ -169,7 +169,7 @@ class _WriteWidgetState extends State<WriteWidget> {
                                 _model.sportDropdownValue = newValue;
                               });
                             },
-                            items: ['축구', '농구', '배구', '테니스']
+                            items: ['축구', '농구', '야구', '볼링','풋살','탁구','당구/포켓볼','배드민턴','E-sport']
                                 .map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
@@ -300,6 +300,28 @@ class _WriteWidgetState extends State<WriteWidget> {
                       _model.textController2Validator.asValidator(context),
                 ),
               ),
+              Align(
+                alignment: AlignmentDirectional(-1, 1),
+                child: FlutterFlowIconButton(
+                  borderColor: Color(0x004B39EF),
+                  borderRadius: 20,
+                  borderWidth: 1,
+                  buttonSize: 55,
+                  fillColor: Color(0x004B39EF),
+                  icon: Icon(
+                    Icons.camera_alt,
+                    color: FlutterFlowTheme.of(context).tertiary,
+                    size: 40,
+                  ),
+                  onPressed: () {
+                    print('IconButton pressed ...');
+                  },
+                ),
+              ),
+              Divider(
+                thickness: 1,
+                color: Color(0xCCA5A5A5),
+              ),
               if (showLocationButton) // 위치 선택 버튼은 모집일 때만 표시
                 Row(
                   mainAxisSize: MainAxisSize.max,
@@ -361,7 +383,7 @@ class _WriteWidgetState extends State<WriteWidget> {
                         text: '장소 선택',
                         icon: Icon(
                           Icons.place,
-                          size: 15.0,
+                          size: 20.0,
                         ),
                         options: FFButtonOptions(
                           width: 200.0,
@@ -424,7 +446,7 @@ class _WriteWidgetState extends State<WriteWidget> {
                     },
                     text: _model.datePicked != null
                         ? '${_model.datePicked!.year}/${_model.datePicked!.month}/${_model.datePicked!.day}'
-                        : '대항전 날짜',
+                        : '날짜 선택',
                     icon: FaIcon(
                       FontAwesomeIcons.calendarAlt,
                       size: 18,
@@ -451,28 +473,7 @@ class _WriteWidgetState extends State<WriteWidget> {
                     ),
                   ),
                 ),
-              Align(
-                alignment: AlignmentDirectional(-1, 1),
-                child: FlutterFlowIconButton(
-                  borderColor: Color(0x004B39EF),
-                  borderRadius: 20,
-                  borderWidth: 1,
-                  buttonSize: 55,
-                  fillColor: Color(0x004B39EF),
-                  icon: Icon(
-                    Icons.camera_alt,
-                    color: FlutterFlowTheme.of(context).tertiary,
-                    size: 40,
-                  ),
-                  onPressed: () {
-                    print('IconButton pressed ...');
-                  },
-                ),
-              ),
-              Divider(
-                thickness: 1,
-                color: Color(0xCCA5A5A5),
-              ),
+              
             ],
           ),
         ),
