@@ -27,11 +27,22 @@ class MainModel extends FlutterFlowModel<MainWidget> {
     if (response['memberIdx'].toString() == memberIdx) {
       // 조회 성공
       print(response);
+      // 끝에 2자리에 "학교" 라는 단어가 있으면 제거하고 formatSchool 에 저장
+      String formatSchool = '';
+
+      if (response['schoolName'] != null &&
+          response['schoolName'].endsWith('학교')) {
+        formatSchool = response['schoolName']
+            .substring(0, response['schoolName'].length - 2);
+      } else {
+        formatSchool = response['schoolName'];
+      }
+
       return userProfile(
         userName: response['userName'],
         nickname: response['nickname'],
         memberIdx: response['memberIdx'].toString(),
-        univName: response['schoolName'].toString(),
+        univName: formatSchool,
         deptName: response['deptName'].toString(),
         univLogoImage: response['logoImg'] != null &&
                 response['logoImg'].isNotEmpty
