@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:universus/chat/test.dart';
+import 'package:universus/chat/chats.dart';
 import 'package:universus/club/ClubList_Model.dart';
 import 'package:universus/club/ClubList_Widget.dart';
 import 'package:universus/main/Components/clubElement_Widget.dart';
@@ -20,7 +20,6 @@ import 'package:universus/Community/Write_Widget.dart';
 import 'package:universus/Search/SearchResult_Widget.dart';
 import 'package:universus/Search/Search_Widget.dart';
 import 'package:universus/auth/AdditionalInfo_Widget.dart';
-import 'package:universus/chat/ChatListWidget.dart';
 
 import 'package:universus/class/user/user.dart';
 
@@ -194,7 +193,7 @@ class _MyAppState extends State<MyApp> {
               '/club/update': (context) => UpdateClubWidget(
                   clubId: "9"), // 테스트용 나중에 clubId 파라미터도 같이 전달해야함
               '/profile': (context) => ProfileWidget(),
-              '/chat/main': (context) => ChatScreen(),
+              '/chat/main': (context) => ChatsPage(),
               '/main1': (context) => MainWidget(),
               '/versusList': (context) => VersusListWidget(),
               '/versusCreate': (context) => versusCreateWidget(),
