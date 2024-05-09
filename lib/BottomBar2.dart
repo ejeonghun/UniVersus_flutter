@@ -23,7 +23,7 @@ class _BottomBar2State extends State<BottomBar2> {
           case 0:
             if (_selectedIndex != 0) {
               debugPrint("메인으로 이동");
-              Navigator.of(context).pushNamed('/main');
+              Navigator.of(context).pushNamed('/main1');
             } else {
               debugPrint("현재 메인임");
             }
@@ -33,12 +33,16 @@ class _BottomBar2State extends State<BottomBar2> {
             Navigator.of(context).pushNamed('/versusList');
             break;
           case 2:
-            Navigator.of(context).pushNamed('/community');
+            Navigator.of(context).pushNamed('/Community');
             debugPrint('내 정보 클릭');
             break;
           case 3:
-            Navigator.of(context).pushNamed('/profile');
+            Navigator.of(context).pushNamed('/chat/main');
             debugPrint('3');
+            break;
+          case 4:
+            Navigator.of(context).pushNamed('/profile');
+            debugPrint('4');
             break;
           default:
             debugPrint('의도하지 않은 버튼');
@@ -47,8 +51,9 @@ class _BottomBar2State extends State<BottomBar2> {
       },
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-        BottomNavigationBarItem(icon: Icon(Icons.leaderboard), label: '대항전'),
+        BottomNavigationBarItem(icon: Icon(Icons.sports_mma), label: '대항전'),
         BottomNavigationBarItem(icon: Icon(Icons.school), label: '커뮤니티'),
+        BottomNavigationBarItem(icon: Icon(Icons.sms), label: '채팅'),
         BottomNavigationBarItem(icon: Icon(Icons.person), label: '프로필')
       ],
       type: BottomNavigationBarType.fixed,

@@ -4,6 +4,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart'
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:universus/BottomBar2.dart';
 import 'package:universus/Community/Community_Widget.dart';
 import 'package:universus/class/user/userProfile.dart';
 import 'package:universus/club/ClubList_Widget.dart';
@@ -98,7 +99,7 @@ class _MainWidgetState extends State<MainWidget> {
                         size: 30,
                       ),
                       onPressed: () {
-                        print('IconButton pressed ...');
+                        Navigator.of(context).pushNamed('/Search');
                       },
                     ),
                     FlutterFlowIconButton(
@@ -289,9 +290,10 @@ class _MainWidgetState extends State<MainWidget> {
                                           ),
                                     ),
                                     TextSpan(
-                                      text: '팀',
+                                      text: '클럽',
                                       style: TextStyle(
-                                        color: Color.fromARGB(255, 15, 239, 60),
+                                        color:
+                                            Color.fromARGB(255, 90, 112, 253),
                                       ),
                                     ),
                                     TextSpan(
@@ -464,6 +466,7 @@ class _MainWidgetState extends State<MainWidget> {
                     ),
                   ),
                 ),
+                bottomNavigationBar: BottomBar2(),
               ),
             );
           }
