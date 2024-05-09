@@ -3,7 +3,7 @@ import 'package:flutterflow_ui/flutterflow_ui.dart';
 class clubInfo {
   int clubId; // 클럽 아이디
   int clubLeader; // 클럽 개설자
-  int eventId; // 클럽 카테고리
+  String eventId; // 클럽 카테고리
   String clubName; // 클럽 이름
   String clubIntro; // 클럽 소개
   String regDate; // 클럽 생성일
@@ -38,7 +38,7 @@ class clubInfo {
     return clubInfo(
       clubId: 0,
       clubLeader: 0,
-      eventId: 0,
+      eventId: "",
       clubName: '',
       clubIntro: '',
       regDate: '',
