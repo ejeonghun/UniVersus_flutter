@@ -20,6 +20,13 @@ class PostModel extends FlutterFlowModel<PostWidget> {
   @override
   void initState(BuildContext context) {}
 
+  /*
+ * 댓글 조회
+ * @param univBoardId: 게시글 아이디
+ * @return PostElement: 게시글 정보
+ * @throws Exception: 게시글 조회 실패 시 예외 발생
+ * 생성자 : 이정훈
+ * */
   Future<PostElement> getPost(int univBoardId) async {
     DioApiCall api = DioApiCall();
     final response =
@@ -34,7 +41,7 @@ class PostModel extends FlutterFlowModel<PostWidget> {
         nickname: response['data']['nickname'] ?? '',
         regDt: response['data']['regDt'] ?? '',
         place: response['data']['place'] ?? '',
-        udtDt: response['data']['udtDt'] ?? '', // 이 값이 없을 경우 빈 문자열로 처리됨
+        udtDt: response['data']['udtDt'] ?? '',
         lat: response['data']['lat'] ?? '',
         lng: response['data']['lng'] ?? '',
         eventName: response['data']['eventName'] ?? '',
@@ -43,6 +50,7 @@ class PostModel extends FlutterFlowModel<PostWidget> {
         postImageUrls: (response['data']['postImageUrls'] as List<dynamic>)
             .map<String>((imageUrl) => imageUrl.toString())
             .toList(),
+        // postImage 배열로 불러온다.
 
         profileImgUrl: response['data']['profileImgUrl'] ??
             'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
@@ -50,14 +58,19 @@ class PostModel extends FlutterFlowModel<PostWidget> {
     } else {
       // 조회 실패
       print(response);
-      return PostElement.empty(); // 빈 리스트 반환
+      return PostElement.empty(); // 빈 Post 반환
     }
   }
 
     
-
+ /*
+ * 댓글 조회
+ * @param univBoardId: 게시글 아이디
+ * @return List<Reply>: 댓글 리스트
+ * @throws Exception: 댓글 조회 실패 시 예외 발생
+ * 생성자 : 이정훈
+ * */
   Future<List<Reply>> getReply(int univBoardId) async {
-    List<Reply> comments = [];
     DioApiCall api = DioApiCall();
     final response =
         await api.get('/reply/list?univBoardId=${univBoardId}');
@@ -65,22 +78,26 @@ class PostModel extends FlutterFlowModel<PostWidget> {
   
   // 조회 성공
   if (response['success'] == true) {
-    
+    debugPrint(response.toString());
+    if (response['data'] == null) {
+      Reply reply = Reply.empty();
+      // 댓글이 없으면 "첫 댓글을 작성해보세요!" 라는 댓글을 반환
+      replies.add(reply);
+      return replies;
+    }
     for (var data in response['data']) {
       Reply reply = Reply(
-        profileImageUrl: data['profileImageUrl'] ?? '',
+        profileImageUrl: data['profileImgUrl'] ?? '',
         nickname: data['nickname'] ?? '',
         content: data['content'] ?? '',
         timestamp: data['lastDt'] ?? '',
       );
-      
       replies.add(reply);
     }
   } else {
-    // 조회 실패
     print('Failed to load replies');
   }
-  
+    debugPrint(replies.toString());
   return replies;
 }
 

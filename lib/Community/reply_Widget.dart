@@ -27,8 +27,8 @@ class ReplyWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                 ),
-                child: Image.asset(
-                  'assets/images/Rectangle_19.png', // 프로필 이미지 URL로 변경 가능
+                child: Image.network(
+                  reply.profileImageUrl, // 댓글 작성자 프로필 이미지
                   fit: BoxFit.cover,
                 ),
               ),
