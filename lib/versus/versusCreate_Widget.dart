@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -57,11 +58,13 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
     var status3 = await Permission.locationAlways.status;
     var statusIos = await Permission.locationWhenInUse.serviceStatus;
     var statusIos2 = await Permission.location.request();
+    LocationPermission permission = await Geolocator.checkPermission();
     if (status.isGranted ||
         status2.isGranted ||
         status3.isGranted ||
         statusIos2.isGranted ||
-        statusIos == ServiceStatus.enabled) {
+        permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
       debugPrint("권한 허용되어 있음 ");
       return true;
     } else {
