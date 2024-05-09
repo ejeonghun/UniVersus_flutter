@@ -20,7 +20,7 @@ class Template {
     case '농구':
       return Icon(Icons.sports_basketball, size: size);
     case '당구/포켓볼':
-      return Icon(Icons.sports_golf, size: size);
+      return Icon(Icons.workspaces, size: size);
     case '탁구':
       return Icon(Icons.sports_tennis, size: size);
     case 'E-Sport':
