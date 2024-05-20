@@ -17,7 +17,7 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
 
   late String status;
 
-  /*
+  /**
  * eventId를 넣으면 Icon을 반환함
  * */
   Icon getIcon(int eventId) {
@@ -48,7 +48,7 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     }
   }
 
-  /*
+  /**
   * eventId를 넣으면 텍스트를 반환함
    */
   String getEventText(int eventId) {
@@ -76,7 +76,7 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     }
   }
 
-  /*
+  /**
  * 대항전 조회
  * @param battleId: 대항전 id
  * @return versusDetail : 대항전 정보 클래스
@@ -136,7 +136,7 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     }
   }
 
-  /*
+  /**
   * @param battleId: 대항전 id
   * @return bool : 성공 or 실패 -> 스낵바 표시 -> 새로고침
   * @throws Exception: 대항전 참가 실패 시 스낵바를 띄움.
@@ -152,7 +152,7 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     return response['success']; // true or false
   }
 
-  /*
+  /**
   * @param battleId: 대항전 id
   * @return bool : 성공 or 실패 -> 스낵바 표시 -> 새로고침
   * @throws Exception: 대항전 시작 실패 시 스낵바를 띄움.
@@ -169,7 +169,7 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
   }
 
 
-  /*
+  /**
   * Enum -> String
   * 대항전 상태의 Enum 값을 String으로 변환함
    */
@@ -190,7 +190,7 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     }
   }
 
-  /*
+  /**
   * Enum -> String
   * 대항전 상태의 Enum 값을 상황에 맞는 Color으로 변환함
    */

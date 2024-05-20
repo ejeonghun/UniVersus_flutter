@@ -99,10 +99,18 @@ class _WriteWidgetState extends State<WriteWidget> {
           ),
           actions: [
             FFButtonWidget(
-              onPressed: () {
-                print('Button pressed ...');
+              onPressed: () async {
+                if (await _model.writePost() == true) {
+                  debugPrint("성공");
+                  CustomSnackbar.success(
+                      context, "글쓰기", "글이 성공적으로 작성되었습니다.", 2);
+                  Navigator.of(context).pop();
+                } else {
+                  debugPrint("실패");
+                  CustomSnackbar.error(context, "글쓰기", "글 작성에 실패하였습니다.", 2);
+                }
               },
-              text: '완료',
+              text: '작성',
               options: FFButtonOptions(
                 padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
                 iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
@@ -169,8 +177,17 @@ class _WriteWidgetState extends State<WriteWidget> {
                                 _model.sportDropdownValue = newValue;
                               });
                             },
-                            items: ['축구', '농구', '야구', '볼링','풋살','탁구','당구/포켓볼','배드민턴','E-sport']
-                                .map<DropdownMenuItem<String>>((String value) {
+                            items: [
+                              '축구',
+                              '농구',
+                              '야구',
+                              '볼링',
+                              '풋살',
+                              '탁구',
+                              '당구/포켓볼',
+                              '배드민턴',
+                              'E-sport'
+                            ].map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value),
@@ -300,7 +317,7 @@ class _WriteWidgetState extends State<WriteWidget> {
                       _model.textController2Validator.asValidator(context),
                 ),
               ),
-              Align(
+              Align( //이미지 업로드
                 alignment: AlignmentDirectional(-1, 1),
                 child: FlutterFlowIconButton(
                   borderColor: Color(0x004B39EF),
@@ -313,8 +330,10 @@ class _WriteWidgetState extends State<WriteWidget> {
                     color: FlutterFlowTheme.of(context).tertiary,
                     size: 40,
                   ),
-                  onPressed: () {
-                    print('IconButton pressed ...');
+                  onPressed: () async {
+                    if (await _model.pickImage() == true) {
+                      debugPrint("이미지 선택 성공");
+                    }
                   },
                 ),
               ),
@@ -473,7 +492,6 @@ class _WriteWidgetState extends State<WriteWidget> {
                     ),
                   ),
                 ),
-              
             ],
           ),
         ),

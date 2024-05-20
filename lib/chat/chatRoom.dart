@@ -125,7 +125,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('WebSocket Chat'),
+        title: Text(widget.customChatRoomName ?? '채팅방'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

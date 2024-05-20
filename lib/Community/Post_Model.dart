@@ -15,8 +15,6 @@ class PostModel extends FlutterFlowModel<PostWidget> {
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
 
-
-
   @override
   void initState(BuildContext context) {}
 
@@ -36,7 +34,7 @@ class PostModel extends FlutterFlowModel<PostWidget> {
     if (response['success'] == true) {
       return PostElement(
         univBoardId: response['data']['univBoardId'] ?? 0,
-        title: response['data']['title'].toString() ?? '',
+        title: response['data']['title'].toString() ?? '제목 없음',
         content: response['data']['content'] ?? '',
         nickname: response['data']['nickname'] ?? '',
         regDt: response['data']['regDt'] ?? '',
@@ -62,8 +60,7 @@ class PostModel extends FlutterFlowModel<PostWidget> {
     }
   }
 
-    
- /*
+  /*
  * 댓글 조회
  * @param univBoardId: 게시글 아이디
  * @return List<Reply>: 댓글 리스트
@@ -72,34 +69,33 @@ class PostModel extends FlutterFlowModel<PostWidget> {
  * */
   Future<List<Reply>> getReply(int univBoardId) async {
     DioApiCall api = DioApiCall();
-    final response =
-        await api.get('/reply/list?univBoardId=${univBoardId}');
-  List<Reply> replies = [];
-  
-  // 조회 성공
-  if (response['success'] == true) {
-    debugPrint(response.toString());
-    if (response['data'] == null) {
-      Reply reply = Reply.empty();
-      // 댓글이 없으면 "첫 댓글을 작성해보세요!" 라는 댓글을 반환
-      replies.add(reply);
-      return replies;
+    final response = await api.get('/reply/list?univBoardId=${univBoardId}');
+    List<Reply> replies = [];
+
+    // 조회 성공
+    if (response['success'] == true) {
+      debugPrint(response.toString());
+      if (response['data'] == null) {
+        Reply reply = Reply.empty();
+        // 댓글이 없으면 "첫 댓글을 작성해보세요!" 라는 댓글을 반환
+        replies.add(reply);
+        return replies;
+      }
+      for (var data in response['data']) {
+        Reply reply = Reply(
+          profileImageUrl: data['profileImgUrl'] ?? '',
+          nickname: data['nickname'] ?? '',
+          content: data['content'] ?? '',
+          timestamp: data['lastDt'] ?? '',
+        );
+        replies.add(reply);
+      }
+    } else {
+      print('Failed to load replies');
     }
-    for (var data in response['data']) {
-      Reply reply = Reply(
-        profileImageUrl: data['profileImgUrl'] ?? '',
-        nickname: data['nickname'] ?? '',
-        content: data['content'] ?? '',
-        timestamp: data['lastDt'] ?? '',
-      );
-      replies.add(reply);
-    }
-  } else {
-    print('Failed to load replies');
-  }
     debugPrint(replies.toString());
-  return replies;
-}
+    return replies;
+  }
 
   @override
   void dispose() {
