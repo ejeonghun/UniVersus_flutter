@@ -30,6 +30,7 @@ class _PostWidgetState extends State<PostWidget> {
     debugPrint(widget.univBoardId.toString());
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
+    _model.getMemberIdx();
   }
 
   @override
@@ -44,7 +45,7 @@ class _PostWidgetState extends State<PostWidget> {
     return FutureBuilder(
         future: Future.wait([
           _model.getPost(widget.univBoardId),
-          _model.getReply(widget.univBoardId)
+          _model.getReply(widget.univBoardId),
         ]),
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -238,6 +239,7 @@ class _PostWidgetState extends State<PostWidget> {
                           ),
                         ),
                         Align(
+                          //댓글입력
                           alignment: AlignmentDirectional(0, -1),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
@@ -316,8 +318,14 @@ class _PostWidgetState extends State<PostWidget> {
                                 ),
                               ),
                               FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
+                                onPressed: () async {
+                                  // 댓글을 업로드하는 함수 호출
+                                  await _model.postComment(widget.univBoardId,
+                                      _model.textController.text);
+                                  // 댓글을 업로드한 후 UI를 업데이트합니다.
+                                  setState(() {});
+                                  _model.textController?.clear();
+
                                 },
                                 text: '입력',
                                 options: FFButtonOptions(

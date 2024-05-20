@@ -110,7 +110,7 @@ class _WriteWidgetState extends State<WriteWidget> {
                   CustomSnackbar.error(context, "글쓰기", "글 작성에 실패하였습니다.", 2);
                 }
               },
-              text: '완료',
+              text: '작성',
               options: FFButtonOptions(
                 padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
                 iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
@@ -317,7 +317,7 @@ class _WriteWidgetState extends State<WriteWidget> {
                       _model.textController2Validator.asValidator(context),
                 ),
               ),
-              Align(
+              Align( //이미지 업로드
                 alignment: AlignmentDirectional(-1, 1),
                 child: FlutterFlowIconButton(
                   borderColor: Color(0x004B39EF),
