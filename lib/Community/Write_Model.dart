@@ -59,4 +59,5 @@ class WriteModel extends FlutterFlowModel<WriteWidget> {
     textFieldFocusNode2?.dispose();
     textController2?.dispose();
   }
+
 }

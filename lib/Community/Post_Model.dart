@@ -7,6 +7,7 @@ import 'package:universus/Community/PostElement.dart';
 import 'package:universus/Community/replyElement.dart';
 import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/user/user.dart';
+import 'package:http/http.dart' as http;
 import 'Post_Widget.dart' show PostWidget;
 
 class PostModel extends FlutterFlowModel<PostWidget> {
@@ -14,14 +15,15 @@ class PostModel extends FlutterFlowModel<PostWidget> {
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
-
+  void getMemberIdx() async {memberIdx = await UserData.getMemberIdx();}
+String? memberIdx;
 
 
   @override
   void initState(BuildContext context) {}
 
   /*
- * 댓글 조회
+ * 게시글 조회
  * @param univBoardId: 게시글 아이디
  * @return PostElement: 게시글 정보
  * @throws Exception: 게시글 조회 실패 시 예외 발생
@@ -61,8 +63,21 @@ class PostModel extends FlutterFlowModel<PostWidget> {
       return PostElement.empty(); // 빈 Post 반환
     }
   }
-
-    
+  Future<void> postComment(int univBoardId, String content) async {
+    DioApiCall api = DioApiCall();
+    final response =
+        await api.post('/reply/create', {'univBoardId': univBoardId, 'content': content, 'memberIdx' : memberIdx});
+      debugPrint('${memberIdx} ${content}, ${univBoardId}');
+      
+      if (response['success'] == true) {
+        // 댓글이 성공적으로 작성됨
+        // 필요한 경우 여기서 새로운 댓글을 가져오는 메서드를 호출할 수 있습니다.
+        // getComments(univBoardId);
+      } else {
+        
+      }
+    }
+  
  /*
  * 댓글 조회
  * @param univBoardId: 게시글 아이디
