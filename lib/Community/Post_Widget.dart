@@ -324,6 +324,8 @@ class _PostWidgetState extends State<PostWidget> {
                                       _model.textController.text);
                                   // 댓글을 업로드한 후 UI를 업데이트합니다.
                                   setState(() {});
+                                  _model.textController?.clear();
+
                                 },
                                 text: '입력',
                                 options: FFButtonOptions(
