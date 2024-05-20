@@ -76,6 +76,7 @@ dependencies:
   flutter_local_notifications: ^17.1.1
   web_socket_channel: ^2.1.0
   firebase_core_web: ^2.16.0
+  iamport_flutter: ^0.10.18
 
 dev_dependencies:
   flutter_test:

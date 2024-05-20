@@ -11,6 +11,7 @@ import 'package:universus/main/Components/clubElement_Widget.dart';
 import 'package:universus/main/Components/clubelement_widget.dart';
 import 'package:universus/permissonManage.dart';
 import 'package:universus/permissonManage.dart';
+import 'package:universus/shared/paymentResult.dart';
 import 'firebase_options.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -205,6 +206,7 @@ class _MyAppState extends State<MyApp> {
               '/ClubMain': (context) => ClubMainWidget(clubId: 1),
               '/MyClub': (context) => MyClubWidget(),
               '/clubList': (context) => ClubListWidget(),
+              '/result': (context) => PaymentResult(),
             },
           );
         });
