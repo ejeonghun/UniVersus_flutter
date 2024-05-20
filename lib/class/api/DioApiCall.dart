@@ -53,9 +53,8 @@ class DioApiCall {
   }
 
   Future<Map<String, dynamic>> multipartReq(
-      String url, Map<String, dynamic> data) async {
+      String url, FormData formData) async {
     try {
-      var formData = FormData.fromMap(data);
       Response response = await dio.post((baseUrl + url), data: formData);
       return response.data;
     } catch (e) {

@@ -1,35 +1,36 @@
 import 'package:flutter/material.dart';
 
 class Template {
-
   static Icon getIcon(String eventName, {double size = 20.0}) {
-  switch (eventName) {
-    case '배드민턴':
-      return Icon(
-        Icons.sports_tennis_sharp,
-        size: size,
-      );
-    case '볼링': 
-      return Icon(Icons.sports, size: size,);
-    case '축구':
-      return Icon(Icons.sports_soccer, size: size);
-    case '풋살':
-      return Icon(Icons.sports_soccer, size: size);
-    case '야구':
-      return Icon(Icons.sports_baseball, size: size);
-    case '농구':
-      return Icon(Icons.sports_basketball, size: size);
-    case '당구/포켓볼':
-      return Icon(Icons.workspaces, size: size);
-    case '탁구':
-      return Icon(Icons.sports_tennis, size: size);
-    case 'E-Sport':
-      return Icon(Icons.sports_esports, size: size);
-    default:
-      return Icon(Icons.help_outline, size: size);
+    switch (eventName) {
+      case '배드민턴':
+        return Icon(
+          Icons.sports_tennis_sharp,
+          size: size,
+        );
+      case '볼링':
+        return Icon(
+          Icons.sports,
+          size: size,
+        );
+      case '축구':
+        return Icon(Icons.sports_soccer, size: size);
+      case '풋살':
+        return Icon(Icons.sports_soccer, size: size);
+      case '야구':
+        return Icon(Icons.sports_baseball, size: size);
+      case '농구':
+        return Icon(Icons.sports_basketball, size: size);
+      case '당구/포켓볼':
+        return Icon(Icons.workspaces, size: size);
+      case '탁구':
+        return Icon(Icons.sports_tennis, size: size);
+      case 'E-Sport':
+        return Icon(Icons.sports_esports, size: size);
+      default:
+        return Icon(Icons.help_outline, size: size);
+    }
   }
-}
-
 
   static String getEventText(String eventName) {
     switch (eventName) {
@@ -55,7 +56,8 @@ class Template {
         return '알 수 없음';
     }
   }
-static Color getEventTextColor(String eventName) {
+
+  static Color getEventTextColor(String eventName) {
     switch (eventName) {
       case '배드민턴':
         return Colors.brown;
@@ -79,5 +81,43 @@ static Color getEventTextColor(String eventName) {
       default:
         return Colors.black;
     }
-}
+  }
+
+  static int getEventId(String eventName) {
+    switch (eventName) {
+      case '배드민턴':
+        return 1;
+      case '볼링':
+        return 2;
+      case '축구':
+        return 3;
+      case '풋살':
+        return 4;
+      case '야구':
+        return 5;
+      case '농구':
+        return 6;
+      case '당구/포켓볼':
+        return 7;
+      case '탁구':
+        return 8;
+      case 'E-sport':
+        return 9;
+      default:
+        return 0;
+    }
+  }
+
+  static int getCategoryId(String? value) {
+    switch (value) {
+      case '자유':
+        return 1;
+      case '모집':
+        return 2;
+      case '정보':
+        return 3;
+      default: // null이면 0으로
+        return 4;
+    }
+  }
 }
