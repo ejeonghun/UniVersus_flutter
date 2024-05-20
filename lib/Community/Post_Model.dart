@@ -15,6 +15,12 @@ class PostModel extends FlutterFlowModel<PostWidget> {
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
 
+  void getMemberIdx() async {
+    memberIdx = await UserData.getMemberIdx();
+  }
+
+  String? memberIdx;
+
   @override
   void initState(BuildContext context) {}
 
@@ -95,6 +101,22 @@ class PostModel extends FlutterFlowModel<PostWidget> {
     }
     debugPrint(replies.toString());
     return replies;
+  }
+
+  Future<void> postComment(int univBoardId, String content) async {
+    DioApiCall api = DioApiCall();
+    final response = await api.post('/reply/create', {
+      'univBoardId': univBoardId,
+      'content': content,
+      'memberIdx': memberIdx
+    });
+    debugPrint('${memberIdx} ${content}, ${univBoardId}');
+
+    if (response['success'] == true) {
+      // 댓글이 성공적으로 작성됨
+      // 필요한 경우 여기서 새로운 댓글을 가져오는 메서드를 호출할 수 있습니다.
+      // getComments(univBoardId);
+    } else {}
   }
 
   @override
