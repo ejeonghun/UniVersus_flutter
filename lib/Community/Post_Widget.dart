@@ -156,7 +156,7 @@ class _PostWidgetState extends State<PostWidget> {
                                         ),
                                       ),
                                       Text(
-                                        post.regDt,
+                                        post.getFormattedDate(),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(

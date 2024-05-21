@@ -21,8 +21,8 @@ class ReplyWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                width: 30,
-                height: 30,
+                width: 25,
+                height: 25,
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
@@ -49,7 +49,7 @@ class ReplyWidget extends StatelessWidget {
           Align(
             alignment: AlignmentDirectional(-1, 0),
             child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(35, 0, 0, 0),
+              padding: EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
               child: Text(
                 reply.content, // 댓글 내용
                 style: FlutterFlowTheme.of(context).bodyMedium.override(
@@ -63,9 +63,9 @@ class ReplyWidget extends StatelessWidget {
           Align(
             alignment: AlignmentDirectional(-1, 0),
             child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(35, 0, 0, 0),
+              padding: EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
               child: Text(
-                reply.timestamp, // 댓글 작성 시간
+                reply.getFormattedDate(), // 댓글 작성 시간
                 style: FlutterFlowTheme.of(context).bodyMedium.override(
                   fontFamily: 'Readex Pro',
                   color: Color(0xFF979797),

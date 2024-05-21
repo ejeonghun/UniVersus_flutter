@@ -11,7 +11,7 @@ class replyModel extends ChangeNotifier {
   final FocusNode textFieldFocusNode = FocusNode();
 
 
-
+  //댓글 작성
   Future<void> postComment(int univBoardId, String content) async {
     final url = Uri.parse('https://moyoapi.lunaweb.dev/api/v1/comment/write');
     final headers = {'Content-Type': 'application/json'};
