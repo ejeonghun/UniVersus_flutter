@@ -1,4 +1,6 @@
 
+import 'package:flutterflow_ui/flutterflow_ui.dart';
+
 class Reply {
   final String profileImageUrl;
   final String nickname;
@@ -12,6 +14,12 @@ class Reply {
     required this.timestamp,
   });
 
+  String getFormattedDate() {
+    // Assuming timestamp is in ISO 8601 format, for example "2023-05-21T10:30:00"
+    DateTime dateTime = DateTime.parse(timestamp);
+    return DateFormat('MM/dd HH:mm').format(dateTime);
+  }
+  
   static empty() {
     return Reply(
       profileImageUrl: 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
