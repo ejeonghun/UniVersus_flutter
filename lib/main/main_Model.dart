@@ -75,18 +75,28 @@ class MainModel extends FlutterFlowModel<MainWidget> {
 
       // 클럽 목록 생성
       List<ClubElement> clubList = [];
-      for (var clubData in response['data']) {
+      if (response['data'] != null) {
+        for (var clubData in response['data']) {
+          clubList.add(ClubElement(
+            clubId: clubData['clubId'],
+            eventName: clubData['eventName'],
+            clubName: clubData['clubName'],
+            currentMembers: clubData['currentMembers'],
+            imageUrl: clubData['imageUrl'] == ""
+                ? 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png'
+                : clubData['imageUrl'],
+          ));
+        }
+      } else {
+        // 클럽 목록이 비어있으면
         clubList.add(ClubElement(
-          clubId: clubData['clubId'],
-          eventName: clubData['eventName'],
-          clubName: clubData['clubName'],
-          currentMembers: clubData['currentMembers'],
-          imageUrl: clubData['imageUrl'] == ""
-              ? 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png'
-              : clubData['imageUrl'],
-        ));
+            clubId: 10000,
+            eventName: '축구',
+            clubName: '클럽 생성~',
+            currentMembers: 5,
+            imageUrl:
+                'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png'));
       }
-
       // 클럽 목록 반환
       debugPrint(clubList.toString());
       return clubList;
@@ -107,17 +117,32 @@ class MainModel extends FlutterFlowModel<MainWidget> {
       // 조회 성공
       print(response);
       List<RecruitmentElement> recruitmentlist = [];
-      for (var item in response['data']) {
+      if (response['data'] != null) {
+        for (var item in response['data']) {
+          recruitmentlist.add(RecruitmentElement(
+            univBoardId: item['univBoardId'],
+            title: item['title'].toString(),
+            eventName: item['eventName'] ?? '',
+            latitude: item['lat'] ?? '',
+            longitude: item['lng'] ?? '',
+            place: item['place'] ?? '',
+            imageUrl: item['imageUrl'],
+          ));
+        }
+      } else {
+        // 대결 리스트가 비어있으면
         recruitmentlist.add(RecruitmentElement(
-          univBoardId: item['univBoardId'],
-          title: item['title'].toString(),
-          eventName: item['eventName'] ?? '',
-          latitude: item['lat'] ?? '',
-          longitude: item['lng'] ?? '',
-          place: item['place'] ?? '',
-          imageUrl: item['imageUrl'],
+          univBoardId: 10000,
+          title: '대결을 생성해보세요!',
+          eventName: '축구',
+          latitude: '37.5662952',
+          longitude: '126.9779451',
+          place: '서울특별시',
+          imageUrl:
+              'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
         ));
       }
+
       return recruitmentlist;
     } else {
       // 조회 실패
