@@ -1,8 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:universus/chat/chatRoom.dart';
+import 'package:universus/chat/createChatRoom.dart';
 import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/user/user.dart';
 import 'dart:convert';
@@ -16,40 +16,56 @@ class ChatRoomItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: chatRoom.chatRoomImg != null
-            ? NetworkImage(chatRoom.chatRoomImg!)
-            : AssetImage('assets/default_room.png') as ImageProvider,
-        backgroundColor: Colors.transparent,
-        onBackgroundImageError: (_, __) => Icon(Icons.error),
-      ),
-      title: Text(chatRoom.customChatRoomName ?? '상대가 지정되지 않음'),
-      subtitle: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (chatRoom.recentChat != null) Text(chatRoom.recentChat!),
-              ],
-            ),
+    return Container(
+      margin:
+          EdgeInsets.symmetric(vertical: 3, horizontal: 3), // 위아래 간격을 10으로 조정
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 6,
+            offset: Offset(0, 3),
           ),
-          if (chatRoom.getRecentChatDate != null)
-            Text(chatRoom.getRecentChatDate!),
         ],
+        borderRadius: BorderRadius.circular(8),
       ),
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-          return ChatScreen(
-            chatRoomType: chatRoom.chatRoomType,
-            chatRoomId: chatRoom.chatRoomId,
-            customChatRoomName: chatRoom.customChatRoomName,
-          );
-        }));
-      },
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundImage: chatRoom.chatRoomImg != null
+              ? NetworkImage(chatRoom.chatRoomImg!)
+              : AssetImage('assets/default_room.png') as ImageProvider,
+          backgroundColor: Colors.transparent,
+          onBackgroundImageError: (_, __) => Icon(Icons.error),
+        ),
+        title: Text(chatRoom.customChatRoomName ?? '상대가 지정되지 않음'),
+        subtitle: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (chatRoom.recentChat != null) Text(chatRoom.recentChat!),
+                ],
+              ),
+            ),
+            if (chatRoom.getRecentChatDate != null)
+              Text(chatRoom.getRecentChatDate!),
+          ],
+        ),
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+            return ChatScreen(
+              chatRoomType: chatRoom.chatRoomType,
+              chatRoomId: chatRoom.chatRoomId,
+              customChatRoomName: chatRoom.customChatRoomName,
+            );
+          }));
+        },
+      ),
     );
   }
 }
@@ -93,7 +109,6 @@ class _ChatsPageState extends State<ChatsPage> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting &&
               snapshot.data == null) {
-            // Show loading only on the first load
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text("데이터 로드 실패: ${snapshot.error}"));
