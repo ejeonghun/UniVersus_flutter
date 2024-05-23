@@ -132,8 +132,8 @@ class MainModel extends FlutterFlowModel<MainWidget> {
       } else {
         // 대결 리스트가 비어있으면
         recruitmentlist.add(RecruitmentElement(
-          univBoardId: 10000,
-          title: '대결을 생성해보세요!',
+          univBoardId: 0,
+          title: '모집글을 작성해보세요!',
           eventName: '축구',
           latitude: '37.5662952',
           longitude: '126.9779451',
