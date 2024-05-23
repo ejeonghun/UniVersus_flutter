@@ -71,14 +71,31 @@ class AdditionalInfoModel extends FlutterFlowModel<AdditionalInfoWidget> {
 
     // 변수들이 null인지 체크
     if (univId == null ||
+        universityController?.text == null ||
         emailController?.text == null ||
         passwordController?.text == null ||
         fullNameController?.text == null ||
         nicknameController?.text == null ||
         datePicked == null ||
         selectedDeptId == null) {
-      // 스낵바 띄우기
-      CustomSnackbar.error(context, "회원가입 실패", "모든 필수 정보를 입력해주세요.", 3);
+      // AlertDialog 띄우기
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("회원가입 실패"),
+            content: Text("모든 필수 정보를 입력해주세요."),
+            actions: <Widget>[
+              TextButton(
+                child: Text("확인"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
       return false;
     }
     inputTest();
