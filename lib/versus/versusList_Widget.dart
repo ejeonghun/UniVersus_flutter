@@ -111,8 +111,8 @@ class _VersusListWidgetState extends State<VersusListWidget> {
                 color: FlutterFlowTheme.of(context).primaryText,
                 size: 20.0,
               ),
-              onPressed: () {
-                print('IconButton pressed ...');
+              onPressed: () async {
+                Navigator.pushNamed(context, '/ranking');
               },
             ),
           ],
@@ -120,81 +120,83 @@ class _VersusListWidgetState extends State<VersusListWidget> {
           elevation: 2.0,
         ),
         body: FutureBuilder(
-  future: _model.getVersusList(statusCode),
-  builder: (BuildContext context, AsyncSnapshot<List<versusElement>> snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CircularProgressIndicator(), // 로딩 바 추가
-            SizedBox(height: 20), // 로딩 바와 텍스트 사이에 간격 추가
-            Text('데이터를 불러오는 중...'),
-          ],
-        ),
-      );
-    } else if (snapshot.hasError) {
-      return Text('오류: ${snapshot.error}');
-    } else {
-      return SafeArea(
-        top: true,
-        child: ListView(
-          children: [
-            Lottie.asset(
-              'assets/lottie/vs.json',
-              width: MediaQuery.sizeOf(context).width * 1.0,
-              height: 190.0,
-              fit: BoxFit.fill,
-              animate: true,
-            ),
-            if (_showVersusSearchWidget)
-              wrapWithModel(
-                model: _model.versusSearchModel,
-                updateCallback: () => setState(() {}),
-                child: VersusSearchWidget(
-                  setStatusCode: setStatusCode,
-                  selectedIndex: statusCode, // 해당 값을 전해줌으로써 ChoiceChip에 선택이 되어 있게함
+          future: _model.getVersusList(statusCode),
+          builder: (BuildContext context,
+              AsyncSnapshot<List<versusElement>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    CircularProgressIndicator(), // 로딩 바 추가
+                    SizedBox(height: 20), // 로딩 바와 텍스트 사이에 간격 추가
+                    Text('데이터를 불러오는 중...'),
+                  ],
                 ),
-              ),
-            if (responsiveVisibility(
-              context: context,
-              phone: false,
-              tablet: false,
-            ))
-              Container(
-                width: double.infinity,
-                height: 24.0,
-                decoration: BoxDecoration(),
-              ),
-            if (snapshot.data != null && snapshot.data!.isNotEmpty)
-              ListView.separated(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) => SizedBox(height: 1.0),
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  return wrapWithModel(
-                    model: _model.versusElementModel1,
-                    updateCallback: () => setState(() {}),
-                    child: VersusElementWidget(
-                      element: snapshot.data![index],
+              );
+            } else if (snapshot.hasError) {
+              return Text('오류: ${snapshot.error}');
+            } else {
+              return SafeArea(
+                top: true,
+                child: ListView(
+                  children: [
+                    Lottie.asset(
+                      'assets/lottie/vs.json',
+                      width: MediaQuery.sizeOf(context).width * 1.0,
+                      height: 190.0,
+                      fit: BoxFit.fill,
+                      animate: true,
                     ),
-                  );
-                },
-              )
-            else
-              Padding(
-                padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
-                child: Text("대항전이 존재하지 않습니다!"),
-              ), // Close the else block properly
-            // Add the contents of the inner SingleChildScrollView here
-          ],
+                    if (_showVersusSearchWidget)
+                      wrapWithModel(
+                        model: _model.versusSearchModel,
+                        updateCallback: () => setState(() {}),
+                        child: VersusSearchWidget(
+                          setStatusCode: setStatusCode,
+                          selectedIndex:
+                              statusCode, // 해당 값을 전해줌으로써 ChoiceChip에 선택이 되어 있게함
+                        ),
+                      ),
+                    if (responsiveVisibility(
+                      context: context,
+                      phone: false,
+                      tablet: false,
+                    ))
+                      Container(
+                        width: double.infinity,
+                        height: 24.0,
+                        decoration: BoxDecoration(),
+                      ),
+                    if (snapshot.data != null && snapshot.data!.isNotEmpty)
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        separatorBuilder: (context, index) =>
+                            SizedBox(height: 1.0),
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return wrapWithModel(
+                            model: _model.versusElementModel1,
+                            updateCallback: () => setState(() {}),
+                            child: VersusElementWidget(
+                              element: snapshot.data![index],
+                            ),
+                          );
+                        },
+                      )
+                    else
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
+                        child: Text("대항전이 존재하지 않습니다!"),
+                      ), // Close the else block properly
+                    // Add the contents of the inner SingleChildScrollView here
+                  ],
+                ),
+              );
+            }
+          },
         ),
-      );
-    }
-  },
-),
-
       ),
     );
   }
