@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -317,7 +319,22 @@ class _WriteWidgetState extends State<WriteWidget> {
                       _model.textController2Validator.asValidator(context),
                 ),
               ),
-              Align( //이미지 업로드
+              if (_model.imageFile !=
+                  null) // Display the selected image if it exists
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Image.file(
+                      File(_model.imageFile!.path),
+                      width: 110,
+                      height: 110,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              Align(
+                //이미지 업로드
                 alignment: AlignmentDirectional(-1, 1),
                 child: FlutterFlowIconButton(
                   borderColor: Color(0x004B39EF),
@@ -333,6 +350,7 @@ class _WriteWidgetState extends State<WriteWidget> {
                   onPressed: () async {
                     if (await _model.pickImage() == true) {
                       debugPrint("이미지 선택 성공");
+                      setState(() {}); // UI 재 랜더링
                     }
                   },
                 ),
