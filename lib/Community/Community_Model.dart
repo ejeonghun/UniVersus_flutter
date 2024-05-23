@@ -56,6 +56,11 @@ class CommunityModel extends FlutterFlowModel<CommunityWidget> {
     return list;
   }
 
+  /*
+ * 유저 프로필 정보 조회
+ * @return userProfile 객체:
+ * 생성자 : 이정훈
+ * */
   Future<userProfile> getProfile() async {
     String? memberIdx = await UserData.getMemberIdx();
     // 사용자 정보를 불러오는 메소드

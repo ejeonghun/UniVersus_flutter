@@ -51,6 +51,7 @@ class PostModel extends FlutterFlowModel<PostWidget> {
         eventName: response['data']['eventName'] ?? '',
         categoryName: response['data']['categoryName'] ?? '',
         clubName: response['data']['clubName'] ?? '',
+        PostMemberIdx: response['data']['memberIdx'] ?? 0,
         postImageUrls: (response['data']['postImageUrls'] as List<dynamic>)
             .map<String>((imageUrl) => imageUrl.toString())
             .toList(),

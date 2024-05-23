@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:universus/Community/PostElement.dart';
 import 'package:universus/Community/replyElement.dart';
 import 'package:universus/Community/reply_Widget.dart';
+import 'package:universus/shared/memberDetails.dart';
 
 import 'Post_Model.dart';
 export 'Post_Model.dart';
@@ -121,13 +122,19 @@ class _PostWidgetState extends State<PostWidget> {
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(24),
-                                  child: Image.network(
-                                    post.getProfileImgUrl,
-                                    width: 40,
-                                    height: 40,
-                                    fit: BoxFit.cover,
+                                GestureDetector(
+                                  onTap: () async {
+                                    await MemberDetails(post.PostMemberIdx)
+                                        .showMemberDetailsModal(context);
+                                  },
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(24),
+                                    child: Image.network(
+                                      post.getProfileImgUrl,
+                                      width: 40,
+                                      height: 40,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
                                 Padding(
@@ -325,7 +332,6 @@ class _PostWidgetState extends State<PostWidget> {
                                   // 댓글을 업로드한 후 UI를 업데이트합니다.
                                   setState(() {});
                                   _model.textController?.clear();
-
                                 },
                                 text: '입력',
                                 options: FFButtonOptions(
