@@ -79,18 +79,20 @@ class ChatsModel extends FlutterFlowModel<ChatsPage> {
       if (response.isNotEmpty && response['data'] != null) {
         List<ChatRoom> chatRoomList = [];
         for (var item in response['data']['chatRooms']) {
-          chatRoomList.add(ChatRoom(
-            recentChat: item['recentChat'] ?? '새 채팅을 시작해보세요',
-            idx: item['chatRoom']['idx'],
-            memberIdx: item['chatRoom']['memberIdx'],
-            chatRoomId: item['chatRoom']['chatRoomId'],
-            chatRoomType: item['chatRoom']['chatRoomType'],
-            customChatRoomName:
-                item['chatRoom']['customChatRoomName'] ?? '이름 미지정',
-            chatRoomImg: item['chatRoom']['chatRoomImg'] ??
-                'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
-            recentChatDate: item['recentChatDate'],
-          ));
+          chatRoomList.add(
+            ChatRoom(
+              recentChat: item['recentChat'] ?? '새 채팅을 시작해보세요',
+              idx: item['chatRoom']['idx'],
+              memberIdx: item['chatRoom']['memberIdx'],
+              chatRoomId: item['chatRoom']['chatRoomId'],
+              chatRoomType: item['chatRoom']['chatRoomType'],
+              customChatRoomName:
+                  item['chatRoom']['customChatRoomName'] ?? '이름 미지정',
+              chatRoomImg: item['chatRoom']['chatRoomImg'] ??
+                  'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
+              recentChatDate: item['recentChatDate'],
+            ),
+          );
         }
         return chatRoomList;
       } else {
@@ -102,4 +104,6 @@ class ChatsModel extends FlutterFlowModel<ChatsPage> {
       return [];
     }
   }
+
+
 }
