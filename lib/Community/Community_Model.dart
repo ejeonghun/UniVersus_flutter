@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:universus/Community/PostElement.dart';
 import 'package:universus/class/api/DioApiCall.dart';
+import 'package:universus/class/user/user.dart';
+import 'package:universus/class/user/userProfile.dart';
 import 'Community_Widget.dart' show CommunityWidget;
 import 'package:flutter/material.dart';
 
@@ -47,7 +49,46 @@ class CommunityModel extends FlutterFlowModel<CommunityWidget> {
     
     return list;
   }
+Future<userProfile> getProfile() async {
+    String? memberIdx = await UserData.getMemberIdx();
+    // 사용자 정보를 불러오는 메소드
+    DioApiCall api = DioApiCall();
+    final response = await api.get('/member/profile?memberIdx=${memberIdx}');
+    if (response['memberIdx'].toString() == memberIdx) {
+      // 조회 성공
+      print(response);
+      // 끝에 2자리에 "학교" 라는 단어가 있으면 제거하고 formatSchool 에 저장
+      String formatSchool = '';
 
+      if (response['schoolName'] != null &&
+          response['schoolName'].endsWith('학교')) {
+        formatSchool = response['schoolName']
+            .substring(0, response['schoolName'].length - 2);
+      } else {
+        formatSchool = response['schoolName'];
+      }
+
+      return userProfile(
+        userName: response['userName'],
+        nickname: response['nickname'],
+        memberIdx: response['memberIdx'].toString(),
+        univName: formatSchool,
+        deptName: response['deptName'].toString(),
+        univLogoImage: response['logoImg'] != null &&
+                response['logoImg'].isNotEmpty
+            ? response['logoImg']
+            : 'https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-15.png',
+        profileImage: response['profileImage'] != null &&
+                response['profileImage'].isNotEmpty
+            ? response['profileImage'][0]['imageUrl']
+            : 'https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-15.png',
+      );
+    } else {
+      // 조회 실패
+      print(response);
+      return userProfile.nullPut();
+    }
+  }
   @override
   void initState(BuildContext context) {}
 
