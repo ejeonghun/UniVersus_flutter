@@ -15,6 +15,7 @@ class PostElement {
   String? place;
   String? eventName;
   String? profileImgUrl;
+  int? PostMemberIdx;
 
   PostElement({
     required this.univBoardId,
@@ -31,6 +32,7 @@ class PostElement {
     this.place,
     this.eventName,
     this.profileImgUrl,
+    this.PostMemberIdx,
   });
 
   get getProfileImgUrl =>
@@ -49,7 +51,9 @@ class PostElement {
         lat = null, // Initialize as null
         lng = null, // Initialize as null
         place = null,
-        eventName = null;
+        eventName = null,
+        profileImgUrl = null,
+        PostMemberIdx = 0;
 
   String getFormattedDate() {
     // Assuming regDt is in ISO 8601 format, for example "2023-05-21T10:30:00"
@@ -58,6 +62,13 @@ class PostElement {
   }
 
   static nullput() {
-    return PostElement(univBoardId: 0, nickname: '', categoryName: '공지', title: '게시글 작성해보세요', content: '네', regDt: DateTime.now().toString(), postImageUrls: []);
+    return PostElement(
+        univBoardId: 0,
+        nickname: '',
+        categoryName: '공지',
+        title: '게시글 작성해보세요',
+        content: '네',
+        regDt: DateTime.now().toString(),
+        postImageUrls: []);
   }
 }

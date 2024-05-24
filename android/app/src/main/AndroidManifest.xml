@@ -17,7 +17,8 @@
     <application
         android:label="universus"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyD4-bLyOjZB1wZj7lnYXOd9fzJYOiaHoUI"/>
             <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"

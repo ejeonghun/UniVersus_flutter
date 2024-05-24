@@ -41,10 +41,10 @@ class ProfileEditModel extends FlutterFlowModel<updateProfileWidget> {
         userName: response['userName'],
         nickname: response['nickname'],
         memberIdx: response['memberIdx'].toString(),
-        univName: response['univId'].toString(),
-        deptName: response['deptId'].toString(),
+        univName: response['schoolName'].toString(),
+        deptName: response['deptName'].toString(),
         profileImage: response['imageUrl'],
-        phone: response['phone'],
+        phone: response['phone'] ?? '전화번호를 입력해주세요',
         oneLineIntro: response['oneLineIntro'] != null &&
                 response['oneLineIntro'].isNotEmpty
             ? response['oneLineIntro']

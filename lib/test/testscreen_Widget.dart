@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:universus/BottomBar2.dart';
 import 'package:universus/auth/AdditionalInfo_Widget.dart';
 import 'package:universus/main/Components/clubElement_Widget.dart';
+import 'package:universus/shared/payment.dart';
 
 import 'testscreen_Model.dart';
 export 'testscreen_Model.dart';
@@ -972,6 +973,49 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                                       .pushNamed('/clubElement');
                                 },
                                 text: '클럽요소',
+                                options: FFButtonOptions(
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                              child: FFButtonWidget(
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => Payment(),
+                                    ),
+                                  );
+                                },
+                                text: '결제',
                                 options: FFButtonOptions(
                                   height: 40,
                                   padding: EdgeInsetsDirectional.fromSTEB(

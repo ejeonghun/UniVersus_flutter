@@ -19,6 +19,12 @@ class ClubMainModel extends FlutterFlowModel<ClubMainWidget> {
   final unfocusNode = FocusNode();
   late ClubPostModel clubPostModel;
 
+  /**
+   * Club 정보 조회
+   * @param clubId
+   * @return clubInfo 객체:
+   * 생성자 : 이정훈
+   */
   Future<clubInfo> getClubInfo(int clubId) async {
     DioApiCall api = DioApiCall();
     final response = await api.get('/club/info?clubId=${clubId}');
@@ -43,10 +49,16 @@ class ClubMainModel extends FlutterFlowModel<ClubMainWidget> {
     }
   }
 
+  /**
+   * Club 게시글 조회
+   * @param clubId
+   * @return List<clubPost> 객체:
+   * 생성자 : 이정훈
+   */
   Future<List<ClubPost>> getClubPosts(int clubId) async {
     DioApiCall api = DioApiCall();
     final response = await api.get(
-        '/univBoard/list?memberIdx=${await UserData.getMemberIdx()}&clubId=${clubId}');
+        '/univBoard/list?memberIdx=${await UserData.getMemberIdx()}&clubId=${clubId}&categoryId=1');
     if (response['success'] == true) {
       List<ClubPost> clubPosts = [];
       for (var item in response['data']) {
@@ -57,7 +69,10 @@ class ClubMainModel extends FlutterFlowModel<ClubMainWidget> {
           title: item['title'],
           content: item['content'],
           regDt: item['regDt'],
-          imageUrl: item['postImageUrls'][0],
+          imageUrl:
+              item['postImageUrls'] != null && item['postImageUrls'].isNotEmpty
+                  ? item['postImageUrls'][0]
+                  : '', // 추후 이미지 없을 때 처리 해야함
           categoryName: item['categoryName'],
           nickname: item['nickname'],
         ));
@@ -68,6 +83,12 @@ class ClubMainModel extends FlutterFlowModel<ClubMainWidget> {
     }
   }
 
+  /**
+   * Club 가입
+   * @param clubId
+   * @return bool:
+   * 생성자 : 이정훈
+   */
   Future<bool> joinClub(int clubId) async {
     DioApiCall api = DioApiCall();
     final response = await api.post('/club/join', {

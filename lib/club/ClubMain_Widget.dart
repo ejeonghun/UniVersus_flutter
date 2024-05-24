@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:universus/class/club/clubInfo.dart';
 import 'package:universus/class/club/clubPost.dart';
+import 'package:universus/club/ClubPostWrite_Widget.dart';
 import 'package:universus/club/Components/clubPost_Widget.dart';
 import 'package:universus/shared/CustomSnackbar.dart';
 
@@ -117,7 +118,10 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                               size: 24,
                             ),
                             onPressed: () {
-                              print('IconButton pressed ...');
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ClubPostWriteWidget(
+                                        clubId: widget.clubId,
+                                      )));
                             },
                           ),
                           FlutterFlowIconButton(
