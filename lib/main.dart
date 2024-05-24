@@ -21,6 +21,7 @@ import 'package:universus/Community/Write_Widget.dart';
 import 'package:universus/Search/SearchResult_Widget.dart';
 import 'package:universus/Search/Search_Widget.dart';
 import 'package:universus/auth/AdditionalInfo_Widget.dart';
+import 'package:universus/ranking/ranking.dart';
 
 import 'package:universus/class/user/user.dart';
 
@@ -207,6 +208,7 @@ class _MyAppState extends State<MyApp> {
               '/MyClub': (context) => MyClubWidget(),
               '/clubList': (context) => ClubListWidget(),
               '/result': (context) => PaymentResult(),
+              '/ranking': (context) => RankingPage(),
             },
           );
         });
