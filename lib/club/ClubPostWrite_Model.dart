@@ -55,7 +55,7 @@ class ClubPostWriteModel extends FlutterFlowModel<ClubPostWriteWidget> {
     formData = FormData.fromMap({
       'memberIdx': await UserData.getMemberIdx(),
       'clubId': clubId,
-      'categoryId': 1,
+      'categoryId': 0,
       'title': textController1?.text ?? '제목 없음',
       'content': textController2?.text ?? '내용 없음',
     });

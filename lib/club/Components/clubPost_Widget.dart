@@ -10,6 +10,9 @@ import 'package:universus/class/club/clubPost.dart';
 import 'clubPost_Model.dart';
 export 'clubPost_Model.dart';
 
+/* 
+* 클럽 내 게시글 위젯
+*/
 class ClubPostWidget extends StatefulWidget {
   final ClubPost clubPost;
   const ClubPostWidget({super.key, required this.clubPost});
@@ -129,7 +132,9 @@ class _ClubPostWidgetState extends State<ClubPostWidget> {
                                     fontSize: 17.0,
                                     letterSpacing: 0.0,
                                     fontWeight: FontWeight.w900,
+                                    useGoogleFonts: false,
                                   ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           Text(
@@ -142,21 +147,26 @@ class _ClubPostWidgetState extends State<ClubPostWidget> {
                                   letterSpacing: 0.0,
                                   useGoogleFonts: false,
                                 ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
                       Align(
-                        alignment: AlignmentDirectional(0.0, 0.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image.network(
-                            widget.clubPost.imageUrl ??=
-                                'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
-                            width: 100.0,
-                            height: 70.0,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                        alignment: Alignment.centerRight,
+                        // AlignmentDirectional(0.0, 0.0),
+
+                        child: (widget.clubPost.imageUrl != null &&
+                                widget.clubPost.imageUrl != 'none')
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.network(
+                                  widget.clubPost.imageUrl!,
+                                  width: 100.0,
+                                  height: 70.0,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : Text(''),
                       ),
                     ].divide(SizedBox(width: 50.0)),
                   ),

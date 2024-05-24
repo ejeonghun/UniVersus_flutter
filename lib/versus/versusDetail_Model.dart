@@ -117,6 +117,7 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
           hostLeaderId: response['data']['univBattle']['hostLeader'],
           place: response['data']['univBattle']['place'] ?? '없음',
           regDate: response['data']['univBattle']['regDt'],
+          endDate: response['data']['univBattle']['endDt'] ?? '',
           invitationCode: response['data']['univBattle']['invitationCode'],
           hostTeamMembers: hostTeamMembers,
           guestTeamMembers: guestTeamMembers,
@@ -168,7 +169,6 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     return response['success'];
   }
 
-
   /**
   * Enum -> String
   * 대항전 상태의 Enum 값을 String으로 변환함
@@ -211,7 +211,6 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     }
   }
 
-
   /*
   * 대항전 일반 참가 코드입력 팝업창
   * @param univBattleId: 대항전 id, context: BuildContext
@@ -224,7 +223,6 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
       builder: (BuildContext context) {
         return CupertinoAlertDialog(
           title: Text('대항전 참가'),
-
           content: CupertinoTextField(
             onChanged: (value) {
               userInput = value;
@@ -242,10 +240,13 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
               onPressed: () async {
                 // 사용자 입력을 처리하는 로직을 추가할 수 있습니다.
                 print('사용자 입력: $userInput');
-                if (await versusAttend(univBattleId, userInput) == true) {
+                Map<String, dynamic> result =
+                    await versusAttend(univBattleId, userInput);
+                if (result['success'] == true) {
                   CustomSnackbar.success(context, "성공", "참가가 되었습니다.", 2);
                 } else {
-                  CustomSnackbar.error(context, "실패", "참가에 실패했습니다.", 2);
+                  CustomSnackbar.error(
+                      context, "실패", "${result['message']}", 2);
                 }
                 Navigator.of(context).pop(); // 다이얼로그 닫기
               },
@@ -263,17 +264,19 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
   * @return bool : 성공 or 실패
   * 생성자 : 이정훈
   * */
-  Future<bool> versusAttend(int univBattleId, String invitationCode) async {
+  Future<Map<String, dynamic>> versusAttend(
+      int univBattleId, String invitationCode) async {
     DioApiCall api = DioApiCall();
     final response = await api.post('/univBattle/attend', {
       'univBattleId': univBattleId,
-      'guestLeader': await UserData.getMemberIdx(),
+      'memberIdx': await UserData.getMemberIdx(),
       'invitationCode': invitationCode,
     });
+    print(response);
     if (response['success']) {
-      return true;
+      return response;
     } else {
-      return false;
+      return response;
     }
   }
 

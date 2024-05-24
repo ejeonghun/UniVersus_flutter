@@ -53,7 +53,9 @@ class _versusProceedingWidgetState extends State<versusProceedingWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: _model.getVersusDetail(widget.battleId),
+        future: elapsedTime == Duration.zero // 초기에만 백앤드에 요청
+            ? _model.getVersusDetail(widget.battleId)
+            : null,
         builder: (BuildContext context, AsyncSnapshot<versusDetail> snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -398,38 +400,42 @@ class _versusProceedingWidgetState extends State<versusProceedingWidget> {
                                       alignment: AlignmentDirectional(0.0, 1.0),
                                       child: FFButtonWidget(
                                         onPressed: () {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return CupertinoAlertDialog(
-        title: Text("확인"),
-        content: Text("경기를 종료하시겠습니까?"),
-        actions: [
-          CupertinoDialogAction(
-            child: Text("취소"),
-            onPressed: () {
-              Navigator.pop(context); // 다이얼로그 닫기
-            },
-          ),
-          CupertinoDialogAction(
-            child: Text("확인"),
-            onPressed: () {
-              Navigator.pop(context); // 다이얼로그 닫기
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => VersusResultWidget(
-                    battleId: widget.battleId,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      );
-    },
-  );
-},
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return CupertinoAlertDialog(
+                                                title: Text("확인"),
+                                                content: Text("경기를 종료하시겠습니까?"),
+                                                actions: [
+                                                  CupertinoDialogAction(
+                                                    child: Text("취소"),
+                                                    onPressed: () {
+                                                      Navigator.pop(
+                                                          context); // 다이얼로그 닫기
+                                                    },
+                                                  ),
+                                                  CupertinoDialogAction(
+                                                    child: Text("확인"),
+                                                    onPressed: () {
+                                                      Navigator.pop(
+                                                          context); // 다이얼로그 닫기
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              VersusResultWidget(
+                                                            battleId:
+                                                                widget.battleId,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
                                         text: '종료',
                                         options: FFButtonOptions(
                                           width: double.infinity,

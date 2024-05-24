@@ -25,6 +25,7 @@ class versusDetail {
   String? winUnivName; // 이긴 대학교 이름
   int? hostUnivId; // 대표 팀 대학 id
   int? guestUnivId; // 게스트 팀 대학 id
+  String? endDate; // 대항전 종료 날짜
 
   // 팀 정보
   List<Map<String, dynamic>>? hostTeamMembers; // 대표 팀 멤버 리스트
@@ -56,6 +57,7 @@ class versusDetail {
     this.winUnivName,
     this.hostUnivId,
     this.guestUnivId,
+    this.endDate,
   });
 
   // Getter methods
@@ -79,6 +81,11 @@ class versusDetail {
 
   String? get getRegDate {
     DateTime parsedDate = DateTime.parse(this.regDate!);
+    return DateFormat('yyyy-MM-dd').format(parsedDate);
+  }
+
+  String? get getEndDate {
+    DateTime parsedDate = DateTime.parse(this.endDate!);
     return DateFormat('yyyy-MM-dd').format(parsedDate);
   }
 

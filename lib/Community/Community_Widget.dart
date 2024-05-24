@@ -92,7 +92,7 @@ class _CommunityWidgetState extends State<CommunityWidget>
                           size: 30,
                         ),
                         onPressed: () {
-                          print('IconButton pressed ...');
+                          Navigator.of(context).pushNamed('/Search');
                         },
                       ),
                       FlutterFlowIconButton(

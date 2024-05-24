@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -101,8 +102,16 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                         color: FlutterFlowTheme.of(context).primaryText,
                         size: 24.0,
                       ),
-                      onPressed: () {
-                        _model.showInputDialog(context, widget.battleId);
+                      onPressed: () async {
+                        await _model.showInputDialog(context, widget.battleId);
+                        // 새로고침 시킴
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => VersusDetailWidget(
+                              battleId: widget.battleId,
+                            ),
+                          ),
+                        );
                       },
                     ),
                   ],
@@ -419,26 +428,29 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                               decoration: BoxDecoration(
                                 color: Color(0xC6ABA4A4),
                               ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        5.0, 0.0, 0.0, 0.0),
-                                    child: Text(
-                                      '초대코드 : ${snapshot.data!.invitationCode ??= "모집 중"}',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            fontSize: 16.0,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.bold,
-                                            useGoogleFonts: false,
-                                          ),
-                                    ),
-                                  ),
-                                ],
+                              child: GestureDetector(
+                                onTap: () {
+                                  final invitationCode =
+                                      snapshot.data!.invitationCode ?? "모집 중";
+                                  Clipboard.setData(
+                                      ClipboardData(text: invitationCode));
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text('초대코드가 클립보드에 복사되었습니다.')),
+                                  );
+                                },
+                                child: Text(
+                                  '초대코드 : ${snapshot.data!.invitationCode ?? "모집 중"}',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        fontSize: 16.0,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FontWeight.bold,
+                                        useGoogleFonts: false,
+                                      ),
+                                ),
                               ),
                             ),
                           ),
@@ -564,16 +576,17 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                         useGoogleFonts: false,
                                       ),
                                 ),
-                                Text(
-                                  '종료일 : ',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        letterSpacing: 0.0,
-                                        useGoogleFonts: false,
-                                      ),
-                                ),
+                                if (snapshot.data!.endDate != '')
+                                  Text(
+                                    '종료일 : ${snapshot.data!.getEndDate}',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily: 'Readex Pro',
+                                          letterSpacing: 0.0,
+                                          useGoogleFonts: false,
+                                        ),
+                                  ),
                               ],
                             ),
                           ),

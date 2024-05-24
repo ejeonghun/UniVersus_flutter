@@ -72,7 +72,7 @@ class ClubMainModel extends FlutterFlowModel<ClubMainWidget> {
           imageUrl:
               item['postImageUrls'] != null && item['postImageUrls'].isNotEmpty
                   ? item['postImageUrls'][0]
-                  : '', // 추후 이미지 없을 때 처리 해야함
+                  : 'none', // 추후 이미지 없을 때 처리 해야함
           categoryName: item['categoryName'],
           nickname: item['nickname'],
         ));
