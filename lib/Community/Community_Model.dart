@@ -55,6 +55,7 @@ class CommunityModel extends FlutterFlowModel<CommunityWidget> {
 
     return list;
   }
+      
 
   /*
  * 유저 프로필 정보 조회
@@ -69,17 +70,29 @@ class CommunityModel extends FlutterFlowModel<CommunityWidget> {
     if (response['memberIdx'].toString() == memberIdx) {
       // 조회 성공
       print(response);
+      String formatSchool = '';
+      // 끝에 2자리에 "학교" 라는 단어가 있으면 제거하고 formatSchool 에 저장
+      if (response['schoolName'] != null &&
+          response['schoolName'].endsWith('학교')) {
+        formatSchool = response['schoolName']
+            .substring(0, response['schoolName'].length - 2);
+      } else {
+        formatSchool = response['schoolName'];
+      }
       return userProfile(
-          userName: response['userName'],
-          nickname: response['nickname'],
-          memberIdx: response['memberIdx'].toString(),
-          univName: response['schoolName'].toString(),
-          deptName: response['deptName'].toString(),
-          univLogoImage: response['logoImg'] != null &&
-                  response['logoImg'].isNotEmpty
-              ? response['logoImg']
-              : 'https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-15.png',
-          profileImage: response['imageUrl']);
+        userName: response['userName'],
+        nickname: response['nickname'],
+        memberIdx: response['memberIdx'].toString(),
+        univName: formatSchool,
+        deptName: response['deptName'].toString(),
+        univLogoImage: response['logoImg'] != null &&
+                response['logoImg'].isNotEmpty
+            ? response['logoImg']
+            : 'https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-15.png',
+        profileImage: response['profileImage'] != null &&
+                response['profileImage'].isNotEmpty
+            ? response['profileImage'][0]['imageUrl']
+            : 'https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-15.png',
     } else {
       // 조회 실패
       print(response);
