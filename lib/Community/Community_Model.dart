@@ -93,6 +93,7 @@ class CommunityModel extends FlutterFlowModel<CommunityWidget> {
                 response['profileImage'].isNotEmpty
             ? response['profileImage'][0]['imageUrl']
             : 'https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-15.png',
+      );
     } else {
       // 조회 실패
       print(response);

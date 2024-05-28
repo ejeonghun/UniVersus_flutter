@@ -4,13 +4,13 @@ import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/user/user.dart';
 import 'package:universus/class/versus/versusDetail.dart';
 import 'package:universus/shared/CustomSnackbar.dart';
-import 'versusDetail_Widget.dart' show VersusDetailWidget;
+import 'deptVersusDetail_Widget.dart' show deptVersusDetailWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
+class VersusDetailModel extends FlutterFlowModel<deptVersusDetailWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
@@ -86,7 +86,7 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     // 대결 리스트를 불러오는 메소드
     DioApiCall api = DioApiCall();
     final response =
-        await api.get('/univBattle/info?univBattleId=${battleId.toString()}');
+        await api.get('/deptBattle/info?deptBattleId=${battleId.toString()}');
     if (response.isNotEmpty) {
       // response가 null이 아니면 조회 성공
       List<dynamic> hostParticipantListData =
@@ -103,27 +103,27 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
           List<Map<String, dynamic>>.from(guestTeamMembersData);
 
       versusDetail res = versusDetail(
-          battleDate: response['data']['univBattle']['battleDate'],
-          lat: response['data']['univBattle']['lat'],
-          lng: response['data']['univBattle']['lng'],
-          hostTeamName: response['data']['HostTeam']['hostUvName'],
-          hostTeamUnivLogo: response['data']['univBattle']['hostUnivLogo'],
+          battleDate: response['data']['deptBattle']['battleDate'],
+          lat: response['data']['deptBattle']['lat'],
+          lng: response['data']['deptBattle']['lng'],
+          hostTeamName: response['data']['HostTeam']['hostDeptName'],
+          hostTeamUnivLogo: response['data']['deptBattle']['univLogo'],
           guestTeamName: response['data']['GuestTeam'] != null
-              ? response['data']['GuestTeam']['guestUvName']
+              ? response['data']['GuestTeam']['guestDeptName']
               : '참가 학교 없음',
-          guestTeamUnivLogo: response['data']['univBattle']['guestUnivLogo'],
-          BattleId: response['data']['univBattle']['univBattleId'],
-          status: response['data']['univBattle']['matchStatus'],
-          hostLeaderId: response['data']['univBattle']['hostLeader'],
-          place: response['data']['univBattle']['place'] ?? '없음',
-          regDate: response['data']['univBattle']['regDt'],
-          invitationCode: response['data']['univBattle']['invitationCode'],
+          guestTeamUnivLogo: response['data']['deptBattle']['guestUnivLogo'] ??= 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
+          BattleId: response['data']['deptBattle']['deptBattleId'],
+          status: response['data']['deptBattle']['matchStatus'],
+          hostLeaderId: response['data']['deptBattle']['hostLeader'],
+          place: response['data']['deptBattle']['place'] ?? '없음',
+          regDate: response['data']['deptBattle']['regDt'],
+          invitationCode: response['data']['deptBattle']['invitationCode'],
           hostTeamMembers: hostTeamMembers,
           guestTeamMembers: guestTeamMembers,
-          content: response['data']['univBattle']['content'],
-          cost: response['data']['univBattle']['cost'],
-          eventId: response['data']['univBattle']['eventId'],
-          guestLeaderId: response['data']['univBattle']['guestLeader'],
+          content: response['data']['deptBattle']['content'],
+          cost: response['data']['deptBattle']['cost'],
+          eventId: response['data']['deptBattle']['eventId'],
+          guestLeaderId: response['data']['deptBattle']['guestLeader'],
           winUnivName: response['data']['winUnivName'] ??= "null");
       // debugPrint(res.getHostTeamMembers.toString());
       status = res.status!;
@@ -145,8 +145,8 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
   Future<bool> repAttend(int battleId) async {
     // 대항전 대표 참가
     DioApiCall api = DioApiCall();
-    final response = await api.post('/univBattle/repAttend', {
-      'univBattleId': battleId,
+    final response = await api.post('/deptBattle/repAttend', {
+      'deptBattleId': battleId,
       'guestLeader': await UserData.getMemberIdx(),
     });
     return response['success']; // true or false
@@ -164,7 +164,7 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
     // 경기시작 API
     DioApiCall api = DioApiCall();
     final response = await api
-        .get('/univBattle/matchStart?univBattleId=${battleId.toString()}');
+        .get('/deptBattle/matchStart?deptBattleId=${battleId.toString()}');
     return response['success'];
   }
 
@@ -214,10 +214,10 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
 
   /*
   * 대항전 일반 참가 코드입력 팝업창
-  * @param univBattleId: 대항전 id, context: BuildContext
+  * @param deptBattleId: 대항전 id, context: BuildContext
   * 생성자 : 이정훈
   * */
-  Future<void> showInputDialog(BuildContext context, int univBattleId) async {
+  Future<void> showInputDialog(BuildContext context, int deptBattleId) async {
     String userInput = '';
     return showCupertinoDialog<void>(
       context: context,
@@ -242,7 +242,7 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
               onPressed: () async {
                 // 사용자 입력을 처리하는 로직을 추가할 수 있습니다.
                 print('사용자 입력: $userInput');
-                if (await versusAttend(univBattleId, userInput) == true) {
+                if (await versusAttend(deptBattleId, userInput) == true) {
                   CustomSnackbar.success(context, "성공", "참가가 되었습니다.", 2);
                 } else {
                   CustomSnackbar.error(context, "실패", "참가에 실패했습니다.", 2);
@@ -259,14 +259,14 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
 
   /*
   * 대항전 일반 참가 API
-  * @param univBattleId: 대항전 id, invitationCode: 초대 코드
+  * @param deptBattleId: 대항전 id, invitationCode: 초대 코드
   * @return bool : 성공 or 실패
   * 생성자 : 이정훈
   * */
-  Future<bool> versusAttend(int univBattleId, String invitationCode) async {
+  Future<bool> versusAttend(int deptBattleId, String invitationCode) async {
     DioApiCall api = DioApiCall();
-    final response = await api.post('/univBattle/attend', {
-      'univBattleId': univBattleId,
+    final response = await api.post('/deptBattle/attend', {
+      'deptBattleId': deptBattleId,
       'guestLeader': await UserData.getMemberIdx(),
       'invitationCode': invitationCode,
     });

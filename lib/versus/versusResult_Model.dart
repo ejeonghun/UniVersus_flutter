@@ -60,7 +60,7 @@ class VersusResultModel extends FlutterFlowModel<VersusResultWidget> {
             ? response['data']['GuestTeam']['guestUvName']
             : '참가 학교 없음',
         guestTeamUnivLogo: response['data']['univBattle']['guestUnivLogo'],
-        univBattleId: response['data']['univBattle']['univBattleId'],
+        BattleId: response['data']['univBattle']['univBattleId'],
         status: response['data']['univBattle']['matchStatus'],
         hostLeaderId: response['data']['univBattle']['hostLeader'],
         place: response['data']['univBattle']['place'] ?? '없음',
