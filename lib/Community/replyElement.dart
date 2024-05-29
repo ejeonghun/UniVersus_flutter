@@ -1,4 +1,3 @@
-
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 
 class Reply {
@@ -6,12 +5,14 @@ class Reply {
   final String nickname;
   final String content;
   final String timestamp;
+  final int replyId;
 
   Reply({
     required this.profileImageUrl,
     required this.nickname,
     required this.content,
     required this.timestamp,
+    required this.replyId,
   });
 
   String getFormattedDate() {
@@ -19,13 +20,14 @@ class Reply {
     DateTime dateTime = DateTime.parse(timestamp);
     return DateFormat('MM/dd HH:mm').format(dateTime);
   }
-  
+
   static empty() {
     return Reply(
-      profileImageUrl: 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
-      nickname: '사용자',
-      content: '첫 댓글을 작성해보세요!',
-      timestamp: DateTime.now().toString()
-    );
+        profileImageUrl:
+            'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
+        nickname: '사용자',
+        content: '첫 댓글을 작성해보세요!',
+        timestamp: DateTime.now().toString(),
+        replyId: 0);
   }
 }

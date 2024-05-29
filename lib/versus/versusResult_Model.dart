@@ -72,7 +72,8 @@ class VersusResultModel extends FlutterFlowModel<VersusResultWidget> {
         cost: response['data']['univBattle']['cost'],
         eventId: response['data']['univBattle']['eventId'],
         guestLeaderId: response['data']['univBattle']['guestLeader'],
-        matchStartDt: DateTime.parse(response['data']['univBattle']["matchStartDt"]),
+        matchStartDt:
+            DateTime.parse(response['data']['univBattle']["matchStartDt"]),
         hostUnivId: response['data']['univBattle']['hostUniv'],
         guestUnivId: response['data']['univBattle']['guestUniv'],
       );
@@ -91,7 +92,8 @@ class VersusResultModel extends FlutterFlowModel<VersusResultWidget> {
     DioApiCall api = DioApiCall();
     late int hostScore;
     late int guestScore;
-    if (isWinGuestUniv) { // 게스트 팀이 이겼을 경우 스코어를 반대로 전송
+    if (isWinGuestUniv) {
+      // 게스트 팀이 이겼을 경우 스코어를 반대로 전송
       hostScore = int.parse(textController2.text);
       guestScore = int.parse(textController1.text);
     } else {
@@ -99,18 +101,16 @@ class VersusResultModel extends FlutterFlowModel<VersusResultWidget> {
       guestScore = int.parse(textController2.text);
     }
     final response = await api.post('/univBattle/resultReq', {
-        "univBattleId": battleId,
-        "hostLeader": await UserData.getMemberIdx(),
-        "winUniv": winUnivId,
-        "hostScore": hostScore,
-        "guestScore": guestScore,
+      "univBattleId": battleId,
+      "hostLeader": await UserData.getMemberIdx(),
+      "winUniv": winUnivId,
+      "hostScore": hostScore,
+      "guestScore": guestScore,
     });
     debugPrint(response.toString());
     bool res = response['success'];
     return res;
   }
-
-
 
   @override
   void initState(BuildContext context) {}
