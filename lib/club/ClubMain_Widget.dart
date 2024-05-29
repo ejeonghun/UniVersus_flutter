@@ -5,10 +5,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:universus/class/club/clubInfo.dart';
+import 'package:universus/class/club/clubMember.dart';
 import 'package:universus/class/club/clubPost.dart';
 import 'package:universus/club/ClubPostWrite_Widget.dart';
 import 'package:universus/club/Components/clubPost_Widget.dart';
+import 'package:universus/club/UpdateClub_Widget.dart';
 import 'package:universus/shared/CustomSnackbar.dart';
+import 'package:universus/shared/IOSAlertDialog.dart';
 
 import 'ClubMain_Model.dart';
 export 'ClubMain_Model.dart';
@@ -24,6 +27,7 @@ class ClubMainWidget extends StatefulWidget {
 class _ClubMainWidgetState extends State<ClubMainWidget> {
   var f = NumberFormat('###,###,###,###');
   late ClubMainModel _model;
+  bool isMenuOpen = false;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -31,6 +35,7 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => ClubMainModel());
+    _model.clubId = widget.clubId;
   }
 
   @override
@@ -43,8 +48,9 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: Future.wait([
-          _model.getClubInfo(widget.clubId),
-          _model.getClubPosts(widget.clubId),
+          _model.getMemberIdx(),
+          _model.getClubInfo(_model.clubId),
+          _model.getClubPosts(_model.clubId),
         ]),
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -59,8 +65,8 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
           } else if (snapshot.hasError) {
             return Text('오류: ${snapshot.error}');
           } else {
-            clubInfo clubInfoValue = snapshot.data![0];
-            List<ClubPost> clubPosts = snapshot.data![1];
+            clubInfo clubInfoValue = snapshot.data![1];
+            List<ClubPost> clubPosts = snapshot.data![2];
             return GestureDetector(
               onTap: () => _model.unfocusNode.canRequestFocus
                   ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -136,23 +142,104 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                               size: 24,
                             ),
                             onPressed: () {
-                              print('IconButton pressed ...');
+                              print('IconButton pressed ...12312');
                             },
                           ),
-                          FlutterFlowIconButton(
-                            borderColor: Color(0x004B39EF),
-                            borderRadius: 20,
-                            borderWidth: 1,
-                            buttonSize: 40,
-                            fillColor: Color(0x004B39EF),
-                            icon: Icon(
-                              Icons.keyboard_control,
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              size: 24,
-                            ),
-                            onPressed: () {
-                              print('IconButton pressed ...');
+                          PopupMenuButton<String>(
+                            onSelected: (value) async {
+                              if (value == 'memberManagement') {
+                                if (clubInfoValue.clubLeader.toString() !=
+                                    _model.memberIdx!) {
+                                  return IOSAlertDialog.show(
+                                    context: context,
+                                    title: "실패",
+                                    content: "모임장만 사용가능한 메뉴입니다.",
+                                  );
+                                }
+                                List<ClubMember> clubMembers =
+                                    await _model.getClubMembers(widget.clubId);
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Container(
+                                      padding: EdgeInsets.all(16),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '멤버 관리',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(height: 16),
+                                          ListView.builder(
+                                            shrinkWrap: true,
+                                            itemCount: clubMembers.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              ClubMember member =
+                                                  clubMembers[index];
+                                              return ListTile(
+                                                leading: CircleAvatar(
+                                                  backgroundImage: NetworkImage(
+                                                      member.profileImgUrl),
+                                                ),
+                                                title: Text(member.nickname),
+                                                trailing: TextButton(
+                                                  onPressed: () async {
+                                                    // 추방 버튼 클릭 시 동작
+                                                    if (await _model.expel(
+                                                            widget.clubId,
+                                                            member.memberIdx) ==
+                                                        true) {
+                                                      IOSAlertDialog.show(
+                                                          context: context,
+                                                          title: "성공",
+                                                          content:
+                                                              "해당 멤버를 추방하였습니다.");
+                                                    }
+                                                  },
+                                                  child: Text('추방'),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              } else if (value == 'ClubUpdate') {
+                                // 정보 수정 버튼 클릭 시 동작
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => UpdateClubWidget(
+                                      clubId: widget.clubId.toString()),
+                                ));
+                              }
                             },
+                            itemBuilder: (BuildContext context) {
+                              return [
+                                PopupMenuItem(
+                                    value: 'memberManagement',
+                                    child: Text('멤버 관리'),
+                                    onTap: () async {
+                                      if (await _model
+                                              .getClubMembers(widget.clubId) !=
+                                          []) {}
+                                    }),
+                                PopupMenuItem(
+                                    value: 'ClubUpdate',
+                                    child: Text('정보 수정'),
+                                    onTap: () async {}),
+                              ];
+                            },
+                            icon: Icon(
+                              Icons.more_vert,
+                              color: FlutterFlowTheme.of(context).primary,
+                            ),
                           ),
                         ],
                         centerTitle: false,
@@ -371,105 +458,181 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                                     ),
                                                   ].divide(SizedBox(width: 4)),
                                                 ),
-                                                FFButtonWidget(
-                                                  onPressed: () async {
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return CupertinoAlertDialog(
-                                                          title: Text("확인"),
-                                                          content: Text(
-                                                              "모임에 가입하시겠습니까?"),
-                                                          actions: [
-                                                            CupertinoDialogAction(
-                                                              child: Text("취소"),
-                                                              onPressed: () {
-                                                                Navigator.pop(
-                                                                    context); // 다이얼로그 닫기
-                                                              },
-                                                            ),
-                                                            CupertinoDialogAction(
-                                                              child: Text("확인"),
-                                                              onPressed:
-                                                                  () async {
-                                                                if (await _model
-                                                                        .joinClub(
-                                                                            widget.clubId) ==
-                                                                    true) {
-                                                                  CustomSnackbar
-                                                                      .success(
-                                                                          context,
-                                                                          "성공",
-                                                                          '가입되었습니다',
-                                                                          3);
-                                                                  setState(
-                                                                      () {});
-                                                                } else {
-                                                                  CustomSnackbar
-                                                                      .error(
-                                                                          context,
-                                                                          "실패",
-                                                                          '이미 가입된 모임입니다',
-                                                                          3);
-                                                                }
-                                                                Navigator.pop(
-                                                                    context); // 다이얼로그 닫기
-                                                              },
-                                                            ),
-                                                          ],
-                                                        );
-                                                      },
-                                                    );
-                                                  },
-                                                  text: '가입하기\n',
-                                                  options: FFButtonOptions(
-                                                    height: 40,
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                24, 0, 24, 0),
-                                                    iconPadding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                0, 0, 0, 0),
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .tertiary,
-                                                    textStyle: FlutterFlowTheme
-                                                            .of(context)
-                                                        .titleSmall
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          color: Colors.white,
-                                                          letterSpacing: 0,
+                                                clubInfoValue.joinedStatus == 0
+                                                    // 만약 가입되어 있다면 글작성 버튼, 아니면 가입하기 버튼
+                                                    ? FFButtonWidget(
+                                                        onPressed: () async {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return CupertinoAlertDialog(
+                                                                title:
+                                                                    Text("확인"),
+                                                                content: Text(
+                                                                    "모임에 가입하시겠습니까?"),
+                                                                actions: [
+                                                                  CupertinoDialogAction(
+                                                                    child: Text(
+                                                                        "취소"),
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.pop(
+                                                                          context); // 다이얼로그 닫기
+                                                                    },
+                                                                  ),
+                                                                  CupertinoDialogAction(
+                                                                    child: Text(
+                                                                        "확인"),
+                                                                    onPressed:
+                                                                        () async {
+                                                                      if (await _model
+                                                                              .joinClub(widget.clubId) ==
+                                                                          true) {
+                                                                        CustomSnackbar.success(
+                                                                            context,
+                                                                            "성공",
+                                                                            '가입되었습니다',
+                                                                            3);
+                                                                        setState(
+                                                                            () {});
+                                                                      } else {
+                                                                        CustomSnackbar.error(
+                                                                            context,
+                                                                            "실패",
+                                                                            '이미 가입된 모임입니다',
+                                                                            3);
+                                                                      }
+                                                                      Navigator.pop(
+                                                                          context); // 다이얼로그 닫기
+                                                                    },
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                        text: '가입하기\n',
+                                                        options:
+                                                            FFButtonOptions(
+                                                          height: 40,
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(24,
+                                                                      0, 24, 0),
+                                                          iconPadding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(0,
+                                                                      0, 0, 0),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .tertiary,
+                                                          textStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .titleSmall
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Readex Pro',
+                                                                    color: Colors
+                                                                        .white,
+                                                                    letterSpacing:
+                                                                        0,
+                                                                  ),
+                                                          elevation: 3,
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: Colors
+                                                                .transparent,
+                                                            width: 2,
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
+                                                          hoverColor:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .accent1,
+                                                          hoverBorderSide:
+                                                              BorderSide(
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .primary,
+                                                            width: 2,
+                                                          ),
+                                                          hoverTextColor:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .primaryText,
                                                         ),
-                                                    elevation: 3,
-                                                    borderSide: BorderSide(
-                                                      color: Colors.transparent,
-                                                      width: 2,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                    hoverColor:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .accent1,
-                                                    hoverBorderSide: BorderSide(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                                                      )
+                                                    : FFButtonWidget(
+                                                        onPressed: () {
+                                                          debugPrint("클럽 글 작성");
+                                                          Navigator.of(context).push(
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          ClubPostWriteWidget(
+                                                                            clubId:
+                                                                                widget.clubId,
+                                                                          )));
+                                                        },
+                                                        text: '글 작성',
+                                                        options:
+                                                            FFButtonOptions(
+                                                          height: 40,
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(24,
+                                                                      0, 24, 0),
+                                                          iconPadding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(0,
+                                                                      0, 0, 0),
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
                                                               .primary,
-                                                      width: 2,
-                                                    ),
-                                                    hoverTextColor:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .primaryText,
-                                                  ),
-                                                ),
+                                                          textStyle:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .titleSmall
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Readex Pro',
+                                                                    color: Colors
+                                                                        .white,
+                                                                    letterSpacing:
+                                                                        0,
+                                                                  ),
+                                                          elevation: 3,
+                                                          borderSide:
+                                                              BorderSide(
+                                                            color: Colors
+                                                                .transparent,
+                                                            width: 2,
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
+                                                          hoverColor:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .accent1,
+                                                          hoverBorderSide:
+                                                              BorderSide(
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .primary,
+                                                            width: 2,
+                                                          ),
+                                                          hoverTextColor:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .primaryText,
+                                                        ),
+                                                      ),
                                               ],
                                             ),
                                             Divider(

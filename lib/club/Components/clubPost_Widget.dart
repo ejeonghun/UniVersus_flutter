@@ -75,8 +75,7 @@ class _ClubPostWidgetState extends State<ClubPostWidget> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(24.0),
                         child: Image.network(
-                          widget.clubPost.memberProfileImg ??
-                              'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
+                          widget.clubPost.memberProfileImg!,
                           width: 40.0,
                           height: 40.0,
                           fit: BoxFit.cover,

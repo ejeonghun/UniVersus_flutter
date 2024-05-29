@@ -319,12 +319,12 @@ class _UpdateClubWidgetState extends State<UpdateClubWidget> {
                                           ),
                                           count: _model
                                                   .countControllerValue ??= // 변수가 null이면 4로 초기화됨
-                                              4,
+                                              2,
                                           updateCount: (count) => setState(() =>
                                               _model.countControllerValue =
                                                   count),
                                           stepSize: 1,
-                                          minimum: 4,
+                                          minimum: 2,
                                           maximum: 20,
                                         ),
                                       ),
