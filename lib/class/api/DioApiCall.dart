@@ -52,6 +52,17 @@ class DioApiCall {
     }
   }
 
+  Future<Map<String, dynamic>> deleteForData(
+      String url, Map<String, dynamic> data) async {
+    try {
+      Response response = await dio.delete((baseUrl + url), data: data);
+      return response.data;
+    } catch (e) {
+      print(e);
+      return {'error': e.toString()};
+    }
+  }
+
   Future<Map<String, dynamic>> multipartReq(
       String url, FormData formData) async {
     try {

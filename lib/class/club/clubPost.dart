@@ -10,18 +10,19 @@ class ClubPost {
   String? imageUrl; // 게시글 이미지
   String nickname; // 게시글 작성자 닉네임
   String? memberProfileImg; // 게시글 작성자 프로필 이미지
+  int? memberIdx;
 
-  ClubPost({
-    required this.univBoardId,
-    required this.categoryName,
-    required this.clubName,
-    required this.title,
-    required this.content,
-    required this.regDt,
-    this.imageUrl,
-    required this.nickname,
-    this.memberProfileImg,
-  });
+  ClubPost(
+      {required this.univBoardId,
+      required this.categoryName,
+      required this.clubName,
+      required this.title,
+      required this.content,
+      required this.regDt,
+      this.imageUrl,
+      required this.nickname,
+      this.memberProfileImg,
+      required this.memberIdx});
 
   String? get getRegDt {
     DateTime parsedDate = DateTime.parse(this.regDt!);

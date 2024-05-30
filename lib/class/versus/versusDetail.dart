@@ -8,7 +8,7 @@ class versusDetail {
   String? guestTeamName; // 게스트 팀 학교 이름
   String? guestTeamDept; // 게스트 팀 학과
   String? guestTeamUnivLogo; // 게스트 팀 로고
-  int? univBattleId; // 대항전 id
+  int? BattleId; // 대항전 id
   String? status; // 대항전 상태
   int? hostLeaderId; // 대항전 생성자 memberId -> 관리자 메뉴 권한 추가
   int? guestLeaderId; // 대항전 생성자 memberId -> 관리자 메뉴 권한 추가
@@ -25,6 +25,7 @@ class versusDetail {
   String? winUnivName; // 이긴 대학교 이름
   int? hostUnivId; // 대표 팀 대학 id
   int? guestUnivId; // 게스트 팀 대학 id
+  String? endDate; // 대항전 종료 날짜
 
   // 팀 정보
   List<Map<String, dynamic>>? hostTeamMembers; // 대표 팀 멤버 리스트
@@ -37,7 +38,7 @@ class versusDetail {
     this.guestTeamName,
     this.guestTeamDept,
     this.guestTeamUnivLogo,
-    this.univBattleId,
+    this.BattleId,
     this.status,
     this.hostLeaderId,
     this.guestLeaderId,
@@ -56,6 +57,7 @@ class versusDetail {
     this.winUnivName,
     this.hostUnivId,
     this.guestUnivId,
+    this.endDate,
   });
 
   // Getter methods
@@ -65,7 +67,7 @@ class versusDetail {
   String? get getGuestTeamName => this.guestTeamName;
   String? get getGuestTeamDept => this.guestTeamDept;
   String? get getGuestTeamUnivLogo => this.guestTeamUnivLogo;
-  int? get getUnivBattleId => this.univBattleId;
+  int? get getUnivBattleId => this.BattleId;
   String? get getStatus => this.status;
   int? get getHostLeaderId => this.hostLeaderId;
   int? get getGuestLeaderId => this.guestLeaderId ?? 0;
@@ -79,6 +81,11 @@ class versusDetail {
 
   String? get getRegDate {
     DateTime parsedDate = DateTime.parse(this.regDate!);
+    return DateFormat('yyyy-MM-dd').format(parsedDate);
+  }
+
+  String? get getEndDate {
+    DateTime parsedDate = DateTime.parse(this.endDate!);
     return DateFormat('yyyy-MM-dd').format(parsedDate);
   }
 

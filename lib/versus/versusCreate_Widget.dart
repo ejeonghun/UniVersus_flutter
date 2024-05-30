@@ -410,11 +410,11 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
                                     letterSpacing: 0.0,
                                   ),
                             ),
-                            count: _model.countControllerValue ??= 4,
+                            count: _model.countControllerValue ??= 2,
                             updateCount: (count) => setState(
                                 () => _model.countControllerValue = count),
                             stepSize: 1,
-                            minimum: 4,
+                            minimum: 2,
                             maximum: 20,
                           ),
                         ),
@@ -519,7 +519,9 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
                                   }
                                 }
                               },
-                              text: '장소 선택',
+                              text: _model.placeName != null
+                                  ? '${_model.placeName}'
+                                  : '대항전 장소',
                               icon: Icon(
                                 Icons.place,
                                 size: 15.0,
@@ -574,7 +576,8 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
                                       width: MediaQuery.of(context).size.width,
                                       child: CupertinoDatePicker(
                                         mode: CupertinoDatePickerMode.date,
-                                        minimumDate: DateTime(2024),
+                                        minimumDate:
+                                            DateTime.now(), // 과거로 선택이 안되게
                                         initialDateTime: getCurrentTimestamp,
                                         use24hFormat: false,
                                         onDateTimeChanged: (newDateTime) =>

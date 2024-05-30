@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:universus/class/versus/versusElement.dart';
+import 'package:universus/versus/deptVersusDetail_Widget.dart';
 import 'package:universus/versus/versusDetail_Widget.dart';
 
 import 'versusElement_Model.dart';
@@ -56,14 +57,28 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
         highlightColor: Colors.transparent,
         onTap: () async {
           // 해당 대항전으로 이동하는 코드 추가
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => VersusDetailWidget(
-                battleId: widget.element.univBattleId!,
-              ),
-            ),
-          );
+          // 만약 대학 대항전이라면 대학 대항전 상세 페이지로 이동
+          if (widget.element.univBattleId != null) {
+            Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => VersusDetailWidget(
+                            battleId: widget.element.univBattleId!,
+                          ),
+                        ),
+                      );
+          }
+          else {
+            debugPrint("학과 임");
+            Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => deptVersusDetailWidget(
+                            battleId: widget.element.deptBattleId!,
+                          ),
+                        ),
+                      );
+          }
         },
         child: Column(
           mainAxisSize: MainAxisSize.max,
@@ -143,7 +158,9 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
                                         letterSpacing: 0.0,
                                         useGoogleFonts: false,
                                       ),
-                                  minFontSize: 13.0,
+                                  minFontSize: 1.0,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ),
@@ -227,6 +244,8 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
                                         useGoogleFonts: false,
                                       ),
                                   minFontSize: 13.0,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ),
