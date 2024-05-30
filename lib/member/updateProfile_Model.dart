@@ -105,7 +105,7 @@ class ProfileEditModel extends FlutterFlowModel<updateProfileWidget> {
       'memberIdx': memberIdx,
       'nickname': nicknameController?.text,
       'phone': phoneController?.text,
-      // 'deptId': deptValue,
+      // 'deptId': deptValue, 학과는 변경 불가
       'oneLineIntro': oneLineIntroController?.text,
     });
     if (response['success'] == true) {
