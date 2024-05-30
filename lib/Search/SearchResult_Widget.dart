@@ -1,15 +1,17 @@
-import 'package:flutterflow_ui/flutterflow_ui.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:universus/Community/CommunityPost_Widget.dart';
+import 'package:universus/Community/PostElement.dart';
 import 'package:universus/Search/SearchResultClubList_Widget.dart';
-
+import 'package:universus/class/club/clubElement.dart';
 import 'SearchResult_Model.dart';
-export 'SearchResult_Model.dart';
+import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SearchResultWidget extends StatefulWidget {
-  const SearchResultWidget({super.key});
+  final String searchQuery;
+  const SearchResultWidget({Key? key, required this.searchQuery})
+      : super(key: key);
 
   @override
   State<SearchResultWidget> createState() => _SearchResultWidgetState();
@@ -18,7 +20,6 @@ class SearchResultWidget extends StatefulWidget {
 class _SearchResultWidgetState extends State<SearchResultWidget>
     with TickerProviderStateMixin {
   late SearchResultModel _model;
-
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -39,7 +40,6 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
   }
 
@@ -77,6 +77,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
               autofocus: true,
               obscureText: false,
               decoration: InputDecoration(
+                hintText: widget.searchQuery,
                 hintStyle: FlutterFlowTheme.of(context).labelMedium.override(
                       fontFamily: 'Readex Pro',
                       color: Color(0xFF979797),
@@ -117,7 +118,6 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
                     letterSpacing: 0,
                   ),
               minLines: null,
-              validator: _model.textControllerValidator.asValidator(context),
             ),
           ),
           actions: [
@@ -136,8 +136,17 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
                     color: FlutterFlowTheme.of(context).primaryText,
                     size: 28,
                   ),
-                  onPressed: () {
-                    print('IconButton pressed ...');
+                  onPressed: () async {
+                    final clubs = await _model
+                        .getSearchClub(_model.textController?.text ?? '');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SearchResultWidget(
+                          searchQuery: _model.textController?.text ?? '',
+                        ),
+                      ),
+                    );
                   },
                 ),
               ),
@@ -175,171 +184,53 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
                             text: '모임',
                           ),
                           Tab(
-                            text: '게시글',
+                            text: '게시물',
                           ),
                         ],
                         controller: _model.tabBarController,
-                        onTap: (i) async {
-                          [() async {}, () async {}][i]();
-                        },
                       ),
                     ),
                     Expanded(
                       child: TabBarView(
                         controller: _model.tabBarController,
                         children: [
-                          SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Align(
-                                  alignment: AlignmentDirectional(-0.9, 0),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 10, 0, 15),
-                                    child: Text(
-                                      '검색결과 5',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            color: Color(0xFF979797),
-                                            fontSize: 16,
-                                            letterSpacing: 0,
-                                            fontWeight: FontWeight.normal,
-                                          ),
-                                    ),
-                                  ),
-                                ),
-                                wrapWithModel(
-                                  model: _model,
-                                  updateCallback: () => setState(() {}),
-                                  child: SearchResultClubListWidget(),
-                                ),
-                              ],
-                            ),
+                          FutureBuilder<List<ClubElement>>(
+                            future: _model.getSearchClub(widget.searchQuery),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              } else if (snapshot.hasError) {
+                                return Center(
+                                    child: Text('Error: ${snapshot.error}'));
+                              } else if (!snapshot.hasData ||
+                                  snapshot.data!.isEmpty) {
+                                return Center(child: Text('No results found.'));
+                              } else {
+                                return SearchResultClubListWidget(
+                                    clubs: snapshot.data!);
+                              }
+                            },
                           ),
-                          SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Align(
-                                  alignment: AlignmentDirectional(-1, 0),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        30, 0, 0, 0),
-                                    child: DropdownButton<String>(
-                                      value: _model.dropDownValue,
-                                      onChanged: (String? newValue) {
-                                        if (newValue != null) {
-                                          setState(() {
-                                            _model.dropDownValue = newValue;
-                                          });
-                                        }
-                                      },
-                                      items: ['자유', '모집', '정보']
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                      hint: Text('카테고리'),
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: AlignmentDirectional(0, 0),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        15, 10, 15, 0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        RichText(
-                                          textScaler:
-                                              MediaQuery.of(context).textScaler,
-                                          text: TextSpan(
-                                            children: [
-                                              TextSpan(
-                                                text: '[모집] ',
-                                                style: FlutterFlowTheme.of(
-                                                        context)
-                                                    .bodyMedium
-                                                    .override(
-                                                      fontFamily: 'Readex Pro',
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .warning,
-                                                      fontSize: 16,
-                                                      letterSpacing: 0,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
-                                              ),
-                                              TextSpan(
-                                                text: '오늘 5시에 복현 풋살장 한분 구해요',
-                                                style: TextStyle(),
-                                              )
-                                            ],
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Readex Pro',
-                                                  fontSize: 16,
-                                                  letterSpacing: 0,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment:
-                                              AlignmentDirectional(-1, 0),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    3, 3, 0, 0),
-                                            child: Text(
-                                              '쪽지나 번호남겨주세요~^^',
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Readex Pro',
-                                                        letterSpacing: 0,
-                                                      ),
-                                            ),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment: AlignmentDirectional(1, 0),
-                                          child: Text(
-                                            '3/26 4:51',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Readex Pro',
-                                                  color: Color(0xCCA5A5A5),
-                                                  letterSpacing: 0,
-                                                ),
-                                          ),
-                                        ),
-                                        Divider(
-                                          thickness: 1,
-                                          color: FlutterFlowTheme.of(context)
-                                              .error,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                          FutureBuilder<List<PostElement>>(
+                            future: _model.getSearchPost(widget.searchQuery),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              } else if (snapshot.hasError) {
+                                return Center(
+                                    child: Text('Error: ${snapshot.error}'));
+                              } else if (!snapshot.hasData ||
+                                  snapshot.data!.isEmpty) {
+                                return Center(child: Text('No results found.'));
+                              } else {
+                                return CommunityPostWidget(
+                                    post: snapshot.data![0]);
+                              }
+                            },
                           ),
                         ],
                       ),
