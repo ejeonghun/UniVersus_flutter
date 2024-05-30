@@ -2,7 +2,7 @@ class ClubElement {
   int clubId;
   String eventName;
   String clubName;
-  String introduction;
+  String? introduction;
   int currentMembers;
   String imageUrl;
 
@@ -10,7 +10,7 @@ class ClubElement {
     required this.clubId,
     required this.eventName,
     required this.clubName,
-    required this.introduction,
+    this.introduction,
     required this.currentMembers,
     required this.imageUrl,
   });

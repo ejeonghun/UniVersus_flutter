@@ -87,7 +87,7 @@ class _SearchResultClubListWidgetState
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 3, 0, 0),
                         child: Text(
-                          club.introduction,
+                          club.introduction ?? 'no',
                           style: GoogleFonts.getFont(
                             'Readex Pro',
                             color: FlutterFlowTheme.of(context).secondaryText,
