@@ -80,6 +80,7 @@ class MainModel extends FlutterFlowModel<MainWidget> {
           clubId: clubData['clubId'],
           eventName: clubData['eventName'],
           clubName: clubData['clubName'],
+          introduction: clubData['club']['introduction'],
           currentMembers: clubData['currentMembers'],
           imageUrl: clubData['imageUrl'] == ""
               ? 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png'

@@ -198,7 +198,7 @@ class _MyAppState extends State<MyApp> {
               '/versusList': (context) => VersusListWidget(),
               '/versusCreate': (context) => versusCreateWidget(),
               '/Search': (context) => SearchWidget(),
-              '/SearchResult': (context) => SearchResultWidget(),
+              '/SearchResult': (context) => SearchResultWidget(searchQuery: '',),
               '/Community': (context) => CommunityWidget(),
               '/Post': (context) => PostWidget(univBoardId: 1),
               '/Write': (context) => WriteWidget(),

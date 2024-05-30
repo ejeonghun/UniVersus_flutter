@@ -1,12 +1,8 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:universus/Search/SearchCategory_Model.dart';
+import 'package:universus/Search/Search_Model.dart';
 import 'package:universus/Search/SearchCategory_Widget.dart';
-
-import 'Search_Model.dart';
+import 'SearchResult_Widget.dart'; // 추가
 export 'Search_Model.dart';
 
 class SearchWidget extends StatefulWidget {
@@ -24,7 +20,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => SearchModel());
+    _model = SearchModel();
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
   }
@@ -32,8 +28,13 @@ class _SearchWidgetState extends State<SearchWidget> {
   @override
   void dispose() {
     _model.dispose();
-
     super.dispose();
+  }
+
+  void _clearRecentSearches() {
+    setState(() {
+      _model.clearRecentSearches();
+    });
   }
 
   @override
@@ -135,7 +136,17 @@ class _SearchWidgetState extends State<SearchWidget> {
                     size: 28,
                   ),
                   onPressed: () {
-                    print('IconButton pressed ...');
+                    String searchQuery = _model.textController?.text ?? '';
+                    setState(() {
+                      _model.addRecentSearch(searchQuery);
+                    });
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            SearchResultWidget(searchQuery: searchQuery),
+                      ),
+                    );
                   },
                 ),
               ),
@@ -177,9 +188,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
                         child: FFButtonWidget(
-                          onPressed: () {
-                            print('Button pressed ...');
-                          },
+                          onPressed: _clearRecentSearches,
                           text: '검색내역 삭제',
                           options: FFButtonOptions(
                             height: 40,
@@ -210,64 +219,57 @@ class _SearchWidgetState extends State<SearchWidget> {
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Align(
-                      alignment: AlignmentDirectional(0, -0.74),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Align(
-                              alignment: AlignmentDirectional(0, 0),
-                              child: FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
-                                },
-                                text: '여행',
-                                options: FFButtonOptions(
-                                  height: 35,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      24, 0, 24, 0),
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 0),
-                                  color: FlutterFlowTheme.of(context).tertiary,
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .titleSmall
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        letterSpacing: 0,
-                                      ),
-                                  elevation: 3,
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
+                padding: EdgeInsetsDirectional.fromSTEB(10, 20, 10, 100),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  itemCount: _model.recentSearches.take(8).length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 13,
+                    childAspectRatio: 2.5, // Button의 가로 세로 비율을 맞추기 위해 설정
+                  ),
+                  itemBuilder: (context, index) {
+                    String search = _model.recentSearches[index];
+                    return FFButtonWidget(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                SearchResultWidget(searchQuery: search),
+                          ),
+                        );
+                      },
+                      text: search,
+                      options: FFButtonOptions(
+                        height: 35,
+                        padding: EdgeInsets.symmetric(horizontal: 24),
+                        color: FlutterFlowTheme.of(context).tertiary,
+                        textStyle:
+                            FlutterFlowTheme.of(context).titleSmall.override(
+                                  fontFamily: 'Readex Pro',
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  letterSpacing: 0,
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        elevation: 3,
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ),
-              Align(
-                alignment: AlignmentDirectional(0, 0),
-                child: wrapWithModel(
-                  model: _model.searchCategoryModel,
-                  updateCallback: () => setState(() {}),
-                  child: SearchCategoryWidget(),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 100, 0, 0),
+                child: Align(
+                  alignment: AlignmentDirectional(0, 0),
+                  child: wrapWithModel(
+                    model: _model.searchCategoryModel,
+                    updateCallback: () => setState(() {}),
+                    child: SearchCategoryWidget(),
+                  ),
                 ),
               ),
             ],

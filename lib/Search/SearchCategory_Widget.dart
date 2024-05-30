@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:universus/Search/SearchCategory_Model.dart';
+import 'package:universus/Search/SearchResult_Widget.dart';
 
 export 'SearchCategory_model.dart';
 
@@ -63,7 +64,13 @@ class _SearchCategoryWidgetState extends State<SearchCategoryWidget> {
                     size: 35,
                   ),
                   onPressed: () {
-                    print('IconButton pressed ...');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            SearchResultWidget(searchQuery: '축구'),
+                      ),
+                    );
                   },
                 ),
                 Padding(
@@ -92,7 +99,13 @@ class _SearchCategoryWidgetState extends State<SearchCategoryWidget> {
                       size: 30,
                     ),
                     onPressed: () {
-                      print('IconButton pressed ...');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              SearchResultWidget(searchQuery: '농구'),
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -122,7 +135,13 @@ class _SearchCategoryWidgetState extends State<SearchCategoryWidget> {
                       size: 30,
                     ),
                     onPressed: () {
-                      print('IconButton pressed ...');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              SearchResultWidget(searchQuery: '탁구'),
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -159,7 +178,13 @@ class _SearchCategoryWidgetState extends State<SearchCategoryWidget> {
                     size: 30,
                   ),
                   onPressed: () {
-                    print('IconButton pressed ...');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            SearchResultWidget(searchQuery: '풋살'),
+                      ),
+                    );
                   },
                 ),
                 Padding(
@@ -188,7 +213,13 @@ class _SearchCategoryWidgetState extends State<SearchCategoryWidget> {
                       size: 30,
                     ),
                     onPressed: () {
-                      print('IconButton pressed ...');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              SearchResultWidget(searchQuery: '볼링'),
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -218,7 +249,13 @@ class _SearchCategoryWidgetState extends State<SearchCategoryWidget> {
                       size: 30,
                     ),
                     onPressed: () {
-                      print('IconButton pressed ...');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              SearchResultWidget(searchQuery: 'E스포츠'),
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -255,7 +292,13 @@ class _SearchCategoryWidgetState extends State<SearchCategoryWidget> {
                     size: 30,
                   ),
                   onPressed: () {
-                    print('IconButton pressed ...');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            SearchResultWidget(searchQuery: '야구'),
+                      ),
+                    );
                   },
                 ),
                 Padding(
@@ -284,7 +327,13 @@ class _SearchCategoryWidgetState extends State<SearchCategoryWidget> {
                       size: 30,
                     ),
                     onPressed: () {
-                      print('IconButton pressed ...');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              SearchResultWidget(searchQuery: '당구/포켓볼'),
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -314,7 +363,13 @@ class _SearchCategoryWidgetState extends State<SearchCategoryWidget> {
                       size: 30,
                     ),
                     onPressed: () {
-                      print('IconButton pressed ...');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              SearchResultWidget(searchQuery: '배드민턴'),
+                        ),
+                      );
                     },
                   ),
                 ),

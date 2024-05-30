@@ -20,6 +20,17 @@ class DioApiCall {
     }
   }
 
+  Future<List<dynamic>> getDynamic(String url) async {
+    try {
+      Response response = await dio.get(baseUrl + url);
+      return response.data
+          as List<dynamic>; // Ensure the response is a List<dynamic>
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
   Future<Map<String, dynamic>> post(
       String url, Map<String, dynamic> data) async {
     try {
