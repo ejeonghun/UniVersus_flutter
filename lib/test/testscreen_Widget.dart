@@ -86,8 +86,8 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                 color: FlutterFlowTheme.of(context).primaryText,
                 size: 24,
               ),
-              onPressed: () {
-                print('IconButton pressed ...');
+              onPressed: () async {
+                Navigator.pushNamed(context, '/notice');
               },
             ),
             FlutterFlowIconButton(
