@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:universus/class/versus/versusElement.dart';
-import 'package:universus/versus/deptVersusDetail_Widget.dart';
+import 'package:universus/versus/deptVersus/deptVersusDetail_Widget.dart';
 import 'package:universus/versus/versusDetail_Widget.dart';
 
 import 'versusElement_Model.dart';
