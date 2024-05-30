@@ -55,7 +55,6 @@ class CommunityModel extends FlutterFlowModel<CommunityWidget> {
 
     return list;
   }
-      
 
   /*
  * 유저 프로필 정보 조회
@@ -93,6 +92,7 @@ class CommunityModel extends FlutterFlowModel<CommunityWidget> {
                 response['profileImage'].isNotEmpty
             ? response['profileImage'][0]['imageUrl']
             : 'https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-15.png',
+      );
     } else {
       // 조회 실패
       print(response);

@@ -14,6 +14,9 @@ class PostModel extends FlutterFlowModel<PostWidget> {
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
+  bool? anonymousCheck = false;
+
+  int get anonymousCheckInt => anonymousCheck! ? 1 : 0;
 
   void getMemberIdx() async {
     memberIdx = await UserData.getMemberIdx();
@@ -42,7 +45,7 @@ class PostModel extends FlutterFlowModel<PostWidget> {
         univBoardId: response['data']['univBoardId'] ?? 0,
         title: response['data']['title'].toString() ?? '제목 없음',
         content: response['data']['content'] ?? '',
-        nickname: response['data']['nickname'] ?? '',
+        nickname: response['data']['nickOrAnon'] ?? '',
         regDt: response['data']['regDt'] ?? '',
         place: response['data']['place'] ?? '',
         udtDt: response['data']['udtDt'] ?? '',
@@ -91,9 +94,10 @@ class PostModel extends FlutterFlowModel<PostWidget> {
       for (var data in response['data']) {
         Reply reply = Reply(
           profileImageUrl: data['profileImgUrl'] ?? '',
-          nickname: data['nickname'] ?? '',
+          nickname: data['nickOrAnon'] ?? '',
           content: data['content'] ?? '',
           timestamp: data['lastDt'] ?? '',
+          replyId: data['replyId'] ?? 0,
         );
         replies.add(reply);
       }
@@ -109,9 +113,10 @@ class PostModel extends FlutterFlowModel<PostWidget> {
     final response = await api.post('/reply/create', {
       'univBoardId': univBoardId,
       'content': content,
-      'memberIdx': memberIdx
+      'memberIdx': memberIdx,
+      'anonymous': anonymousCheckInt,
     });
-    debugPrint('${memberIdx} ${content}, ${univBoardId}');
+    debugPrint('${memberIdx} ${content}, ${univBoardId}, ${anonymousCheckInt}');
 
     if (response['success'] == true) {
       // 댓글이 성공적으로 작성됨

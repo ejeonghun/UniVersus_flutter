@@ -13,7 +13,7 @@ class WriteModel extends FlutterFlowModel<WriteWidget> {
   final unfocusNode = FocusNode();
   String? dropDownValue;
   FormFieldController<String>? dropDownValueController;
-  bool? checkboxValue;
+  bool? checkboxValue = false;
   FocusNode? textFieldFocusNode1;
   TextEditingController? textController1;
   String? Function(BuildContext, String?)? textController1Validator;
@@ -27,6 +27,8 @@ class WriteModel extends FlutterFlowModel<WriteWidget> {
   String? placeName; // 장소명
   DateTime? get datePicked => _datePicked;
   XFile? imageFile; // 이미지 파일
+
+  int get anonymousCheckInt => checkboxValue! ? 1 : 0;
 
   set datePicked(DateTime? value) {
     _datePicked = value;
@@ -67,6 +69,7 @@ class WriteModel extends FlutterFlowModel<WriteWidget> {
         'lat': lat,
         'lng': lng,
         'place': placeName,
+        'anonymous': anonymousCheckInt,
       });
     } else {
       formData = FormData.fromMap({
@@ -74,6 +77,7 @@ class WriteModel extends FlutterFlowModel<WriteWidget> {
         'categoryId': Template.getCategoryId(dropDownValue),
         'title': textController1?.text ?? '제목 없음',
         'content': textController2?.text ?? '내용 없음',
+        'anonymous': anonymousCheckInt,
       });
     }
 
@@ -148,5 +152,4 @@ class WriteModel extends FlutterFlowModel<WriteWidget> {
     textFieldFocusNode2?.dispose();
     textController2?.dispose();
   }
-
 }

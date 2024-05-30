@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/club/clubInfo.dart';
+import 'package:universus/class/club/clubMember.dart';
 import 'package:universus/class/club/clubPost.dart';
 import 'package:universus/class/user/user.dart';
 import 'package:universus/class/user/userProfile.dart';
@@ -19,22 +20,36 @@ class ClubMainModel extends FlutterFlowModel<ClubMainWidget> {
   final unfocusNode = FocusNode();
   late ClubPostModel clubPostModel;
 
+  late int? clubId;
+  String? memberIdx;
+  bool? isMemberIdx = false;
+  Future<void> getMemberIdx() async {
+    memberIdx = await UserData.getMemberIdx();
+    isMemberIdx = true;
+    debugPrint(memberIdx.toString());
+  }
+
   /**
    * Club 정보 조회
    * @param clubId
    * @return clubInfo 객체:
    * 생성자 : 이정훈
    */
-  Future<clubInfo> getClubInfo(int clubId) async {
+  Future<clubInfo> getClubInfo(int? clubId) async {
     DioApiCall api = DioApiCall();
-    final response = await api.get('/club/info?clubId=${clubId}');
+    debugPrint(memberIdx.toString());
+    if (isMemberIdx == false) {
+      await getMemberIdx();
+    }
+    final response =
+        await api.get('/club/info?clubId=${clubId}&memberIdx=${memberIdx}');
     if (response['success'] == true) {
       return clubInfo(
           clubId: response['data']['clubId'],
           clubName: response['data']['clubName'],
           clubIntro: response['data']['introduction'],
           price: response['data']['price'],
-          clubLeader: 0,
+          clubLeader: response['data']['memberIdx'],
           imageUrl: response['data']['clubImageUrls'].isNotEmpty
               ? response['data']['clubImageUrls'][0]
               : 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
@@ -43,7 +58,8 @@ class ClubMainModel extends FlutterFlowModel<ClubMainWidget> {
           currentMembers: response['data']['currentMembers'],
           maximumMembers: response['data']['maximumMembers'],
           LeaderNickname: response['data']['nickname'],
-          LeaderProfileImg: response['data']['memberImageUrl']);
+          LeaderProfileImg: response['data']['memberImageUrl'],
+          joinedStatus: response['data']['joinedStatus']);
     } else {
       return clubInfo.nullPut();
     }
@@ -55,28 +71,49 @@ class ClubMainModel extends FlutterFlowModel<ClubMainWidget> {
    * @return List<clubPost> 객체:
    * 생성자 : 이정훈
    */
-  Future<List<ClubPost>> getClubPosts(int clubId) async {
+  Future<List<ClubPost>> getClubPosts(int? clubId) async {
     DioApiCall api = DioApiCall();
+    if (isMemberIdx == false) {
+      await getMemberIdx();
+    }
     final response = await api.get(
-        '/univBoard/list?memberIdx=${await UserData.getMemberIdx()}&clubId=${clubId}&categoryId=1');
+        '/univBoard/list?memberIdx=${memberIdx}&clubId=${clubId}&categoryId=1');
     if (response['success'] == true) {
       List<ClubPost> clubPosts = [];
-      for (var item in response['data']) {
-        clubPosts.add(ClubPost(
-          univBoardId: item['univBoardId'],
-          clubName: item['clubName'],
-          memberProfileImg: item['profileImgUrl'],
-          title: item['title'],
-          content: item['content'],
-          regDt: item['regDt'],
-          imageUrl:
-              item['postImageUrls'] != null && item['postImageUrls'].isNotEmpty
+      if (response['data'].isNotEmpty) {
+        for (var item in response['data']) {
+          debugPrint(item['profileImgUrl'].toString());
+          clubPosts.add(ClubPost(
+              univBoardId: item['univBoardId'],
+              clubName: item['clubName'],
+              memberProfileImg: item['profileImgUrl'],
+              title: item['title'],
+              content: item['content'],
+              regDt: item['regDt'],
+              imageUrl: item['postImageUrls'] != null &&
+                      item['postImageUrls'].isNotEmpty
                   ? item['postImageUrls'][0]
-                  : '', // 추후 이미지 없을 때 처리 해야함
-          categoryName: item['categoryName'],
-          nickname: item['nickname'],
-        ));
+                  : 'none', // 추후 이미지 없을 때 처리 해야함
+              categoryName: item['categoryName'],
+              nickname: item['nickOrAnon'],
+              memberIdx: item['memberIdx']));
+        }
+        return clubPosts;
       }
+      clubPosts.add(ClubPost(
+        univBoardId: 1,
+        clubName: '게시물이 없습니다',
+        memberProfileImg:
+            'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
+        title: '게시물이 없습니다',
+        content: '게시물이 없습니다',
+        regDt: DateTime.now().toString(),
+        imageUrl:
+            'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
+        categoryName: 'none',
+        nickname: '관리자',
+        memberIdx: 0,
+      ));
       return clubPosts;
     } else {
       return [];
@@ -94,6 +131,53 @@ class ClubMainModel extends FlutterFlowModel<ClubMainWidget> {
     final response = await api.post('/club/join', {
       'memberIdx': await UserData.getMemberIdx(),
       'clubId': clubId,
+    });
+    if (response['success'] == true) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Club Member 조회
+   * 클럽 관리자만 사용 가능
+   * @param clubId
+   * @return List<ClubMember>:
+   * 생성자 : 이정훈
+   */
+  Future<List<ClubMember>> getClubMembers(int clubId) async {
+    DioApiCall api = DioApiCall();
+    final response = await api
+        .get('/club/clubMembersList?clubId=${clubId}&memberIdx=${memberIdx}');
+    if (response['success'] == true) {
+      List<ClubMember> clubMembers = [];
+      for (var item in response['data']) {
+        clubMembers.add(ClubMember(
+          memberIdx: item['memberIdx'],
+          nickname: item['nickname'],
+          profileImgUrl: item['profileImgUrl'],
+        ));
+      }
+      return clubMembers;
+    } else {
+      return [];
+    }
+  }
+
+  /**
+   * Club 멤버 추방
+   * 클럽 관리자만 사용 가능
+   * @param clubId, expelMemberIdx
+   * @return bool:
+   * 생성자 : 이정훈
+   */
+  Future<bool?> expel(int clubId, int expelMemberIdx) async {
+    DioApiCall api = DioApiCall();
+    final response = await api.deleteForData('/club/expel', {
+      'clubId': clubId,
+      'expelMemberIdx': expelMemberIdx,
+      'memberIdx': await UserData.getMemberIdx(),
     });
     if (response['success'] == true) {
       return true;

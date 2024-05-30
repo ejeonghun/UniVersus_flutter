@@ -41,7 +41,8 @@ class UpdateClubModel extends FlutterFlowModel<UpdateClubWidget> {
 
   Future<bool> getClub(String clubId) async {
     ApiCall api = ApiCall();
-    final response = await api.get('/club/info?clubId=9');
+    final response = await api.get(
+        '/club/info?clubId=${clubId}&memberIdx=${await UserData.getMemberIdx()}');
     if (response['success'] == true) {
       debugPrint(response.toString());
       debugPrint("동아리 정보 가져오기 성공");

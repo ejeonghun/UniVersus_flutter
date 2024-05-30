@@ -58,6 +58,7 @@ class ClubPostWriteModel extends FlutterFlowModel<ClubPostWriteWidget> {
       'categoryId': 1,
       'title': textController1?.text ?? '제목 없음',
       'content': textController2?.text ?? '내용 없음',
+      'anonymous': 0
     });
 
     // image파일이 있으면 이미지 파라미터 추가

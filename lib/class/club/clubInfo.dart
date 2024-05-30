@@ -13,6 +13,7 @@ class clubInfo {
   int maximumMembers; // 클럽 최대 인원
   String? LeaderProfileImg; // 클럽 개설자 프로필 이미지
   String? LeaderNickname; // 클럽 개설자 닉네임
+  int? joinedStatus; // 클럽 가입 여부 0 , 1
 
   clubInfo({
     required this.clubId,
@@ -27,6 +28,7 @@ class clubInfo {
     required this.maximumMembers,
     this.LeaderNickname,
     this.LeaderProfileImg,
+    this.joinedStatus,
   });
 
   String? get getRegDate {
