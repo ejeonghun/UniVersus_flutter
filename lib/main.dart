@@ -9,6 +9,7 @@ import 'package:universus/club/ClubList_Model.dart';
 import 'package:universus/club/ClubList_Widget.dart';
 import 'package:universus/main/Components/clubElement_Widget.dart';
 import 'package:universus/main/Components/clubelement_widget.dart';
+import 'package:universus/notice/notice.dart';
 import 'package:universus/permissonManage.dart';
 import 'package:universus/permissonManage.dart';
 import 'package:universus/shared/paymentResult.dart';
@@ -22,6 +23,7 @@ import 'package:universus/Search/SearchResult_Widget.dart';
 import 'package:universus/Search/Search_Widget.dart';
 import 'package:universus/auth/AdditionalInfo_Widget.dart';
 import 'package:universus/ranking/ranking.dart';
+import 'package:universus/notice/notice.dart';
 
 import 'package:universus/class/user/user.dart';
 
@@ -211,6 +213,7 @@ class _MyAppState extends State<MyApp> {
               '/clubList': (context) => ClubListWidget(),
               '/result': (context) => PaymentResult(),
               '/ranking': (context) => RankingPage(),
+              '/notice': (context) => NoticePage(),
             },
           );
         });
