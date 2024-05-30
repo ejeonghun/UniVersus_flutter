@@ -99,7 +99,7 @@ class ChatsModel extends FlutterFlowModel<ChatsPage> {
         print("Empty or invalid response data.");
         return [];
       }
-    } catch (e) {
+    } catch (e) { 
       print("Failed to fetch chat rooms: $e");
       return [];
     }

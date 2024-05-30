@@ -1,138 +1,146 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:universus/ranking/ranking_model.dart';
 
-class TopRankWidget extends StatelessWidget {
+class TopRankWidget extends StatefulWidget {
+  const TopRankWidget({Key? key}) : super(key: key);
+
+  @override
+  _TopRankWidgetState createState() => _TopRankWidgetState();
+}
+
+class _TopRankWidgetState extends State<TopRankWidget> {
+  late Future<List<UniversityRanking>> _rankingsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _rankingsFuture = RankingModel().getUniversityRankings(
+        [1, 2, 3, 4, 5, 6, 7, 8, 9]); // Pass all event IDs
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(5), // 전체 여백을 5로 설정합니다.
+      padding: EdgeInsetsDirectional.fromSTEB(8, 12, 8, 12),
       child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 270,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20), // 모서리를 라운드 형식으로 만듭니다.
           color: Color(0xFF4B39EF),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 5,
+              color: Color(0x32171717),
+              offset: Offset(0.0, 2),
+            )
+          ],
+          borderRadius: BorderRadius.circular(16),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'Top Rank',
-                    style: TextStyle(
-                      fontFamily: 'Outfit',
-                      color: Colors.white,
-                      fontSize: 36,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 30),
+              child: Text(
+                'Top Rank',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 45,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 3),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40),
-                child: Stack(
-                  alignment: AlignmentDirectional(0, -1),
-                  children: [
-                    _buildRankItem(
-                      context,
-                      'assets/images/chgf1_.jpg',
-                      '🥈경북대',
-                      '145P',
-                      AlignmentDirectional(-1, 0),
-                      EdgeInsetsDirectional.fromSTEB(7, 40, 0, 0),
-                      EdgeInsetsDirectional.fromSTEB(28, 150, 0, 0),
-                    ),
-                    _buildRankItem(
-                      context,
-                      'assets/images/t7lxm_.svg',
-                      '🥇영진대',
-                      '582P',
-                      AlignmentDirectional(0, 0),
-                      EdgeInsetsDirectional.zero,
-                      EdgeInsetsDirectional.fromSTEB(0, 130, 0, 0),
-                    ),
-                    _buildRankItem(
-                      context,
-                      'assets/images/d3ifr_.svg',
-                      '🥉계명대',
-                      '115P',
-                      AlignmentDirectional(1, 0),
-                      EdgeInsetsDirectional.fromSTEB(0, 60, 7, 0),
-                      EdgeInsetsDirectional.fromSTEB(0, 170, 26, 0),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+            FutureBuilder<List<UniversityRanking>>(
+              future: _rankingsFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text("Error: ${snapshot.error}");
+                } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                  return buildRankings(
+                      snapshot.data!.sublist(0, 3)); // Assuming top 3
+                } else {
+                  return Text("No rankings available");
+                }
+              },
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildRankItem(
-    BuildContext context,
-    String imagePath,
-    String rankText,
-    String scoreText,
-    AlignmentDirectional alignment,
-    EdgeInsetsDirectional outerPadding,
-    EdgeInsetsDirectional innerPadding,
-  ) {
-    return Align(
-      alignment: alignment,
-      child: Padding(
-        padding: outerPadding,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 70,
-              height: 70,
-              decoration: BoxDecoration(
-                color: Theme.of(context).secondaryHeaderColor,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Theme.of(context).primaryColor,
-                  width: 3,
-                ),
+  Widget buildRankings(List<UniversityRanking> rankings) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: List.generate(3, (index) {
+        // Correct the order by adjusting the index for the 1st and 2nd places
+        int adjustedIndex = index;
+        if (index == 0)
+          adjustedIndex = 1; // Show 2nd place as the first item
+        else if (index == 1)
+          adjustedIndex = 0; // Show 1st place as the second item
+
+        return Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Transform.translate(
+                offset: Offset(0,
+                    adjustedIndex == 0 ? -20 : 0), // Elevate only the 1st place
+                child: buildRankItem(
+                    rankings.length > adjustedIndex
+                        ? rankings[adjustedIndex]
+                        : null,
+                    ["\u{1F947}", "\u{1F948}", "\u{1F949}"][adjustedIndex],
+                    adjustedIndex == 0,
+                    0),
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(40),
-                child: Image.asset(
-                  imagePath,
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.cover,
-                ),
+            ],
+          ),
+        );
+      }),
+    );
+  }
+
+  Widget buildRankItem(UniversityRanking? ranking, String medal,
+      bool isElevated, double verticalOffset) {
+    if (ranking == null) {
+      return Container(); // Return an empty container if there's no ranking data
+    }
+    return Transform.translate(
+      offset: Offset(0, verticalOffset),
+      child: Column(
+        children: [
+          Container(
+            width: isElevated ? 90 : 70,
+            height: isElevated ? 90 : 70,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: NetworkImage(ranking.logoImg),
+                fit: BoxFit.cover,
               ),
+              border: Border.all(color: Colors.white, width: 3),
             ),
-            const SizedBox(height: 8),
-            Text(
-              rankText,
-              style: TextStyle(
-                fontFamily: 'Readex Pro',
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.white,
-              ),
-            ),
-            Text(
-              scoreText,
-              style: TextStyle(
-                fontFamily: 'Readex Pro',
-                fontSize: 14,
-                fontWeight: FontWeight.w200,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 20),
-          ],
-        ),
+          ),
+          SizedBox(height: isElevated ? 5 : 10),
+          Text(
+            ranking.schoolName,
+            style: TextStyle(color: Colors.white, fontSize: 16),
+            textAlign: TextAlign.center, // Ensure text is centered
+          ),
+          Text(
+            ' $medal ${ranking.rankPoint} Points ',
+            style: TextStyle(color: Colors.white, fontSize: 14),
+            textAlign: TextAlign.center, // Ensure text is centered
+          ),
+        ],
       ),
     );
   }
