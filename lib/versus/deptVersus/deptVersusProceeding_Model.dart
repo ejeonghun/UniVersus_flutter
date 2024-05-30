@@ -1,7 +1,7 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/versus/versusDetail.dart';
-import 'versusProceeding_Widget.dart' show versusProceedingWidget;
+import 'deptVersusProceeding_Widget.dart' show deptVersusProceedingWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-class ProceedingModel extends FlutterFlowModel<versusProceedingWidget> {
+class deptProceedingModel extends FlutterFlowModel<deptVersusProceedingWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
@@ -82,11 +82,13 @@ class ProceedingModel extends FlutterFlowModel<versusProceedingWidget> {
   * @throws Exception: 대결 상세 정보 조회 실패 시 예외 발생
   * 생성자 : 이정훈
   * */
-  Future<versusDetail> getVersusDetail(int battleId) async {
+   Future<versusDetail> getDeptVersusDetail(int battleId) async {
     // 대결 리스트를 불러오는 메소드
     DioApiCall api = DioApiCall();
     final response =
-        await api.get('/univBattle/info?univBattleId=${battleId.toString()}');
+        await api.get('/deptBattle/info?deptBattleId=${battleId.toString()}');
+        print("진행중 ... 불러움");
+        print(response.toString());
     if (response.isNotEmpty) {
       // response가 null이 아니면 조회 성공
       List<dynamic> hostParticipantListData =
@@ -94,37 +96,37 @@ class ProceedingModel extends FlutterFlowModel<versusProceedingWidget> {
       List<dynamic> guestTeamMembersData =
           response['data']['GuestTeam']['guestPtcList'];
 
+      // hostTeam 멤버 리스트를 가져온다.
       List<Map<String, dynamic>> hostTeamMembers =
           List<Map<String, dynamic>>.from(hostParticipantListData);
+
+      // guestTeam 멤버 리스트를 가져온다.
       List<Map<String, dynamic>> guestTeamMembers =
           List<Map<String, dynamic>>.from(guestTeamMembersData);
 
       versusDetail res = versusDetail(
-        battleDate: response['data']['univBattle']['battleDate'],
-        lat: response['data']['univBattle']['lat'],
-        lng: response['data']['univBattle']['lng'],
-        hostTeamName: response['data']['HostTeam']['hostUvName'],
-        hostTeamUnivLogo: response['data']['univBattle']['hostUnivLogo'],
-        guestTeamName: response['data']['GuestTeam'] != null
-            ? response['data']['GuestTeam']['guestUvName']
-            : '참가 학교 없음',
-        guestTeamUnivLogo: response['data']['univBattle']['guestUnivLogo'],
-        BattleId: response['data']['univBattle']['univBattleId'],
-        status: response['data']['univBattle']['matchStatus'],
-        hostLeaderId: response['data']['univBattle']['hostLeader'],
-        place: response['data']['univBattle']['place'] ?? '없음',
-        regDate: response['data']['univBattle']['regDt'],
-        invitationCode: response['data']['univBattle']['invitationCode'],
-        hostTeamMembers: hostTeamMembers,
-        guestTeamMembers: guestTeamMembers,
-        content: response['data']['univBattle']['content'],
-        cost: response['data']['univBattle']['cost'],
-        eventId: response['data']['univBattle']['eventId'],
-        guestLeaderId: response['data']['univBattle']['guestLeader'],
-        matchStartDt:
-            DateTime.parse(response['data']['univBattle']["matchStartDt"]),
-      );
-      // debugPrint(res.getHostTeamMembers.toString());
+          battleDate: response['data']['deptBattle']['battleDate'],
+          lat: response['data']['deptBattle']['lat'],
+          lng: response['data']['deptBattle']['lng'],
+          hostTeamName: response['data']['deptBattle']['hostDeptName'],
+          hostTeamUnivLogo: response['data']['deptBattle']['univLogo'],
+          guestTeamName: response['data']['deptBattle']['guestDeptName'],
+          guestTeamUnivLogo: response['data']['deptBattle']['univLogo'] ?? 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
+          BattleId: response['data']['deptBattle']['deptBattleId'],
+          status: response['data']['deptBattle']['matchStatus'],
+          hostLeaderId: response['data']['deptBattle']['hostLeader'],
+          place: response['data']['deptBattle']['place'] ?? '없음',
+          regDate: response['data']['deptBattle']['regDt'],
+          invitationCode: response['data']['deptBattle']['invitationCode'],
+          hostTeamMembers: hostTeamMembers,
+          guestTeamMembers: guestTeamMembers,
+          content: response['data']['deptBattle']['content'],
+          cost: response['data']['deptBattle']['cost'],
+          eventId: response['data']['deptBattle']['eventId'],
+          guestLeaderId: response['data']['deptBattle']['guestLeader'],
+          winUnivName: response['data']['winUnivName'] ??= "null",
+          matchStartDt:
+            DateTime.parse(response['data']['deptBattle']["matchStartDt"]));
       debugPrint(res.toString());
       return res;
     } else {

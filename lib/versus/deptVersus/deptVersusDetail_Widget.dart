@@ -9,10 +9,11 @@ import 'package:universus/class/versus/versusDetail.dart';
 import 'package:universus/shared/CustomSnackbar.dart';
 import 'package:universus/shared/GoogleMap.dart';
 import 'package:universus/versus/component/teamMemberDropdown.dart';
+import 'package:universus/versus/deptVersus/deptVersusProceeding_Widget.dart';
 import 'package:universus/versus/versusProceeding_Widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../shared/Template.dart';
+import '../../shared/Template.dart';
 import 'deptVersusDetail_Model.dart';
 export 'deptVersusDetail_Model.dart';
 
@@ -80,7 +81,7 @@ class _deptVersusDetailWidgetState extends State<deptVersusDetailWidget> {
                       color: FlutterFlowTheme.of(context).primaryText),
                   automaticallyImplyLeading: true,
                   title: Text(
-                    '대항전 상세',
+                    '[학과]대항전 상세',
                     style: FlutterFlowTheme.of(context).headlineMedium.override(
                           fontFamily: 'Outfit',
                           color: FlutterFlowTheme.of(context).primaryText,
@@ -192,8 +193,12 @@ class _deptVersusDetailWidgetState extends State<deptVersusDetailWidget> {
                   ),
                 ),
               ),
+              Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 5.0, 0.0, 0.0),
+                                    child:
               Container(
-                width: 200.0, // Column의 너비를 고정
+                width: 100.0, // Column의 너비를 고정
                 child: AutoSizeText(
                   snapshot.data!.hostTeamName ?? ' 오류 ',
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
@@ -206,7 +211,7 @@ class _deptVersusDetailWidgetState extends State<deptVersusDetailWidget> {
                   minFontSize: 10,
                   textAlign: TextAlign.center, // 텍스트를 중앙 정렬
                 ),
-              ),
+              ),),
               TeamMemberDropdown(
                 teamMembers: snapshot.data!.hostTeamMembers!,
                 hostLeader: snapshot.data!.hostLeaderId!,
@@ -259,7 +264,7 @@ class _deptVersusDetailWidgetState extends State<deptVersusDetailWidget> {
                                         shape: BoxShape.circle,
                                       ),
                                       child: Image.network(
-                                        snapshot.data!.guestTeamUnivLogo ??=
+                                        snapshot.data!.hostTeamUnivLogo ??=
                                             'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
                                         fit: BoxFit.cover,
                                       ),
@@ -267,20 +272,22 @@ class _deptVersusDetailWidgetState extends State<deptVersusDetailWidget> {
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 0.0, 5.0),
-                                    child: Text(
-                                      snapshot.data!.guestTeamName ??= '모집중 ..',
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            fontSize: 16.0,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w600,
-                                            useGoogleFonts: false,
-                                          ),
-                                    ),
-                                  ),
+                                        0.0, 5.0, 0.0, 0.0),
+                                    child: Container(
+                width: 100.0, // Column의 너비를 고정
+                child: AutoSizeText(
+                  snapshot.data!.guestTeamName ?? ' 오류 ',
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Readex Pro',
+                        letterSpacing: 0.0,
+                        fontWeight: FontWeight.w600,
+                        useGoogleFonts: false,
+                      ),
+                  maxLines: 2,
+                  minFontSize: 10,
+                  textAlign: TextAlign.center, // 텍스트를 중앙 정렬
+                ),
+              ),),
                                   TeamMemberDropdown(
                                       teamMembers:
                                           snapshot.data!.guestTeamMembers!,
@@ -363,7 +370,7 @@ class _deptVersusDetailWidgetState extends State<deptVersusDetailWidget> {
                                       context, "성공", "참가가 완료되었습니다.", 2);
                                 } else {
                                   CustomSnackbar.error(
-                                      context, "실패", "같은 학교는 참가할 수 없습니다.", 2);
+                                      context, "실패", "같은 학과는 참가할 수 없습니다.", 2);
                                 }
                                 setState(() {});
                               },
@@ -444,7 +451,7 @@ class _deptVersusDetailWidgetState extends State<deptVersusDetailWidget> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              versusProceedingWidget(
+                                              deptVersusProceedingWidget(
                                                 battleId: widget.battleId,
                                               )));
                                 } else {
@@ -497,7 +504,7 @@ class _deptVersusDetailWidgetState extends State<deptVersusDetailWidget> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            versusProceedingWidget(
+                                            deptVersusProceedingWidget(
                                               battleId: widget.battleId,
                                             )));
                               },
