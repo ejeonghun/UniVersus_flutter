@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:universus/ranking/ranking_model.dart';
-
-class RanklistWidget extends StatefulWidget {
-  const RanklistWidget({Key? key}) : super(key: key);
+/*
+class DeptRanklistWidget extends StatefulWidget {
+  const DeptRanklistWidget({Key? key}) : super(key: key);
 
   @override
-  _RanklistWidgetState createState() => _RanklistWidgetState();
+  _DeptRanklistWidgetState createState() => _DeptRanklistWidgetState();
 }
 
-class _RanklistWidgetState extends State<RanklistWidget> {
-  Future<List<UniversityRanking>>? _rankingsFuture;
+class _DeptRanklistWidgetState extends State<DeptRanklistWidget> {
+  Future<List<DepartmentRanking>>? _rankingsFuture;
 
   @override
   void initState() {
     super.initState();
-    _rankingsFuture =
-        RankingModel().getUniversityRankings([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    _rankingsFuture = DepartmentRankingModel().getDepartmentRankings(1);
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<UniversityRanking>>(
+    return FutureBuilder<List<DepartmentRanking>>(
       future: _rankingsFuture,
       builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text("Error: ${snapshot.error}");
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text("Error: ${snapshot.error}"));
         } else if (snapshot.hasData) {
           var rankings = snapshot.data!;
           return ListView.builder(
@@ -36,15 +37,13 @@ class _RanklistWidgetState extends State<RanklistWidget> {
             },
           );
         } else {
-          // Display an empty container or a static layout if there's no data
-          return Center(child: Text("Loading rankings..."));
+          return Center(child: Text("No rankings available"));
         }
       },
     );
   }
 
-  Widget buildRankItem(
-      BuildContext context, UniversityRanking ranking, int rank) {
+  Widget buildRankItem(BuildContext context, DepartmentRanking ranking, int rank) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Container(
@@ -92,7 +91,7 @@ class _RanklistWidgetState extends State<RanklistWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      ranking.schoolName,
+                      ranking.deptName,
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
                     Text(
@@ -109,3 +108,4 @@ class _RanklistWidgetState extends State<RanklistWidget> {
     );
   }
 }
+*/
