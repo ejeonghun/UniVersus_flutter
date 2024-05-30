@@ -14,18 +14,20 @@ import 'package:universus/shared/CustomSnackbar.dart';
 import 'package:universus/shared/placepicker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import 'Write_Model.dart';
-export 'Write_Model.dart';
+import 'ClubPostWrite_Model.dart';
+export 'ClubPostWrite_Model.dart';
 
-class WriteWidget extends StatefulWidget {
-  const WriteWidget({super.key});
+class ClubPostWriteWidget extends StatefulWidget {
+  final int clubId; // 클럽 아이디를 받을 필드 추가
+
+  const ClubPostWriteWidget({super.key, required this.clubId});
 
   @override
-  State<WriteWidget> createState() => _WriteWidgetState();
+  State<ClubPostWriteWidget> createState() => _ClubPostWriteWidgetState();
 }
 
-class _WriteWidgetState extends State<WriteWidget> {
-  late WriteModel _model;
+class _ClubPostWriteWidgetState extends State<ClubPostWriteWidget> {
+  late ClubPostWriteModel _model;
   bool showLocationButton = false;
   bool showSportDropdown = false;
 
@@ -34,7 +36,7 @@ class _WriteWidgetState extends State<WriteWidget> {
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => WriteModel());
+    _model = createModel(context, () => ClubPostWriteModel());
 
     _model.textController1 ??= TextEditingController();
     _model.textFieldFocusNode1 ??= FocusNode();
@@ -102,7 +104,7 @@ class _WriteWidgetState extends State<WriteWidget> {
           actions: [
             FFButtonWidget(
               onPressed: () async {
-                if (await _model.writePost() == true) {
+                if (await _model.writePost(widget.clubId) == true) {
                   debugPrint("성공");
                   CustomSnackbar.success(
                       context, "글쓰기", "글이 성공적으로 작성되었습니다.", 2);
@@ -145,102 +147,7 @@ class _WriteWidgetState extends State<WriteWidget> {
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      flex: 2,
-                      child: DropdownButton<String>(
-                        value: _model.dropDownValue,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _model.dropDownValue = newValue;
-                            showLocationButton = newValue == '모집';
-                            showSportDropdown = newValue == '모집';
-                          });
-                        },
-                        items: ['자유', '모집', '정보']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        hint: Text('카테고리'),
-                      ),
-                    ),
-                    if (showSportDropdown)
-                      Flexible(
-                        flex: 2,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8),
-                          child: DropdownButton<String>(
-                            value: _model.sportDropdownValue,
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                _model.sportDropdownValue = newValue;
-                              });
-                            },
-                            items: [
-                              '축구',
-                              '농구',
-                              '야구',
-                              '볼링',
-                              '풋살',
-                              '탁구',
-                              '당구/포켓볼',
-                              '배드민턴',
-                              'E-sport'
-                            ].map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            hint: Text('종목 선택'),
-                          ),
-                        ),
-                      ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Theme(
-                            data: ThemeData(
-                              checkboxTheme: CheckboxThemeData(
-                                visualDensity: VisualDensity.compact,
-                                materialTapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-                              unselectedWidgetColor: Color(0xCCA5A5A5),
-                            ),
-                            child: Checkbox(
-                              value: _model.checkboxValue ??= false,
-                              onChanged: (newValue) async {
-                                setState(
-                                    () => _model.checkboxValue = newValue!);
-                              },
-                              activeColor:
-                                  FlutterFlowTheme.of(context).tertiary,
-                              checkColor: FlutterFlowTheme.of(context).info,
-                            ),
-                          ),
-                          Text(
-                            '익명',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Readex Pro',
-                                  color: Color(0xCCA5A5A5),
-                                  fontSize: 15,
-                                  letterSpacing: 0,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  children: [],
                 ),
               ),
               Padding(
