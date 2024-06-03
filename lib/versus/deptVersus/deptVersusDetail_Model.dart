@@ -106,8 +106,8 @@ class VersusDetailModel extends FlutterFlowModel<deptVersusDetailWidget> {
           hostTeamName: response['data']['HostTeam']['hostDeptName'],
           hostTeamUnivLogo: response['data']['deptBattle']['univLogo'],
           guestTeamName: response['data']['GuestTeam'] != null &&
-                  response['data']['guestDeptName'] != null
-              ? response['data']['guestDeptName']
+                  response['data']['GuestTeam']['guestDeptName'] != null
+              ? response['data']['deptBattle']['guestDeptName']
               : '모집 중..',
           guestTeamUnivLogo: response['data']['deptBattle']['guestUnivLogo'] ??=
               'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
@@ -116,6 +116,7 @@ class VersusDetailModel extends FlutterFlowModel<deptVersusDetailWidget> {
           hostLeaderId: response['data']['deptBattle']['hostLeader'],
           place: response['data']['deptBattle']['place'] ?? '없음',
           regDate: response['data']['deptBattle']['regDt'],
+          endDate: response['data']['deptBattle']['endDt'] ?? '',
           invitationCode: response['data']['deptBattle']['invitationCode'],
           hostTeamMembers: hostTeamMembers,
           guestTeamMembers: guestTeamMembers,
@@ -123,8 +124,14 @@ class VersusDetailModel extends FlutterFlowModel<deptVersusDetailWidget> {
           cost: response['data']['deptBattle']['cost'],
           eventId: response['data']['deptBattle']['eventId'],
           guestLeaderId: response['data']['deptBattle']['guestLeader'],
-          winUnivName: response['data']['winUnivName'] ??= "null");
-      // debugPrint(res.getHostTeamMembers.toString());
+          winUnivName: response['data']['winDeptName'] ??= "null",
+          hostScore: response['data']['deptBattle']['hostScore'] ?? 0,
+          guestScore: response['data']['deptBattle']['guestScore'] ?? 0,
+          winUniv: response['data']['deptBattle']['winUniv'] ?? 0,
+          hostUnivId: response['data']['deptBattle']['hostUniv'] ?? 0,
+          matchStartDt: response['data']['deptBattle']['matchStartDt'] != null
+              ? DateTime.parse(response['data']['deptBattle']['matchStartDt'])
+              : null);
       status = res.status!;
       debugPrint(res.toString());
       return res;
