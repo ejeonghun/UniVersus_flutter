@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 class ReplyWidget extends StatefulWidget {
   final Reply reply;
 
-  const ReplyWidget({super.key, required this.reply});
+  const ReplyWidget({Key? key, required this.reply}) : super(key: key);
 
   @override
   State<ReplyWidget> createState() => _ReplyWidgetState();
@@ -15,17 +15,18 @@ class ReplyWidget extends StatefulWidget {
 
 class _ReplyWidgetState extends State<ReplyWidget> {
   late ReplyModel _model;
+  bool _isModifying = false;
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => ReplyModel());
+    _model.textController.text = widget.reply.content;
   }
 
   @override
   void dispose() {
     _model.maybeDispose();
-
     super.dispose();
   }
 
@@ -47,14 +48,14 @@ class _ReplyWidgetState extends State<ReplyWidget> {
                   shape: BoxShape.circle,
                 ),
                 child: Image.network(
-                  widget.reply.profileImageUrl, // 댓글 작성자 프로필 이미지
+                  widget.reply.profileImageUrl,
                   fit: BoxFit.cover,
                 ),
               ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
                 child: Text(
-                  widget.reply.nickname, // 댓글 작성자 이름
+                  widget.reply.nickname,
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Readex Pro',
                         fontSize: 15,
@@ -66,28 +67,27 @@ class _ReplyWidgetState extends State<ReplyWidget> {
               Spacer(),
               PopupMenuButton<String>(
                 onSelected: (value) {
-                  if (value == 'edit') {
-                    // 수정 버튼 클릭 시 동작
+                  if (value == 'modify') {
+                    setState(() {
+                      _isModifying = true;
+                      _model.textController.text = widget.reply.content;
+                    });
                   } else if (value == 'delete') {
-                    // 삭제 버튼 클릭 시 동작
+                    _model.deleteReply(widget.reply.replyId, context).then((_) {
+                      setState(() {});
+                    });
                   }
                 },
                 itemBuilder: (BuildContext context) {
                   return [
                     PopupMenuItem(
-                        value: 'edit',
-                        child: Text('수정'),
-                        onTap: () async {
-                          // 수정 버튼 클릭 시 동작
-                        }),
+                      value: 'modify',
+                      child: Text('수정'),
+                    ),
                     PopupMenuItem(
-                        value: 'delete',
-                        child: Text('삭제'),
-                        onTap: () async {
-                          await _model.deleteReply(
-                              widget.reply.replyId, context);
-                          setState(() {});
-                        }),
+                      value: 'delete',
+                      child: Text('삭제'),
+                    ),
                   ];
                 },
                 icon: Icon(
@@ -101,14 +101,41 @@ class _ReplyWidgetState extends State<ReplyWidget> {
             alignment: AlignmentDirectional(-1, 0),
             child: Padding(
               padding: EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
-              child: Text(
-                widget.reply.content, // 댓글 내용
-                style: FlutterFlowTheme.of(context).bodyMedium.override(
-                      fontFamily: 'Readex Pro',
-                      fontSize: 15,
-                      letterSpacing: 0,
+              child: _isModifying
+                  ? Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _model.textController,
+                            focusNode: _model.textFieldFocusNode,
+                            decoration: InputDecoration(
+                              hintText: '댓글을 입력하세요...',
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.send_sharp),
+                          onPressed: () async {
+                            await _model
+                                .modifyReply(widget.reply.replyId,
+                                    _model.textController.text, context)
+                                .then((_) {
+                              setState(() {
+                                _model.textController?.clear();
+                              });
+                            });
+                          },
+                        ),
+                      ],
+                    )
+                  : Text(
+                      widget.reply.content,
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Readex Pro',
+                            fontSize: 15,
+                            letterSpacing: 0,
+                          ),
                     ),
-              ),
             ),
           ),
           Align(
@@ -116,7 +143,7 @@ class _ReplyWidgetState extends State<ReplyWidget> {
             child: Padding(
               padding: EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
               child: Text(
-                widget.reply.getFormattedDate(), // 댓글 작성 시간
+                widget.reply.getFormattedDate(),
                 style: FlutterFlowTheme.of(context).bodyMedium.override(
                       fontFamily: 'Readex Pro',
                       color: Color(0xFF979797),

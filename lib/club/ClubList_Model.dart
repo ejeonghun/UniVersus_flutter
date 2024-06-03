@@ -38,7 +38,7 @@ Future<List<ClubElement>> getClubList() async {
           clubName: item['clubName'],
           introduction: item['introduction'],
           currentMembers: item['currentMembers'],
-          imageUrl: item['imageUrl'] ?? 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
+          imageUrl: item['clubImageUrl'] ?? 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
         ));
       }
 
