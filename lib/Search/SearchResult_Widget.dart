@@ -66,7 +66,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
               size: 30,
             ),
             onPressed: () async {
-              Navigator.of(context).pop();
+              Navigator.of(context).pushNamed('/main1');
             },
           ),
           title: Padding(

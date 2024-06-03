@@ -5,6 +5,7 @@ class ClubElement {
   String? introduction;
   int currentMembers;
   String imageUrl;
+  String? joinedDate;
 
   ClubElement({
     required this.clubId,
@@ -13,5 +14,8 @@ class ClubElement {
     this.introduction,
     required this.currentMembers,
     required this.imageUrl,
+    this.joinedDate,
   });
+
+
 }

@@ -89,7 +89,7 @@ Future<List<PostElement>> getSearchPost(String? query) async {
         content: postData['content'],
         regDt: postData['regDt'],
         nickname: postData['nickname'] ?? 'sa',
-        categoryName: postData['categoryId'].toString(),
+        categoryName: postData['categoryName'].toString(),
         postImageUrls: postData['postImageUrls'] ?? [],
       ));
     }
