@@ -60,8 +60,7 @@ class _TopRankWidgetState extends State<TopRankWidget> {
                 } else if (snapshot.hasError) {
                   return Text("Error: ${snapshot.error}");
                 } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-                  return buildRankings(
-                      snapshot.data!.sublist(0, 3)); // Assuming top 3
+                  return buildRankings(snapshot.data!);
                 } else {
                   return Text("No rankings available");
                 }
@@ -74,15 +73,54 @@ class _TopRankWidgetState extends State<TopRankWidget> {
   }
 
   Widget buildRankings(List<UniversityRanking> rankings) {
+    rankings.sort((a, b) =>
+        b.rankPoint.compareTo(a.rankPoint)); // Sort by rankPoint descending
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: List.generate(3, (index) {
-        // Correct the order by adjusting the index for the 1st and 2nd places
         int adjustedIndex = index;
-        if (index == 0)
+        if (index == 0 && rankings.length > 1) {
           adjustedIndex = 1; // Show 2nd place as the first item
-        else if (index == 1)
+        } else if (index == 1 && rankings.isNotEmpty) {
           adjustedIndex = 0; // Show 1st place as the second item
+        }
+
+        if (rankings.length <= adjustedIndex) {
+          // Add default values for missing rankings
+          return Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: adjustedIndex == 1 ? 90 : 70,
+                  height: adjustedIndex == 1 ? 90 : 70,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 3),
+                  ),
+                  child: Icon(
+                    Icons.school,
+                    size: adjustedIndex == 1 ? 70 : 50,
+                    color: Colors.grey,
+                  ),
+                ),
+                SizedBox(height: adjustedIndex == 1 ? 5 : 10),
+                Text(
+                  '데이터없음',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  ["\u{1F948}", "\u{1F947}", "\u{1F949}"][index] + ' 0 Points',
+                  style: TextStyle(color: Colors.white, fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        }
 
         return Expanded(
           child: Column(
@@ -93,10 +131,8 @@ class _TopRankWidgetState extends State<TopRankWidget> {
                 offset: Offset(0,
                     adjustedIndex == 0 ? -20 : 0), // Elevate only the 1st place
                 child: buildRankItem(
-                    rankings.length > adjustedIndex
-                        ? rankings[adjustedIndex]
-                        : null,
-                    ["\u{1F947}", "\u{1F948}", "\u{1F949}"][adjustedIndex],
+                    rankings[adjustedIndex],
+                    ["\u{1F948}", "\u{1F947}", "\u{1F949}"][index],
                     adjustedIndex == 0,
                     0),
               ),
@@ -107,11 +143,8 @@ class _TopRankWidgetState extends State<TopRankWidget> {
     );
   }
 
-  Widget buildRankItem(UniversityRanking? ranking, String medal,
-      bool isElevated, double verticalOffset) {
-    if (ranking == null) {
-      return Container(); // Return an empty container if there's no ranking data
-    }
+  Widget buildRankItem(UniversityRanking ranking, String medal, bool isElevated,
+      double verticalOffset) {
     return Transform.translate(
       offset: Offset(0, verticalOffset),
       child: Column(
