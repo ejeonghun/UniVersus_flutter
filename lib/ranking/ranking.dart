@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:universus/ranking/dapartmentRank.dart';
+import 'package:universus/ranking/dapartmentRankList.dart';
 import 'package:universus/ranking/rankList.dart';
 import 'package:universus/ranking/topRank.dart'; // 상위 랭크 위젯
 
@@ -46,9 +46,8 @@ class _RankingPageState extends State<RankingPage>
           // 학과 랭킹 페이지
           Column(
             children: [
-              TopRankWidget(), // 상위 랭킹 위젯, 학과별 랭킹을 보여줄 경우 이 위젯 내부 로직 수정 필요
               Expanded(
-                child: RanklistWidget(), //   DeptRanklistWidget,4위 이상 랭크 리스트, 학과별 데이터로 구성 필요
+                child: DepartmentRanklistWidget(), // 학과 랭킹 리스트
               ),
             ],
           ),

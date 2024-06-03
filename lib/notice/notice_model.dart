@@ -41,6 +41,13 @@ class Notification {
       read: json['read'],
     );
   }
+
+
+
+
+
+
+
 }
 
 class NotificationModel {
@@ -48,7 +55,7 @@ class NotificationModel {
     DioApiCall api = DioApiCall();
     String? memberIdx = await UserData.getMemberIdx();
     try {
-      final response = await api.get('/notify/list?memberIdx=$memberIdx');
+      final response = await api.get('/notify/list?memberIdx=${memberIdx}');
       print("API Response:  $response");
       if (response['success'] == true && response['data'] != null) {
         List<Notification> notifications = (response['data'] as List)

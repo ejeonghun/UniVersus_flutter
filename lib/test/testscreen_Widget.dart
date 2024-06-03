@@ -450,6 +450,46 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
                               child: FFButtonWidget(
                                 onPressed: () async {
                                   Navigator.of(context)
+                                      .pushNamed('/UnivBattleRecordPage');
+                                },
+                                text: '승패',
+                                options: FFButtonOptions(
+                                  height: 40,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24, 0, 24, 0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 0, 0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  Navigator.of(context)
                                       .pushNamed('/club/update');
                                 },
                                 text: '모임 수정',
