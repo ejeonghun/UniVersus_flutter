@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:universus/class/club/clubElement.dart';
+import 'package:universus/club/ClubMain_Widget.dart';
 
 import 'clublist_ex_Model.dart';
 export 'clublist_ex_Model.dart';
@@ -49,6 +50,16 @@ class _ClublistExWidgetState extends State<ClublistExWidget> {
         final club = widget.clubs[index];
         return Padding(
           padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 20),
+          child: GestureDetector(
+            onTap: () {
+              // 클럽 상세 페이지로 이동
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ClubMainWidget(clubId: club.clubId),
+                ),
+              );
+            },
           child: Row(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -127,6 +138,7 @@ class _ClublistExWidgetState extends State<ClublistExWidget> {
               ),
             ],
           ),
+        ),
         );
       },
     );

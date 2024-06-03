@@ -96,4 +96,15 @@ class DioApiCall {
       return {'error': e.toString()};
     }
   }
+  Future<Map<String, dynamic>> modify(
+      String url, Map<String, dynamic> data) async {
+    try {
+      Response response = await dio.patch((baseUrl + url), data: data);
+      return response.data;
+    } catch (e) {
+      print(e);
+      return {'error': e.toString()};
+    }
+  }
+  
 }
