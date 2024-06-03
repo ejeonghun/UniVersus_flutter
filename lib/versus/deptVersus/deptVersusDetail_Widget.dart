@@ -115,112 +115,154 @@ class _deptVersusDetailWidgetState extends State<deptVersusDetailWidget> {
                   top: true,
                   child: SingleChildScrollView(
                     child: Column(
-  mainAxisSize: MainAxisSize.max,
-  children: [
-    Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _model.getIcon(snapshot.data!.eventId!),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(3.0, 0.0, 0.0, 0.0),
-            child: Text(
-              "${_model.getEventText(snapshot.data!.eventId!)}",
-              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                    fontFamily: 'Readex Pro',
-                    fontSize: 32.0,
-                    letterSpacing: 0.0,
-                    fontWeight: FontWeight.w600,
-                    useGoogleFonts: false,
-                  ),
-            ),
-          ),
-        ],
-      ),
-    ),
-    Divider(
-      thickness: 1.0,
-      indent: 30.0,
-      endIndent: 30.0,
-      color: FlutterFlowTheme.of(context).secondaryText,
-    ),
-    if (snapshot.data!.winUnivName != 'null')
-      Text(
-        "승리팀 : ${snapshot.data!.winUnivName}",
-        style: TextStyle(fontSize: 22),
-      ),
-    Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 5.0),
-                child: Text(
-                  '제 1팀',
-                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily: 'Readex Pro',
-                        fontSize: 18.0,
-                        letterSpacing: 0.0,
-                        fontWeight: FontWeight.w600,
-                        useGoogleFonts: false,
-                      ),
-                ),
-              ),
-              Container(
-                width: 100.0,
-                height: 100.0,
-                decoration: BoxDecoration(
-                  color: FlutterFlowTheme.of(context).secondary,
-                  borderRadius: BorderRadius.circular(50.0),
-                ),
-                child: Container(
-                  width: 120.0,
-                  height: 120.0,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: Image.network(
-                    snapshot.data!.hostTeamUnivLogo ?? 'https://picsum.photos/seed/260/600',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Padding(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 10.0, 0.0, 0.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              _model.getIcon(snapshot.data!.eventId!),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    3.0, 0.0, 0.0, 0.0),
+                                child: Text(
+                                  "${_model.getEventText(snapshot.data!.eventId!)}",
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        fontSize: 32.0,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FontWeight.w600,
+                                        useGoogleFonts: false,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Divider(
+                          thickness: 1.0,
+                          indent: 30.0,
+                          endIndent: 30.0,
+                          color: FlutterFlowTheme.of(context).secondaryText,
+                        ),
+                        if (snapshot.data!.winUnivName != 'null')
+                          Text(
+                            "승리팀 : ${snapshot.data!.winUnivName}",
+                            style: TextStyle(fontSize: 22),
+                          ),
+                        if (snapshot.data!.status == 'COMPLETED')
+                          Container(
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                '${snapshot.data!.hostScore} Score : ${snapshot.data!.guestScore} Score',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Readex Pro',
+                                      letterSpacing: 0,
+                                    ),
+                              ),
+                            ),
+                          ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 10.0, 0.0, 0.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  // 승리팀이 host팀일 경우 왕관 아이콘 표시
+                                  snapshot.data!.winUniv ==
+                                          snapshot.data!.hostUnivId
+                                      ? FaIcon(
+                                          FontAwesomeIcons.crown,
+                                          color: FlutterFlowTheme.of(context)
+                                              .tertiary,
+                                          size: 24,
+                                        )
+                                      : FaIcon(
+                                          FontAwesomeIcons.crown,
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryBackground,
+                                          size: 24,
+                                        ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 5.0),
+                                    child: Text(
+                                      '제 1팀',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Readex Pro',
+                                            fontSize: 18.0,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w600,
+                                            useGoogleFonts: false,
+                                          ),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 100.0,
+                                    height: 100.0,
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondary,
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    child: Container(
+                                      width: 120.0,
+                                      height: 120.0,
+                                      clipBehavior: Clip.antiAlias,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Image.network(
+                                        snapshot.data!.hostTeamUnivLogo ??
+                                            'https://picsum.photos/seed/260/600',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 5.0, 0.0, 0.0),
-                                    child:
-              Container(
-                width: 100.0, // Column의 너비를 고정
-                child: AutoSizeText(
-                  snapshot.data!.hostTeamName ?? ' 오류 ',
-                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily: 'Readex Pro',
-                        letterSpacing: 0.0,
-                        fontWeight: FontWeight.w600,
-                        useGoogleFonts: false,
-                      ),
-                  maxLines: 2,
-                  minFontSize: 10,
-                  textAlign: TextAlign.center, // 텍스트를 중앙 정렬
-                ),
-              ),),
-              TeamMemberDropdown(
-                teamMembers: snapshot.data!.hostTeamMembers!,
-                hostLeader: snapshot.data!.hostLeaderId!,
-                guestLeader: snapshot.data!.guestLeaderId,
-              ),
-            ],
-          ),
-        
-
+                                    child: Container(
+                                      width: 100.0, // Column의 너비를 고정
+                                      child: AutoSizeText(
+                                        snapshot.data!.hostTeamName ?? ' 오류 ',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.w600,
+                                              useGoogleFonts: false,
+                                            ),
+                                        maxLines: 2,
+                                        minFontSize: 10,
+                                        textAlign:
+                                            TextAlign.center, // 텍스트를 중앙 정렬
+                                      ),
+                                    ),
+                                  ),
+                                  TeamMemberDropdown(
+                                    teamMembers:
+                                        snapshot.data!.hostTeamMembers!,
+                                    hostLeader: snapshot.data!.hostLeaderId!,
+                                    guestLeader: snapshot.data!.guestLeaderId,
+                                  ),
+                                ],
+                              ),
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(8.0),
                                 child: Image.asset(
@@ -232,6 +274,22 @@ class _deptVersusDetailWidgetState extends State<deptVersusDetailWidget> {
                               Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
+                                  // 승리팀이 host팀일 경우 왕관 아이콘 표시
+                                  snapshot.data!.winUniv !=
+                                              snapshot.data!.hostUnivId &&
+                                          snapshot.data!.winUniv != 0
+                                      ? FaIcon(
+                                          FontAwesomeIcons.crown,
+                                          color: FlutterFlowTheme.of(context)
+                                              .tertiary,
+                                          size: 24,
+                                        )
+                                      : FaIcon(
+                                          FontAwesomeIcons.crown,
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryBackground,
+                                          size: 24,
+                                        ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 0.0, 0.0, 5.0),
@@ -274,20 +332,24 @@ class _deptVersusDetailWidgetState extends State<deptVersusDetailWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 5.0, 0.0, 0.0),
                                     child: Container(
-                width: 100.0, // Column의 너비를 고정
-                child: AutoSizeText(
-                  snapshot.data!.guestTeamName ?? ' 오류 ',
-                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily: 'Readex Pro',
-                        letterSpacing: 0.0,
-                        fontWeight: FontWeight.w600,
-                        useGoogleFonts: false,
-                      ),
-                  maxLines: 2,
-                  minFontSize: 10,
-                  textAlign: TextAlign.center, // 텍스트를 중앙 정렬
-                ),
-              ),),
+                                      width: 100.0, // Column의 너비를 고정
+                                      child: AutoSizeText(
+                                        snapshot.data!.guestTeamName ?? ' 오류 ',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.w600,
+                                              useGoogleFonts: false,
+                                            ),
+                                        maxLines: 2,
+                                        minFontSize: 10,
+                                        textAlign:
+                                            TextAlign.center, // 텍스트를 중앙 정렬
+                                      ),
+                                    ),
+                                  ),
                                   TeamMemberDropdown(
                                       teamMembers:
                                           snapshot.data!.guestTeamMembers!,
@@ -353,6 +415,42 @@ class _deptVersusDetailWidgetState extends State<deptVersusDetailWidget> {
                                       useGoogleFonts: false,
                                     ),
                               ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Container(
+                            width: MediaQuery.sizeOf(context).width * 0.7,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context).alternate,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(
+                                  '생성일 : ${snapshot.data!.getRegDate}',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        letterSpacing: 0.0,
+                                        useGoogleFonts: false,
+                                      ),
+                                ),
+                                if (snapshot.data!.endDate != '')
+                                  Text(
+                                    '종료일 : ${snapshot.data!.getEndDate}',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily: 'Readex Pro',
+                                          letterSpacing: 0.0,
+                                          useGoogleFonts: false,
+                                        ),
+                                  ),
+                              ],
                             ),
                           ),
                         ),
@@ -533,41 +631,6 @@ class _deptVersusDetailWidgetState extends State<deptVersusDetailWidget> {
                               ),
                             ),
                           ),
-                        Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Container(
-                            width: MediaQuery.sizeOf(context).width * 0.7,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).alternate,
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  '생성일 : ${snapshot.data!.getRegDate}',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        letterSpacing: 0.0,
-                                        useGoogleFonts: false,
-                                      ),
-                                ),
-                                Text(
-                                  '종료일 : ',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        letterSpacing: 0.0,
-                                        useGoogleFonts: false,
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
 
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(

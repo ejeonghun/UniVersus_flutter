@@ -26,6 +26,9 @@ class versusDetail {
   int? hostUnivId; // 대표 팀 대학 id
   int? guestUnivId; // 게스트 팀 대학 id
   String? endDate; // 대항전 종료 날짜
+  int? hostScore; // 대표 팀 점수
+  int? guestScore; // 게스트 팀 점수
+  int? winUniv; // 이긴 대학 univId
 
   // 팀 정보
   List<Map<String, dynamic>>? hostTeamMembers; // 대표 팀 멤버 리스트
@@ -58,6 +61,9 @@ class versusDetail {
     this.hostUnivId,
     this.guestUnivId,
     this.endDate,
+    this.hostScore,
+    this.guestScore,
+    this.winUniv,
   });
 
   // Getter methods
