@@ -1,4 +1,5 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:universus/class/versus/versusElement.dart';
 import 'versusSearch_Widget.dart' show VersusSearchWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

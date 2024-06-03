@@ -1,6 +1,7 @@
 import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/versus/versusElement.dart';
 import 'package:universus/versus/component/versusElement_Widget.dart';
+import 'package:universus/versus/component/versusSearch_Model.dart';
 import 'package:universus/versus/component/versusSearch_Widget.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'versusList_Widget.dart' show VersusListWidget;
@@ -16,7 +17,6 @@ class VersusListModel extends FlutterFlowModel<VersusListWidget> {
   late VersusElementModel versusElementModel1;
   // Model for versusElement component.
   late VersusElementModel versusElementModel2;
-
 
   /*
   * @param statusCode: 0 - 모집중 , 1 - 대기중 , 2 - 진행중, 3 - 경기 준비완료 , 4 - 경기 종료
@@ -54,7 +54,7 @@ class VersusListModel extends FlutterFlowModel<VersusListWidget> {
     }
   }
 
-    /*
+  /*
   * @param statusCode: 0 - 모집중 , 1 - 대기중 , 2 - 진행중, 3 - 경기 준비완료 , 4 - 경기 종료
   * @return List<versusElement>: 대결 리스트
   * @throws Exception: 대결 리스트 조회 실패 시 예외 발생
