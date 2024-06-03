@@ -1,3 +1,5 @@
+import 'package:flutterflow_ui/flutterflow_ui.dart';
+
 class ClubElement {
   int clubId;
   String eventName;
@@ -5,7 +7,7 @@ class ClubElement {
   String? introduction;
   int currentMembers;
   String imageUrl;
-  String? joinedDate;
+  String? joinedDt;
 
   ClubElement({
     required this.clubId,
@@ -14,8 +16,11 @@ class ClubElement {
     this.introduction,
     required this.currentMembers,
     required this.imageUrl,
-    this.joinedDate,
+    this.joinedDt,
   });
-
-
+  String getFormattedDate() {
+    // Assuming regDt is in ISO 8601 format, for example "2023-05-21T10:30:00"
+    DateTime dateTime = DateTime.parse(joinedDt!);
+    return DateFormat('yyyy-MM-dd').format(dateTime);
+  }
 }

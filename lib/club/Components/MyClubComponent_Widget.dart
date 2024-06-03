@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:universus/class/club/clubElement.dart';
+import 'package:universus/club/ClubMain_Widget.dart';
 
 import 'MyClubComponent_model.dart';
 export 'MyClubComponent_model.dart';
@@ -47,6 +48,16 @@ class _MyClubComponentWidgetState extends State<MyClubComponentWidget> {
         final club = widget.clubs[index];
         return Padding(
           padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 1),
+          child: GestureDetector(
+            onTap: () {
+              // 클럽 상세 페이지로 이동
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ClubMainWidget(clubId: club.clubId),
+                ),
+              );
+            },
           child: Container(
             width: 100,
             height: 72,
@@ -111,7 +122,7 @@ class _MyClubComponentWidgetState extends State<MyClubComponentWidget> {
                             ),
                           ),
                           Text(
-                            '가입일: ${club.joinedDate}', // Assuming joinedDate is a property of ClubElement
+                            club.getFormattedDate(),
                             style: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
@@ -140,6 +151,7 @@ class _MyClubComponentWidgetState extends State<MyClubComponentWidget> {
               ),
             ),
           ),
+        ),
         );
       },
     );

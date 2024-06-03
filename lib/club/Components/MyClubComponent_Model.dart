@@ -19,6 +19,7 @@ Future<List<ClubElement>> getJoinedClubsList(int memberIdx) async {
         clubName: item['clubName'],
         introduction: item['introduction'],
         currentMembers: item['currentMembers'],
+        joinedDt: item['joinedDt'],
         imageUrl: item['imageUrl'] ?? 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
       ));
     }
