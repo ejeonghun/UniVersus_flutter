@@ -1,17 +1,17 @@
-import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:universus/versus/versusList_Model.dart';
-import 'package:universus/versus/versusList_Widget.dart';
-
+import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'versusSearch_Model.dart';
-export 'versusSearch_Model.dart';
 
 class VersusSearchWidget extends StatefulWidget {
-  const VersusSearchWidget({Key? key, required this.setStatusCode, required this.selectedIndex}) : super(key: key);
-  final Function setStatusCode;
+  const VersusSearchWidget({
+    Key? key,
+    required this.onSearch,
+    required this.setStatusCode,
+    required this.selectedIndex,
+  }) : super(key: key);
+
+  final Function(String) onSearch; // 검색 콜백
+  final Function(int) setStatusCode; // Callback to set status code
   final int selectedIndex; // Receive the selected index from the parent
 
   @override
@@ -21,7 +21,7 @@ class VersusSearchWidget extends StatefulWidget {
 class _VersusSearchWidgetState extends State<VersusSearchWidget> {
   late VersusSearchModel _model;
   List<String> options = ['전체', '모집 중', '시작 전', '진행 중', '종료'];
-  
+
   @override
   void setState(VoidCallback callback) {
     super.setState(callback);
@@ -35,13 +35,16 @@ class _VersusSearchWidgetState extends State<VersusSearchWidget> {
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
 
+    _model.textController?.addListener(() {
+      widget.onSearch(_model.textController.text); // 콜백 함수를 호출하여 검색어를 전달합니다.
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
   void dispose() {
     _model.maybeDispose();
-
     super.dispose();
   }
 
@@ -132,14 +135,14 @@ class _VersusSearchWidgetState extends State<VersusSearchWidget> {
                   runSpacing: 12.0,
                   children: List<Widget>.generate(options.length, (index) {
                     return ChoiceChip(
-                  label: Text(options[index]),
-                  selected: widget.selectedIndex == index, // Set the selected state based on the received index
-                  onSelected: (selected) {
-                    if (selected) {
-                      widget.setStatusCode(index);
-                    }
-                  },
-                );
+                      label: Text(options[index]),
+                      selected: widget.selectedIndex == index,
+                      onSelected: (selected) {
+                        if (selected) {
+                          widget.setStatusCode(index);
+                        }
+                      },
+                    );
                   }),
                 ),
               ),

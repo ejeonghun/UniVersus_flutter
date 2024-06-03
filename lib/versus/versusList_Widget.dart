@@ -1,16 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:provider/provider.dart';
 import 'package:universus/class/versus/versusElement.dart';
 import 'package:universus/versus/component/versusElement_Widget.dart';
 import 'package:universus/versus/component/versusSearch_Widget.dart';
-import 'package:flutterflow_ui/flutterflow_ui.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
-
 import 'versusList_Model.dart';
-export 'versusList_Model.dart';
+import 'package:lottie/lottie.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class VersusListWidget extends StatefulWidget {
   const VersusListWidget({super.key});
@@ -19,17 +15,30 @@ class VersusListWidget extends StatefulWidget {
   State<VersusListWidget> createState() => _VersusListWidgetState();
 }
 
-class _VersusListWidgetState extends State<VersusListWidget> with SingleTickerProviderStateMixin {
+class _VersusListWidgetState extends State<VersusListWidget>
+    with SingleTickerProviderStateMixin {
   int statusCode = 0; // status 전역 상태값
   late VersusListModel _model;
   bool _showVersusSearchWidget = false; // 검색창 보이기 여부
   late TabController _tabController;
   List<versusElement> versusList = [];
+  List<versusElement> filteredList = [];
+  bool _isLoading = true; // Loading state
+  String searchQuery = '';
 
   // 상태값 변경 함수
-  setStatusCode(int Code) {
+  void setStatusCode(int code) {
     setState(() {
-      statusCode = Code;
+      statusCode = code;
+      _loadVersusList();
+    });
+  }
+
+  // 검색값 변경 함수
+  void setSearchValue(String value) {
+    setState(() {
+      searchQuery = value;
+      _filterList();
     });
   }
 
@@ -43,10 +52,8 @@ class _VersusListWidgetState extends State<VersusListWidget> with SingleTickerPr
 
     _loadVersusList();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
-        // Tab 전환 시 호출되는 메서드
         _loadVersusList();
       }
     });
@@ -56,17 +63,38 @@ class _VersusListWidgetState extends State<VersusListWidget> with SingleTickerPr
   void dispose() {
     _model.dispose();
     _tabController.dispose();
-
     super.dispose();
   }
 
   Future<void> _loadVersusList() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     if (_tabController.index == 0) {
       versusList = await _model.getVersusList(statusCode);
     } else {
       versusList = await _model.getVersusListDept(statusCode);
     }
-    setState(() {});
+
+    _filterList(); // Apply search filter
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  void _filterList() {
+    if (searchQuery.isEmpty) {
+      filteredList = versusList;
+    } else {
+      filteredList = versusList
+          .where((element) =>
+              element.hostTeamName!.contains(searchQuery) ||
+              element.guestTeamName!.contains(searchQuery) ||
+              element.content!.contains(searchQuery))
+          .toList();
+    }
   }
 
   @override
@@ -92,7 +120,8 @@ class _VersusListWidgetState extends State<VersusListWidget> with SingleTickerPr
         ),
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-          iconTheme: IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
+          iconTheme:
+              IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
           automaticallyImplyLeading: true,
           title: Text(
             '대항전',
@@ -160,11 +189,8 @@ class _VersusListWidgetState extends State<VersusListWidget> with SingleTickerPr
   }
 
   Widget _buildVersusList(BuildContext context) {
-    return FutureBuilder(
-      future: _tabController.index == 0 ? _model.getVersusList(statusCode) : _model.getVersusListDept(statusCode),
-      builder: (BuildContext context, AsyncSnapshot<List<versusElement>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+    return _isLoading
+        ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -173,11 +199,8 @@ class _VersusListWidgetState extends State<VersusListWidget> with SingleTickerPr
                 Text('데이터를 불러오는 중...'),
               ],
             ),
-          );
-        } else if (snapshot.hasError) {
-          return Text('오류: ${snapshot.error}');
-        } else {
-          return SafeArea(
+          )
+        : SafeArea(
             top: true,
             child: ListView(
               children: [
@@ -193,8 +216,12 @@ class _VersusListWidgetState extends State<VersusListWidget> with SingleTickerPr
                     model: _model.versusSearchModel,
                     updateCallback: () => setState(() {}),
                     child: VersusSearchWidget(
-                      setStatusCode: setStatusCode,
-                      selectedIndex: statusCode, // 해당 값을 전해줌으로써 ChoiceChip에 선택이 되어 있게함
+                      onSearch:
+                          setSearchValue, // Pass the setSearchValue callback
+                      setStatusCode:
+                          setStatusCode, // Pass the setStatusCode callback
+                      selectedIndex:
+                          statusCode, // 해당 값을 전해줌으로써 ChoiceChip에 선택이 되어 있게함
                     ),
                   ),
                 if (responsiveVisibility(
@@ -207,18 +234,18 @@ class _VersusListWidgetState extends State<VersusListWidget> with SingleTickerPr
                     height: 24.0,
                     decoration: BoxDecoration(),
                   ),
-                if (snapshot.data != null && snapshot.data!.isNotEmpty)
+                if (filteredList.isNotEmpty)
                   ListView.separated(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     separatorBuilder: (context, index) => SizedBox(height: 1.0),
-                    itemCount: snapshot.data!.length,
+                    itemCount: filteredList.length,
                     itemBuilder: (context, index) {
                       return wrapWithModel(
                         model: _model.versusElementModel1,
                         updateCallback: () => setState(() {}),
                         child: VersusElementWidget(
-                          element: snapshot.data![index],
+                          element: filteredList[index],
                         ),
                       );
                     },
@@ -231,8 +258,5 @@ class _VersusListWidgetState extends State<VersusListWidget> with SingleTickerPr
               ],
             ),
           );
-        }
-      },
-    );
   }
 }
