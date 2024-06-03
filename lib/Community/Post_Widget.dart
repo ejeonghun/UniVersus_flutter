@@ -98,7 +98,6 @@ class _PostWidgetState extends State<PostWidget> {
                           color: FlutterFlowTheme.of(context).primaryText,
                           fontSize: 20,
                           letterSpacing: 0,
-                          fontWeight: FontWeight.normal,
                         ),
                   ),
                 ),
@@ -115,7 +114,7 @@ class _PostWidgetState extends State<PostWidget> {
                       Align(
                         alignment: AlignmentDirectional(0, 0),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(20, 20, 0, 0),
+                          padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
@@ -128,8 +127,8 @@ class _PostWidgetState extends State<PostWidget> {
                                   borderRadius: BorderRadius.circular(24),
                                   child: Image.network(
                                     post.getProfileImgUrl,
-                                    width: 40,
-                                    height: 40,
+                                    width: 30,
+                                    height: 30,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -139,7 +138,7 @@ class _PostWidgetState extends State<PostWidget> {
                                     EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,                                
                                   children: [
                                     Align(
                                       alignment: AlignmentDirectional(0, 0),
@@ -178,7 +177,7 @@ class _PostWidgetState extends State<PostWidget> {
                       Align(
                         alignment: AlignmentDirectional(-1, 0),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(20, 15, 0, 0),
+                          padding: EdgeInsetsDirectional.fromSTEB(60, 15, 0, 0),
                           child: AutoSizeText(
                             post.content,
                             style: FlutterFlowTheme.of(context)

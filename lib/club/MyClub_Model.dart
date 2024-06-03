@@ -1,13 +1,20 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
-import 'MyClub_Widget.dart' show MyClubWidget;
+import 'package:universus/club/Components/MyClubComponent_Model.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
+import 'package:universus/class/club/clubElement.dart';
 
-class MyClubModel extends FlutterFlowModel<MyClubWidget> {
-  ///  State fields for stateful widgets in this page.
-
+class MyClubModel extends FlutterFlowModel {
   final unfocusNode = FocusNode();
+  late MyClubComponentModel myClubComponentModel;
+  List<ClubElement> joinedClubs = [];
+
+  MyClubModel() {
+    myClubComponentModel = MyClubComponentModel();
+  }
+
+  Future<void> fetchJoinedClubs(int memberIdx) async {
+    joinedClubs = await getJoinedClubsList(memberIdx);
+  }
 
   @override
   void initState(BuildContext context) {}
@@ -15,5 +22,6 @@ class MyClubModel extends FlutterFlowModel<MyClubWidget> {
   @override
   void dispose() {
     unfocusNode.dispose();
+    myClubComponentModel.dispose();
   }
 }
