@@ -214,31 +214,36 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                 );
                               } else if (value == 'ClubUpdate') {
                                 // 정보 수정 버튼 클릭 시 동작
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => UpdateClubWidget(
-                                      clubId: widget.clubId.toString()),
-                                ));
+                                if (clubInfoValue.clubLeader.toString() ==
+                                    _model.memberIdx!) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => UpdateClubWidget(
+                                        clubId: widget.clubId.toString()),
+                                  ));
+                                } else {
+                                  IOSAlertDialog.show(
+                                    context: context,
+                                    title: "실패",
+                                    content: "모임장만 가능합니다!",
+                                  );
+                                }
                               }
                             },
                             itemBuilder: (BuildContext context) {
                               return [
                                 PopupMenuItem(
-                                    value: 'memberManagement',
-                                    child: Text('멤버 관리'),
-                                    onTap: () async {
-                                      if (await _model
-                                              .getClubMembers(widget.clubId) !=
-                                          []) {}
-                                    }),
+                                  value: 'memberManagement',
+                                  child: Text('멤버 관리'),
+                                ),
                                 PopupMenuItem(
-                                    value: 'ClubUpdate',
-                                    child: Text('정보 수정'),
-                                    onTap: () async {}),
+                                  value: 'ClubUpdate',
+                                  child: Text('정보 수정'),
+                                ),
                               ];
                             },
                             icon: Icon(
                               Icons.more_vert,
-                              color: FlutterFlowTheme.of(context).primary,
+                              color: FlutterFlowTheme.of(context).primaryText,
                             ),
                           ),
                         ],

@@ -165,6 +165,21 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                             "승리팀 : ${snapshot.data!.winUnivName}",
                             style: TextStyle(fontSize: 22),
                           ),
+                        if (snapshot.data!.status == 'COMPLETED')
+                          Container(
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                '${snapshot.data!.hostTeamName} ${snapshot.data!.hostScore} Score : ${snapshot.data!.guestTeamName} ${snapshot.data!.guestScore} Score',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Readex Pro',
+                                      letterSpacing: 0,
+                                    ),
+                              ),
+                            ),
+                          ),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 10.0, 0.0, 0.0),
@@ -175,6 +190,21 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                               Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
+                                  // 승리팀이 host팀일 경우 왕관 아이콘 표시
+                                  snapshot.data!.winUniv ==
+                                          snapshot.data!.hostUnivId
+                                      ? FaIcon(
+                                          FontAwesomeIcons.crown,
+                                          color: FlutterFlowTheme.of(context)
+                                              .tertiary,
+                                          size: 24,
+                                        )
+                                      : FaIcon(
+                                          FontAwesomeIcons.crown,
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryBackground,
+                                          size: 24,
+                                        ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 0.0, 0.0, 5.0),
@@ -253,6 +283,22 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                               Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
+                                  // 승리팀이 guest팀일 경우 왕관 아이콘 표시
+                                  snapshot.data!.winUniv !=
+                                              snapshot.data!.hostUnivId &&
+                                          snapshot.data!.winUniv != 0
+                                      ? FaIcon(
+                                          FontAwesomeIcons.crown,
+                                          color: FlutterFlowTheme.of(context)
+                                              .tertiary,
+                                          size: 24,
+                                        )
+                                      : FaIcon(
+                                          FontAwesomeIcons.crown,
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryBackground,
+                                          size: 24,
+                                        ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 0.0, 0.0, 5.0),
@@ -372,6 +418,42 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                       useGoogleFonts: false,
                                     ),
                               ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Container(
+                            width: MediaQuery.sizeOf(context).width * 0.7,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context).alternate,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(
+                                  '생성일 : ${snapshot.data!.getRegDate}',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        letterSpacing: 0.0,
+                                        useGoogleFonts: false,
+                                      ),
+                                ),
+                                if (snapshot.data!.endDate != '')
+                                  Text(
+                                    '종료일 : ${snapshot.data!.getEndDate}',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily: 'Readex Pro',
+                                          letterSpacing: 0.0,
+                                          useGoogleFonts: false,
+                                        ),
+                                  ),
+                              ],
                             ),
                           ),
                         ),
@@ -555,42 +637,6 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                               ),
                             ),
                           ),
-                        Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Container(
-                            width: MediaQuery.sizeOf(context).width * 0.7,
-                            decoration: BoxDecoration(
-                              color: FlutterFlowTheme.of(context).alternate,
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  '생성일 : ${snapshot.data!.getRegDate}',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        letterSpacing: 0.0,
-                                        useGoogleFonts: false,
-                                      ),
-                                ),
-                                if (snapshot.data!.endDate != '')
-                                  Text(
-                                    '종료일 : ${snapshot.data!.getEndDate}',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Readex Pro',
-                                          letterSpacing: 0.0,
-                                          useGoogleFonts: false,
-                                        ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        ),
 
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
