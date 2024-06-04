@@ -113,7 +113,7 @@ class _MainWidgetState extends State<MainWidget> {
                         size: 25,
                       ),
                       onPressed: () {
-                        print('IconButton pressed ...');
+                        Navigator.of(context).pushNamed('/notice');
                       },
                     ),
                   ],

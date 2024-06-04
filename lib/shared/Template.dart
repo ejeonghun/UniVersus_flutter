@@ -108,6 +108,31 @@ class Template {
     }
   }
 
+  static String getEventIdToText(int eventName) {
+    switch (eventName) {
+      case 1:
+        return '배드민턴';
+      case 2:
+        return '볼링';
+      case 3:
+        return '축구';
+      case 4:
+        return '풋살';
+      case 5:
+        return '야구';
+      case 6:
+        return '농구';
+      case 7:
+        return '당구/포켓몬';
+      case 8:
+        return '탁구';
+      case 9:
+        return 'E-sport';
+      default:
+        return '';
+    }
+  }
+
   static int getCategoryId(String? value) {
     switch (value) {
       case '자유':

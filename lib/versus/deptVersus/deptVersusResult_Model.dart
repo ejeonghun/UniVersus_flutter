@@ -57,7 +57,8 @@ class deptVersusResultModel extends FlutterFlowModel<deptVersusResultWidget> {
           hostTeamName: response['data']['HostTeam']['hostDeptName'],
           hostTeamUnivLogo: response['data']['deptBattle']['univLogo'],
           guestTeamName: response['data']['deptBattle']['guestDeptName'],
-          guestTeamUnivLogo: response['data']['deptBattle']['guestUnivLogo'] ??= 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
+          guestTeamUnivLogo: response['data']['deptBattle']['guestUnivLogo'] ??=
+              'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
           BattleId: response['data']['deptBattle']['deptBattleId'],
           status: response['data']['deptBattle']['matchStatus'],
           hostLeaderId: response['data']['deptBattle']['hostLeader'],
@@ -72,7 +73,8 @@ class deptVersusResultModel extends FlutterFlowModel<deptVersusResultWidget> {
           guestLeaderId: response['data']['deptBattle']['guestLeader'],
           winUnivName: response['data']['winUnivName'] ??= "null",
           hostUnivId: response['data']['deptBattle']['hostDept'], // 호스트팀 deptId
-          guestUnivId: response['data']['deptBattle']['guestDept'] // 게스트팀 deptId
+          guestUnivId: response['data']['deptBattle']
+              ['guestDept'] // 게스트팀 deptId
           );
       debugPrint(res.toString());
       return res;
@@ -99,7 +101,7 @@ class deptVersusResultModel extends FlutterFlowModel<deptVersusResultWidget> {
     final response = await api.post('/deptBattle/resultReq', {
       "deptBattleId": battleId,
       "hostLeader": await UserData.getMemberIdx(),
-      "winUniv": winUnivId,
+      "winDept": winUnivId,
       "hostScore": hostScore,
       "guestScore": guestScore,
     });

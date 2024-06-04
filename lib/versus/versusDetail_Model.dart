@@ -125,8 +125,14 @@ class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
           cost: response['data']['univBattle']['cost'],
           eventId: response['data']['univBattle']['eventId'],
           guestLeaderId: response['data']['univBattle']['guestLeader'],
-          winUnivName: response['data']['winUnivName'] ??= "null");
-      // debugPrint(res.getHostTeamMembers.toString());
+          winUnivName: response['data']['winUnivName'] ??= "null",
+          hostScore: response['data']['univBattle']['hostScore'] ?? 0,
+          guestScore: response['data']['univBattle']['guestScore'] ?? 0,
+          winUniv: response['data']['univBattle']['winUniv'] ?? 0,
+          hostUnivId: response['data']['univBattle']['hostUniv'] ?? 0,
+          matchStartDt: response['data']['univBattle']['matchStartDt'] != null
+              ? DateTime.parse(response['data']['univBattle']['matchStartDt'])
+              : null);
       status = res.status!;
       debugPrint(res.toString());
       return res;
