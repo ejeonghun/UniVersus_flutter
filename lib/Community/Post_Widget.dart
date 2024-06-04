@@ -1,8 +1,7 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
+import 'package:universus/Community/PostElement.dart';
 import 'package:universus/Community/PostElement.dart';
 import 'package:universus/Community/replyElement.dart';
 import 'package:universus/Community/reply_Widget.dart';
@@ -13,7 +12,11 @@ export 'Post_Model.dart';
 
 class PostWidget extends StatefulWidget {
   final int univBoardId;
-  const PostWidget({super.key, required this.univBoardId});
+
+  const PostWidget({
+    super.key,
+    required this.univBoardId,
+  });
 
   @override
   State<PostWidget> createState() => _PostWidgetState();
@@ -21,6 +24,7 @@ class PostWidget extends StatefulWidget {
 
 class _PostWidgetState extends State<PostWidget> {
   late PostModel _model;
+  bool _isModifying = false;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -114,65 +118,101 @@ class _PostWidgetState extends State<PostWidget> {
                       Align(
                         alignment: AlignmentDirectional(0, 0),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              GestureDetector(
-                                onTap: () async {
-                                  await MemberDetails(post.PostMemberIdx)
-                                      .showMemberDetailsModal(context);
-                                },
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(24),
-                                  child: Image.network(
-                                    post.getProfileImgUrl,
-                                    width: 30,
-                                    height: 30,
-                                    fit: BoxFit.cover,
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    await MemberDetails(post.PostMemberIdx)
+                                        .showMemberDetailsModal(context);
+                                  },
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(24),
+                                    child: Image.network(
+                                      post.getProfileImgUrl,
+                                      width: 30,
+                                      height: 30,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.start,                                
-                                  children: [
-                                    Align(
-                                      alignment: AlignmentDirectional(0, 0),
-                                      child: Text(
-                                        post.nickname,
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      8, 0, 0, 0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Align(
+                                        alignment: AlignmentDirectional(0, 0),
+                                        child: Text(
+                                          post.nickname,
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Readex Pro',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .tertiary,
+                                                fontSize: 20,
+                                                letterSpacing: 0,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                        ),
+                                      ),
+                                      Text(
+                                        post.getFormattedDate(),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
                                               fontFamily: 'Readex Pro',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .tertiary,
-                                              fontSize: 20,
+                                              color: Color(0xFF979797),
                                               letterSpacing: 0,
-                                              fontWeight: FontWeight.w600,
                                             ),
                                       ),
-                                    ),
-                                    Text(
-                                      post.getFormattedDate(),
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            color: Color(0xFF979797),
-                                            letterSpacing: 0,
-                                          ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
+                                Spacer(), // Spacer 추가
+                                PopupMenuButton<String>(
+                                  onSelected: (value) {
+                                    // if (value == 'modify') {
+                                    //   setState(() {
+                                    //     _isModifying = true;
+                                    //     _model.textController.text =
+                                    //         widget.univBoardId, context;
+                                    //   });
+                                    // } else if (value == 'delete') {
+                                      _model
+                                          .deletePost(
+                                              widget.univBoardId, context)
+                                          .then((_) {
+                                        setState(() {});
+                                      });
+                                    },
+                                
+                                  itemBuilder: (BuildContext context) {
+                                    return [
+                                      PopupMenuItem(
+                                        value: 'modify',
+                                        child: Text('수정'),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 'delete',
+                                        child: Text('삭제'),
+                                      ),
+                                    ];
+                                  },
+                                  icon: Icon(
+                                    Icons.more_vert,
+                                    color: FlutterFlowTheme.of(context).primaryText,
+                                  ),
+                                ),
+                              ],
+                            )),
                       ),
                       Align(
                         alignment: AlignmentDirectional(-1, 0),
