@@ -92,7 +92,7 @@ class _ReplyWidgetState extends State<ReplyWidget> {
                 },
                 icon: Icon(
                   Icons.more_vert,
-                  color: FlutterFlowTheme.of(context).primary,
+                  color: FlutterFlowTheme.of(context).primaryText,
                 ),
               ),
             ],

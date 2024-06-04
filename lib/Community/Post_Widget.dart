@@ -1,8 +1,7 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
+import 'package:universus/Community/PostElement.dart';
 import 'package:universus/Community/PostElement.dart';
 import 'package:universus/Community/replyElement.dart';
 import 'package:universus/Community/reply_Widget.dart';
@@ -13,7 +12,11 @@ export 'Post_Model.dart';
 
 class PostWidget extends StatefulWidget {
   final int univBoardId;
-  const PostWidget({super.key, required this.univBoardId});
+
+  const PostWidget({
+    super.key,
+    required this.univBoardId,
+  });
 
   @override
   State<PostWidget> createState() => _PostWidgetState();
@@ -21,7 +24,8 @@ class PostWidget extends StatefulWidget {
 
 class _PostWidgetState extends State<PostWidget> {
   late PostModel _model;
-
+  bool _isModifying = false;
+  late TextEditingController _contentController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -32,13 +36,42 @@ class _PostWidgetState extends State<PostWidget> {
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
     _model.getMemberIdx();
+    _contentController = TextEditingController();
   }
 
   @override
   void dispose() {
     _model.dispose();
-
+    _contentController.dispose();
     super.dispose();
+  }
+
+  void _toggleModifyingMode(PostElement post) {
+    setState(() {
+      _isModifying = !_isModifying;
+      if (_isModifying) {
+        _contentController.text = post.content ?? ''; // null 대신 빈 문자열을 사용하여 초기화합니다.
+      } else {
+        _contentController.clear();
+      }
+    });
+  }
+
+  Future<void> _saveChanges(PostElement post) async {
+    // 데이터 전송 전에 _contentController.text가 비어있지 않은지 확인합니다.
+    if (_contentController.text.isNotEmpty) {
+      // 내용이 있다면 업데이트를 진행합니다.
+      setState(() {
+        post.content = _contentController.text;
+        _isModifying = false;
+      });
+      // 여기서 서버에 데이터를 전송하는 로직을 추가합니다.
+    } else {
+      // 내용이 비어있다면 사용자에게 알립니다.
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('내용을 입력해주세요.')),
+      );
+    }
   }
 
   @override
@@ -114,95 +147,166 @@ class _PostWidgetState extends State<PostWidget> {
                       Align(
                         alignment: AlignmentDirectional(0, 0),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              GestureDetector(
-                                onTap: () async {
-                                  await MemberDetails(post.PostMemberIdx)
-                                      .showMemberDetailsModal(context);
-                                },
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(24),
-                                  child: Image.network(
-                                    post.getProfileImgUrl,
-                                    width: 30,
-                                    height: 30,
-                                    fit: BoxFit.cover,
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    await MemberDetails(post.PostMemberIdx)
+                                        .showMemberDetailsModal(context);
+                                  },
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(24),
+                                    child: Image.network(
+                                      post.getProfileImgUrl,
+                                      width: 30,
+                                      height: 30,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.start,                                
-                                  children: [
-                                    Align(
-                                      alignment: AlignmentDirectional(0, 0),
-                                      child: Text(
-                                        post.nickname,
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      8, 0, 0, 0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Align(
+                                        alignment: AlignmentDirectional(0, 0),
+                                        child: Text(
+                                          post.nickname,
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily: 'Readex Pro',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .tertiary,
+                                                fontSize: 20,
+                                                letterSpacing: 0,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                        ),
+                                      ),
+                                      Text(
+                                        post.getFormattedDate(),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
                                               fontFamily: 'Readex Pro',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .tertiary,
-                                              fontSize: 20,
+                                              color: Color(0xFF979797),
                                               letterSpacing: 0,
-                                              fontWeight: FontWeight.w600,
                                             ),
                                       ),
-                                    ),
-                                    Text(
-                                      post.getFormattedDate(),
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            color: Color(0xFF979797),
-                                            letterSpacing: 0,
-                                          ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
+                                Spacer(), // Spacer 추가
+                                PopupMenuButton<String>(
+                                  onSelected: (value) {
+                                    if (value == 'modify') {
+                                      _toggleModifyingMode(post);
+                                    } else if (value == 'delete') {
+                                      _model
+                                          .deletePost(
+                                              widget.univBoardId, context)
+                                          .then((_) {
+                                        setState(() {});
+                                      });
+                                    }
+                                  },
+                                  itemBuilder: (BuildContext context) {
+                                    return [
+                                      PopupMenuItem(
+                                        value: 'modify',
+                                        child: Text('수정'),
+                                      ),
+                                      PopupMenuItem(
+                                        value: 'delete',
+                                        child: Text('삭제'),
+                                      ),
+                                    ];
+                                  },
+                                  icon: Icon(
+                                    Icons.more_vert,
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
+                                ),
+                              ],
+                            )),
                       ),
                       Align(
                         alignment: AlignmentDirectional(-1, 0),
                         child: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(60, 15, 0, 0),
-                          child: AutoSizeText(
-                            post.content,
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Readex Pro',
-                                  fontSize: 18,
-                                  letterSpacing: 0,
-                                  fontWeight: FontWeight.normal,
+                          child: _isModifying
+                              ? TextFormField(
+                                  controller: _contentController,
+                                  maxLines: null,
+                                  decoration: InputDecoration(
+                                    hintText: '내용을 입력하세요...',
+                                    border: OutlineInputBorder(),
+                                  ),
+                                )
+                              : AutoSizeText(
+                                  post.content,
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        fontSize: 18,
+                                        letterSpacing: 0,
+                                        fontWeight: FontWeight.normal,
+                                      ),
                                 ),
-                          ),
                         ),
                       ),
+                      if (_isModifying)
+                        Align(
+                          alignment: AlignmentDirectional(0, 0),
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(60, 10, 0, 0),
+                            child: Row(
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    await _model.modifyPost(
+                                      post.univBoardId,
+                                      post.title,
+                                      _contentController.text,
+                                      post.categoryId!,
+                                      context,
+                                    );
+                                    _saveChanges(post);
+                                  },
+                                  child: Text('저장'),
+                                ),
+                                SizedBox(width: 10),
+                                ElevatedButton(
+                                  onPressed: () => _toggleModifyingMode(post),
+                                  child: Text('취소'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 20),
-                        child: post.postImageUrls
-                                .isEmpty // Check if the list is empty
-                            ? SizedBox() // Render an empty SizedBox if there are no images
+                        child: post.postImageUrls.isEmpty
+                            ? SizedBox()
                             : ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
-                                child: post.postImageUrls.length ==
-                                        1 // Check if there's only one image
+                                child: post.postImageUrls.length == 1
                                     ? Image.network(
-                                        post.postImageUrls[
-                                            0], // Display the first image
+                                        post.postImageUrls[0],
                                         width:
                                             MediaQuery.sizeOf(context).width *
                                                 0.9,
@@ -211,8 +315,7 @@ class _PostWidgetState extends State<PostWidget> {
                                     : GridView.builder(
                                         gridDelegate:
                                             SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount:
-                                              3, // You can adjust the number of columns
+                                          crossAxisCount: 3,
                                         ),
                                         itemCount: post.postImageUrls.length,
                                         itemBuilder: (context, index) {
@@ -225,14 +328,13 @@ class _PostWidgetState extends State<PostWidget> {
                               ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 15), // 왼쪽 마진 추가
+                        padding: EdgeInsets.only(left: 15),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start, // 왼쪽 정렬
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             for (var reply in replies)
                               Padding(
-                                padding:
-                                    EdgeInsets.only(bottom: 15), // 아래 여백 추가
+                                padding: EdgeInsets.only(bottom: 15),
                                 child: ReplyWidget(reply: reply),
                               ),
                           ],
@@ -240,7 +342,6 @@ class _PostWidgetState extends State<PostWidget> {
                       ),
                       Builder(builder: (context) {
                         return Align(
-                          // 댓글입력
                           alignment: AlignmentDirectional(0, -1),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
@@ -389,7 +490,6 @@ class _PostWidgetState extends State<PostWidget> {
                           ),
                         );
                       }),
-                      // 기타 위젯 코드 생략
                     ],
                   ),
                 ),
