@@ -13,7 +13,10 @@ import 'package:universus/notice/notice.dart';
 import 'package:universus/permissonManage.dart';
 import 'package:universus/permissonManage.dart';
 import 'package:universus/shared/paymentResult.dart';
+import 'package:universus/winloseRecord/record.dart';
+import 'package:universus/winloseRecord/record_model.dart';
 import 'package:universus/versus/versusCheck_Widget.dart';
+
 import 'firebase_options.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -215,6 +218,7 @@ class _MyAppState extends State<MyApp> {
               '/result': (context) => PaymentResult(),
               '/ranking': (context) => RankingPage(),
               '/notice': (context) => NoticePage(),
+              '/UnivBattleRecordPage': (context) => UnivBattleRecordPage(),
               '/checkversus': (context) => VersusCheckWidget(
                     battleId: 1,
                   ),

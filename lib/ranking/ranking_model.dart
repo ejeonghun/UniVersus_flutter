@@ -36,9 +36,46 @@ class UniversityRanking {
     );
   }
 
+  void updateValues(UniversityRanking newRanking) {
+    rankPoint += newRanking.rankPoint;
+    winCount += newRanking.winCount;
+    loseCount += newRanking.loseCount;
+    totalCount += newRanking.totalCount;
+  }
+}
 
+class DepartmentRanking {
+  final int deptId;
+  final int eventId;
+  int rankPoint;
+  final String deptName;
+  int winCount;
+  int loseCount;
+  int totalCount;
 
-void updateValues(UniversityRanking newRanking) {
+  DepartmentRanking({
+    required this.deptId,
+    required this.eventId,
+    required this.rankPoint,
+    required this.deptName,
+    required this.winCount,
+    required this.loseCount,
+    required this.totalCount,
+  });
+
+  factory DepartmentRanking.fromJson(Map<String, dynamic> json) {
+    return DepartmentRanking(
+      deptId: json['deptId'],
+      eventId: json['eventId'],
+      rankPoint: json['rankPoint'],
+      deptName: json['deptName'],
+      winCount: json['winCount'],
+      loseCount: json['loseCount'],
+      totalCount: json['totalCount'],
+    );
+  }
+
+  void updateValues(DepartmentRanking newRanking) {
     rankPoint += newRanking.rankPoint;
     winCount += newRanking.winCount;
     loseCount += newRanking.loseCount;
@@ -49,17 +86,20 @@ void updateValues(UniversityRanking newRanking) {
 class RankingModel {
   DioApiCall api = DioApiCall();
 
-  Future<List<UniversityRanking>> getUniversityRankings(List<int> eventIds) async {
+  Future<List<UniversityRanking>> getUniversityRankings(
+      List<int> eventIds) async {
     try {
       Map<int, UniversityRanking> rankingMap = {};
 
       for (int eventId in eventIds) {
         final response = await api.get('/rank/univ/list?eventId=$eventId');
         if (response['success'] == true && response['data'] != null) {
+          print(response['data']);
           List<UniversityRanking> rankings = (response['data'] as List)
               .map((data) => UniversityRanking.fromJson(data))
               .toList();
           for (var ranking in rankings) {
+            print(ranking.toString());
             if (rankingMap.containsKey(ranking.univId)) {
               rankingMap[ranking.univId]!.updateValues(ranking);
             } else {
@@ -74,69 +114,40 @@ class RankingModel {
       return [];
     }
   }
-}
 
-/*
+  Future<List<DepartmentRanking>> getDepartmentRankings() async {
+    String? univId = await UserData.getUnivId();
+    if (univId == null) {
+      throw Exception('No university ID found');
+    }
 
-// 학과
-class DepartmentRanking {
-  final int deptId;
-  final int eventId;
-  final int rankPoint;
-  final String deptName;
-  final int winCount;
-  final int loseCount;
-  final int totalCount;
-  final String logoImg;
-
-  DepartmentRanking({
-    required this.deptId,
-    required this.eventId,
-    required this.rankPoint,
-    required this.deptName,
-    required this.winCount,
-    required this.loseCount,
-    required this.totalCount,
-    required this.logoImg,
-  });
-
-  factory DepartmentRanking.fromJson(Map<String, dynamic> json) {
-    return DepartmentRanking(
-      deptId: json['deptId'],
-      eventId: json['eventId'],
-      rankPoint: json['rankPoint'],
-      deptName: json['deptName'],
-      winCount: json['winCount'],
-      loseCount: json['loseCount'],
-      totalCount: json['totalCount'],
-      logoImg: json['logoImg'],
-    );
-  }
-}
-
-class DepartmentRankingModel {
-  DioApiCall api = DioApiCall();
-
-  Future<List<DepartmentRanking>> getDepartmentRankings(int eventId) async {
     try {
-      String? univId = await UserData.getUnivId();
-      if (univId == null) {
-        throw Exception('No university ID found');
+      Map<int, DepartmentRanking> rankingMap = {};
+
+      for (int eventId = 1; eventId <= 9; eventId++) {
+        final response =
+            await api.get('/rank/dept/list?eventId=$eventId&univId=$univId');
+        if (response['success'] == true && response['data'] != null) {
+          List<DepartmentRanking> rankings = (response['data'] as List)
+              .map((data) => DepartmentRanking.fromJson(data))
+              .toList();
+          for (var ranking in rankings) {
+            if (rankingMap.containsKey(ranking.deptId)) {
+              rankingMap[ranking.deptId]!.updateValues(ranking);
+            } else {
+              rankingMap[ranking.deptId] = ranking;
+            }
+          }
+        }
       }
 
-      final response = await api.get('/rank/dept/list?eventId=$eventId&univId=$univId');
-      if (response['success'] == true && response['data'] != null) {
-        List<DepartmentRanking> rankings = (response['data'] as List)
-            .map((data) => DepartmentRanking.fromJson(data))
-            .toList();
-        return rankings;
-      }
-      return [];
+      List<DepartmentRanking> finalRankings = rankingMap.values.toList();
+      finalRankings.sort((a, b) =>
+          b.rankPoint.compareTo(a.rankPoint)); // Sort by rankPoint descending
+      return finalRankings;
     } catch (e) {
       print('Error fetching department rankings: $e');
       return [];
     }
   }
 }
-
-*/
