@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,6 +12,7 @@ import 'package:universus/shared/IOSAlertDialog.dart';
 import 'Post_Widget.dart' show PostWidget;
 
 class PostModel extends FlutterFlowModel<PostWidget> {
+  DioApiCall api = DioApiCall();
   final unfocusNode = FocusNode();
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
@@ -60,7 +62,7 @@ class PostModel extends FlutterFlowModel<PostWidget> {
             .map<String>((imageUrl) => imageUrl.toString())
             .toList(),
         // postImage 배열로 불러온다.
-
+        categoryId: response['data']['categoryId'],
         profileImgUrl: response['data']['profileImgUrl'] ??
             'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
       );
@@ -154,45 +156,50 @@ class PostModel extends FlutterFlowModel<PostWidget> {
     debugPrint(univBoardId.toString());
   }
 
-  Future<void> modifyPost(int univBoardId, String content, BuildContext context) async {
-    DioApiCall api = DioApiCall();
-    String? memberIdx = await UserData.getMemberIdx();
-    IOSAlertDialog.confirm(
-      context: context,
-      title: '게시글 수정',
-      content: '게시글을 수정하시겠습니까?',
-      onConfirm: () async {
-        final response = await api.modify(
-          '/reply/modify',
-          {
-            'replyId': univBoardId,
-            'content': content,
-            'memberIdx': memberIdx,
-            'anonymous' : 0,
-          },
+  Future<void> modifyPost(int univBoardId, String title, String content, int categoryId, BuildContext context) async {
+  DioApiCall api = DioApiCall();
+  String? memberIdx = await UserData.getMemberIdx();
+
+  // 사용자 확인을 받음
+  IOSAlertDialog.confirm(
+    context: context,
+    title: '게시글 수정',
+    content: '게시글을 수정하시겠습니까?',
+    onConfirm: () async { // 사용자가 확인을 눌렀을 때 실행될 콜백
+      final response = await api.modify(
+        '/univBoard/modify?univBoardId=${univBoardId}&memberIdx=${memberIdx}&title=${title}&content=${content}&anonymous=${0}&categoryId=${categoryId}',        
+      );
+
+      debugPrint("Response: $response");
+
+      if (response['success'] == true) {
+        IOSAlertDialog.show(
+          content: '게시글이 수정되었습니다.', 
+          title: '성공', 
+          context: context
         );
-        if (response['data'] == true) {
-          IOSAlertDialog.show(
-              content: '게시글이 수정되었습니다.', title: '성공', context: context);
-        } else {
-          return IOSAlertDialog.show(
-              content: '다른 회원이 작성한 게시글을 수정할 수 없습니다.',
-              title: '실패',
-              context: context);
-        }
-      },
-      onCancel: () {
-        // 뒤로가기
-      },
-    );
-    debugPrint("실행");
-    debugPrint(memberIdx);
-    debugPrint(univBoardId.toString());
-  }
-  @override
-  void dispose() {
-    unfocusNode.dispose();
-    textFieldFocusNode?.dispose();
-    textController?.dispose();
-  }
+      } else {
+        IOSAlertDialog.show(
+          content: '다른 회원이 작성한 게시글을 수정할 수 없습니다.',
+          title: '실패',
+          context: context
+        );
+      }
+    },
+    onCancel: () {
+      // 뒤로가기 또는 취소 동작
+    },
+  );
+
+  debugPrint("실행");
+  debugPrint(memberIdx);
+  debugPrint(univBoardId.toString());
+}
+
+@override
+void dispose() {
+  unfocusNode.dispose();
+  textFieldFocusNode?.dispose();
+  textController?.dispose();
+}
 }
