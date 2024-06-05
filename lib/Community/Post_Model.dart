@@ -127,6 +127,7 @@ class PostModel extends FlutterFlowModel<PostWidget> {
       // getComments(univBoardId);
     } else {}
   }
+
   Future<void> deletePost(int univBoardId, BuildContext context) async {
     DioApiCall api = DioApiCall();
     String? memberIdx = await UserData.getMemberIdx();
@@ -135,8 +136,8 @@ class PostModel extends FlutterFlowModel<PostWidget> {
       title: '게시글 삭제',
       content: '게시글을 삭제하시겠습니까?',
       onConfirm: () async {
-        final response = await api
-            .delete('/univBoard/delete?univBoardId=${univBoardId}&memberIdx=${memberIdx}');
+        final response = await api.delete(
+            '/univBoard/delete?univBoardId=${univBoardId}&memberIdx=${memberIdx}');
         if (response['success'] == true) {
           return IOSAlertDialog.show(
               content: '게시글이 삭제되었습니다.', title: '성공', context: context);
@@ -156,50 +157,47 @@ class PostModel extends FlutterFlowModel<PostWidget> {
     debugPrint(univBoardId.toString());
   }
 
-  Future<void> modifyPost(int univBoardId, String title, String content, int categoryId, BuildContext context) async {
-  DioApiCall api = DioApiCall();
-  String? memberIdx = await UserData.getMemberIdx();
+  Future<void> modifyPost(int univBoardId, String title, String content,
+      int categoryId, BuildContext context) async {
+    DioApiCall api = DioApiCall();
+    String? memberIdx = await UserData.getMemberIdx();
 
-  // 사용자 확인을 받음
-  IOSAlertDialog.confirm(
-    context: context,
-    title: '게시글 수정',
-    content: '게시글을 수정하시겠습니까?',
-    onConfirm: () async { // 사용자가 확인을 눌렀을 때 실행될 콜백
-      final response = await api.modify(
-        '/univBoard/modify?univBoardId=${univBoardId}&memberIdx=${memberIdx}&title=${title}&content=${content}&anonymous=${0}&categoryId=${categoryId}',        
-      );
+    // 사용자 확인을 받음
+    IOSAlertDialog.confirm(
+      context: context,
+      title: '게시글 수정',
+      content: '게시글을 수정하시겠습니까?',
+      onConfirm: () async {
+        // 사용자가 확인을 눌렀을 때 실행될 콜백
+        final response = await api.modifyPost(
+            '/univBoard/modify?univBoardId=${univBoardId}&memberIdx=${memberIdx}&title=${title}&content=${content}&anonymous=${0}&categoryId=${categoryId}');
 
-      debugPrint("Response: $response");
+        debugPrint("Response: $response");
 
-      if (response['success'] == true) {
-        IOSAlertDialog.show(
-          content: '게시글이 수정되었습니다.', 
-          title: '성공', 
-          context: context
-        );
-      } else {
-        IOSAlertDialog.show(
-          content: '다른 회원이 작성한 게시글을 수정할 수 없습니다.',
-          title: '실패',
-          context: context
-        );
-      }
-    },
-    onCancel: () {
-      // 뒤로가기 또는 취소 동작
-    },
-  );
+        if (response['success'] == true) {
+          IOSAlertDialog.show(
+              content: '게시글이 수정되었습니다.', title: '성공', context: context);
+        } else {
+          IOSAlertDialog.show(
+              content: '다른 회원이 작성한 게시글을 수정할 수 없습니다.',
+              title: '실패',
+              context: context);
+        }
+      },
+      onCancel: () {
+        // 뒤로가기 또는 취소 동작
+      },
+    );
 
-  debugPrint("실행");
-  debugPrint(memberIdx);
-  debugPrint(univBoardId.toString());
-}
+    debugPrint("실행");
+    debugPrint(memberIdx);
+    debugPrint(univBoardId.toString());
+  }
 
-@override
-void dispose() {
-  unfocusNode.dispose();
-  textFieldFocusNode?.dispose();
-  textController?.dispose();
-}
+  @override
+  void dispose() {
+    unfocusNode.dispose();
+    textFieldFocusNode?.dispose();
+    textController?.dispose();
+  }
 }
