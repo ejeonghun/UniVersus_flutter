@@ -65,6 +65,7 @@ class PostModel extends FlutterFlowModel<PostWidget> {
         categoryId: response['data']['categoryId'],
         profileImgUrl: response['data']['profileImgUrl'] ??
             'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
+        eventId: response['data']['eventId'],
       );
     } else {
       // 조회 실패
@@ -157,8 +158,7 @@ class PostModel extends FlutterFlowModel<PostWidget> {
     debugPrint(univBoardId.toString());
   }
 
-  Future<void> modifyPost(int univBoardId, String title, String content,
-      int categoryId, BuildContext context) async {
+  Future<void> modifyPost(PostElement post, BuildContext context) async {
     DioApiCall api = DioApiCall();
     String? memberIdx = await UserData.getMemberIdx();
 
@@ -169,8 +169,14 @@ class PostModel extends FlutterFlowModel<PostWidget> {
       content: '게시글을 수정하시겠습니까?',
       onConfirm: () async {
         // 사용자가 확인을 눌렀을 때 실행될 콜백
-        final response = await api.modifyPost(
-            '/univBoard/modify?univBoardId=${univBoardId}&memberIdx=${memberIdx}&title=${title}&content=${content}&anonymous=${0}&categoryId=${categoryId}');
+        final response;
+        if (post.eventId == null) {
+          response = await api.modifyPost(
+              '/univBoard/modify?univBoardId=${post.univBoardId}&memberIdx=${memberIdx}&title=${post.title}&content=${post.content}&anonymous=${0}&categoryId=${post.categoryId}');
+        } else {
+          response = await api.modifyPost(
+              '/univBoard/modify?univBoardId=${post.univBoardId}&memberIdx=${memberIdx}&title=${post.title}&content=${post.content}&anonymous=${0}&categoryId=${post.categoryId}&eventId=${post.eventId}');
+        }
 
         debugPrint("Response: $response");
 
@@ -190,8 +196,6 @@ class PostModel extends FlutterFlowModel<PostWidget> {
     );
 
     debugPrint("실행");
-    debugPrint(memberIdx);
-    debugPrint(univBoardId.toString());
   }
 
   @override

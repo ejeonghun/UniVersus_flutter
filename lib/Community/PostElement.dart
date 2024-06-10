@@ -17,6 +17,7 @@ class PostElement {
   String? profileImgUrl;
   int? PostMemberIdx;
   int? categoryId;
+  int? eventId;
 
   PostElement({
     required this.univBoardId,
@@ -35,6 +36,7 @@ class PostElement {
     this.profileImgUrl,
     this.PostMemberIdx,
     this.categoryId,
+    this.eventId,
   });
 
   get getProfileImgUrl =>
