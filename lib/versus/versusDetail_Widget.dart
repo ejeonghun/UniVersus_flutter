@@ -170,7 +170,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                           Container(
                             child: Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 10.0, 0.0, 0.0),
+                                  0.0, 10.0, 0.0, 0.0),
                               child: Text(
                                 '${snapshot.data!.hostScore}  :  ${snapshot.data!.guestScore}',
                                 style: FlutterFlowTheme.of(context)
@@ -179,7 +179,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                       color: Color(0xFFFF5963),
                                       fontSize: 30.0,
                                       fontFamily: 'Readex Pro',
-                                      letterSpacing: 5,                                    
+                                      letterSpacing: 3,
                                     ),
                               ),
                             ),
@@ -663,16 +663,19 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             5.0, 0.0, 0.0, 0.0),
                                         child: Text(
-                                          '주소 : ${snapshot.data!.place}',
+                                          '주소 : ${snapshot.data!.place}',                                          
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
+                                                
                                                 fontFamily: 'Readex Pro',
                                                 fontSize: 15.0,
                                                 letterSpacing: 0.0,
                                                 fontWeight: FontWeight.w600,
                                                 useGoogleFonts: false,
                                               ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
                                         ),
                                       ),
                                     ].divide(SizedBox(width: 0.0)),

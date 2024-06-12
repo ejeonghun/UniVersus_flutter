@@ -21,12 +21,8 @@ class _BottomBar2State extends State<BottomBar2> {
 
         switch (index) {
           case 0:
-            if (_selectedIndex != 0) {
               debugPrint("메인으로 이동");
               Navigator.of(context).pushNamed('/main1');
-            } else {
-              debugPrint("현재 메인임");
-            }
             break;
           case 1:
             debugPrint('대항전으로 이동');

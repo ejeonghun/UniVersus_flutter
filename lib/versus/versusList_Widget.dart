@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:provider/provider.dart';
+import 'package:universus/BottomBar2.dart';
 import 'package:universus/class/versus/versusElement.dart';
 import 'package:universus/versus/component/versusElement_Widget.dart';
 import 'package:universus/versus/component/versusSearch_Widget.dart';
@@ -183,7 +184,8 @@ class _VersusListWidgetState extends State<VersusListWidget>
             _buildVersusList(context),
             _buildVersusList(context),
           ],
-        ),
+        ),      
+        bottomNavigationBar: BottomBar2(), // 바텀 네비게이션 추가
       ),
     );
   }

@@ -50,10 +50,10 @@ class PostModel extends FlutterFlowModel<PostWidget> {
         content: response['data']['content'] ?? '',
         nickname: response['data']['nickOrAnon'] ?? '',
         regDt: response['data']['regDt'] ?? '',
-        place: response['data']['place'] ?? '',
+        place: response['data']['place'] ?? '없음',
         udtDt: response['data']['udtDt'] ?? '',
-        lat: response['data']['lat'] ?? '',
-        lng: response['data']['lng'] ?? '',
+        lat: response['data']['lat'],
+        lng: response['data']['lng'],
         eventName: response['data']['eventName'] ?? '',
         categoryName: response['data']['categoryName'] ?? '',
         clubName: response['data']['clubName'] ?? '',
@@ -175,7 +175,7 @@ class PostModel extends FlutterFlowModel<PostWidget> {
               '/univBoard/modify?univBoardId=${post.univBoardId}&memberIdx=${memberIdx}&title=${post.title}&content=${post.content}&anonymous=${0}&categoryId=${post.categoryId}');
         } else {
           response = await api.modifyPost(
-              '/univBoard/modify?univBoardId=${post.univBoardId}&memberIdx=${memberIdx}&title=${post.title}&content=${post.content}&anonymous=${0}&categoryId=${post.categoryId}&eventId=${post.eventId}');
+              '/univBoard/modify?univBoardId=${post.univBoardId}&memberIdx=${memberIdx}&title=${post.title}&content=${post.content}&anonymous=${0}&categoryId=${post.categoryId}&eventId=${post.eventId}&lng=${post.lng}&lat=${post.lat}&place=${post.place}');
         }
 
         debugPrint("Response: $response");

@@ -315,7 +315,7 @@ class _WriteWidgetState extends State<WriteWidget> {
                     errorBorder: InputBorder.none,
                     focusedErrorBorder: InputBorder.none,
                     contentPadding:
-                        EdgeInsetsDirectional.fromSTEB(20, 10, 0, 0),
+                        EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
                   ),
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Readex Pro',

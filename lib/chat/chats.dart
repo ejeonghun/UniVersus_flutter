@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:universus/BottomBar2.dart';
 import 'package:universus/chat/chatRoom.dart';
 import 'package:universus/chat/createChatRoom.dart';
 import 'package:universus/class/api/DioApiCall.dart';
@@ -125,6 +126,7 @@ class _ChatsPageState extends State<ChatsPage> {
           }
         },
       ),
+      bottomNavigationBar: BottomBar2(), // 바텀 네비게이션 추가
     );
   }
 }
