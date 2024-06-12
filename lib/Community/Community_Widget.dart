@@ -178,6 +178,8 @@ class _CommunityWidgetState extends State<CommunityWidget>
                               }
 
                               List<PostElement> postList = snapshot.data!;
+                              postList.sort((a, b) => DateTime.parse(b.regDt)
+                                  .compareTo(DateTime.parse(a.regDt)));
                               return SingleChildScrollView(
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,

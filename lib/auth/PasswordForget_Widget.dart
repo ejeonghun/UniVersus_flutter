@@ -54,6 +54,16 @@ class _PasswordForgetWidgetState extends State<PasswordForgetWidget> {
       appBar: AppBar(
         backgroundColor: Color(0xFFF1F4F8),
         automaticallyImplyLeading: false,
+        title: Text(
+          '비밀번호 찾기',
+          style: FlutterFlowTheme.of(context).headlineMedium.override(
+                fontFamily: 'Outfit',
+                color: FlutterFlowTheme.of(context).primaryText,
+                fontSize: 22.0,
+                letterSpacing: 0.0,
+                fontWeight: FontWeight.normal,
+              ),
+        ),
         leading: FlutterFlowIconButton(
           borderColor: Colors.transparent,
           borderRadius: 30.0,
@@ -82,7 +92,7 @@ class _PasswordForgetWidgetState extends State<PasswordForgetWidget> {
           decoration: BoxDecoration(),
           child: Column(
             mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // This row exists for when the "app bar" is hidden on desktop, having a way back for the user can work well.
               if (responsiveVisibility(
@@ -132,21 +142,10 @@ class _PasswordForgetWidgetState extends State<PasswordForgetWidget> {
                   ),
                 ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
-                child: Text(
-                  '비밀번호 찾기',
-                  style: FlutterFlowTheme.of(context).headlineMedium.override(
-                        fontFamily: 'Outfit',
-                        color: Color(0xFF15161E),
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16.0, 4.0, 16.0, 4.0),
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 40.0, 0.0, 5.0),
                 child: Text(
                   '비밀번호를 잊어버리셨나요?\n가입하신 학교 계정 이메일과 이름을 입력해주세요.',
+                  textAlign: TextAlign.center,
                   style: FlutterFlowTheme.of(context).labelMedium.override(
                         fontFamily: 'Plus Jakarta Sans',
                         color: Color(0xFF606A85),
@@ -165,7 +164,8 @@ class _PasswordForgetWidgetState extends State<PasswordForgetWidget> {
                       padding:
                           EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
                       child: Container(
-                        width: double.infinity,
+                        width: 300.0,
+                        height: 60.0,
                         child: TextFormField(
                           controller: _model.emailAddressController,
                           focusNode: _model.emailAddressFocusNode,
@@ -219,8 +219,9 @@ class _PasswordForgetWidgetState extends State<PasswordForgetWidget> {
                             ),
                             filled: true,
                             fillColor: Colors.white,
-                            contentPadding: EdgeInsetsDirectional.fromSTEB(
-                                24.0, 24.0, 20.0, 24.0),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 16.0,
+                                horizontal: 24.0), // Adjusted contentPadding
                           ),
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
@@ -241,7 +242,8 @@ class _PasswordForgetWidgetState extends State<PasswordForgetWidget> {
                       padding:
                           EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
                       child: Container(
-                        width: double.infinity,
+                        width: 300.0,
+                        height: 60.0,
                         child: TextFormField(
                           controller: _model.userNameController,
                           focusNode: _model.userNameFocusNode,
@@ -295,8 +297,9 @@ class _PasswordForgetWidgetState extends State<PasswordForgetWidget> {
                             ),
                             filled: true,
                             fillColor: Colors.white,
-                            contentPadding: EdgeInsetsDirectional.fromSTEB(
-                                24.0, 24.0, 20.0, 24.0),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 16.0,
+                                horizontal: 24.0), // Adjusted contentPadding
                           ),
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
@@ -331,7 +334,7 @@ class _PasswordForgetWidgetState extends State<PasswordForgetWidget> {
                           },
                           text: '인증번호 전송',
                           options: FFButtonOptions(
-                            width: 270.0,
+                            width: 150.0,
                             height: 50.0,
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 0.0, 0.0, 0.0),
@@ -362,7 +365,8 @@ class _PasswordForgetWidgetState extends State<PasswordForgetWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               16.0, 12.0, 16.0, 0.0),
                           child: Container(
-                            width: double.infinity,
+                            width: 300.0,
+                            height: 60.0,
                             child: TextFormField(
                               controller: _model.verifyController,
                               focusNode: _model.verifyFocusNode,
@@ -416,8 +420,10 @@ class _PasswordForgetWidgetState extends State<PasswordForgetWidget> {
                                 ),
                                 filled: true,
                                 fillColor: Colors.white,
-                                contentPadding: EdgeInsetsDirectional.fromSTEB(
-                                    24.0, 24.0, 20.0, 24.0),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 16.0,
+                                    horizontal:
+                                        24.0), // Adjusted contentPadding
                               ),
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
@@ -462,7 +468,7 @@ class _PasswordForgetWidgetState extends State<PasswordForgetWidget> {
                               },
                               text: '인증번호 확인',
                               options: FFButtonOptions(
-                                width: 270.0,
+                                width: 150.0,
                                 height: 50.0,
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     0.0, 0.0, 0.0, 0.0),
