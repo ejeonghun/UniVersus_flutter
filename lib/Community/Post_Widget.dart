@@ -5,6 +5,7 @@ import 'package:universus/Community/PostElement.dart';
 import 'package:universus/Community/PostElement.dart';
 import 'package:universus/Community/replyElement.dart';
 import 'package:universus/Community/reply_Widget.dart';
+import 'package:universus/shared/Template.dart';
 import 'package:universus/shared/memberDetails.dart';
 
 import 'Post_Model.dart';
@@ -50,7 +51,8 @@ class _PostWidgetState extends State<PostWidget> {
     setState(() {
       _isModifying = !_isModifying;
       if (_isModifying) {
-        _contentController.text = post.content ?? ''; // null 대신 빈 문자열을 사용하여 초기화합니다.
+        _contentController.text =
+            post.content ?? ''; // null 대신 빈 문자열을 사용하여 초기화합니다.
       } else {
         _contentController.clear();
       }
@@ -270,16 +272,14 @@ class _PostWidgetState extends State<PostWidget> {
                         Align(
                           alignment: AlignmentDirectional(0, 0),
                           child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(60, 10, 0, 0),
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(60, 10, 0, 0),
                             child: Row(
                               children: [
                                 ElevatedButton(
                                   onPressed: () async {
                                     await _model.modifyPost(
-                                      post.univBoardId,
-                                      post.title,
-                                      _contentController.text,
-                                      post.categoryId!,
+                                      post,
                                       context,
                                     );
                                     _saveChanges(post);

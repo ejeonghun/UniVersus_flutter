@@ -46,14 +46,14 @@ class ClubMainModel extends FlutterFlowModel<ClubMainWidget> {
     if (response['success'] == true) {
       return clubInfo(
           clubId: response['data']['clubId'],
-          clubName: response['data']['clubName'],
-          clubIntro: response['data']['introduction'],
-          price: response['data']['price'],
+          clubName: response['data']['clubName'] ?? '',
+          clubIntro: response['data']['introduction'] ?? '소개 없음',
+          price: response['data']['price'] ?? 0,
           clubLeader: response['data']['memberIdx'],
           imageUrl: response['data']['clubImageUrls'].isNotEmpty
               ? response['data']['clubImageUrls'][0]
               : 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
-          eventId: response['data']['eventName'],
+          eventId: response['data']['eventName'] ?? '',
           regDate: response['data']['regDt'],
           currentMembers: response['data']['currentMembers'],
           maximumMembers: response['data']['maximumMembers'],
@@ -101,7 +101,7 @@ class ClubMainModel extends FlutterFlowModel<ClubMainWidget> {
         return clubPosts;
       }
       clubPosts.add(ClubPost(
-        univBoardId: 1,
+        univBoardId: 0,
         clubName: '게시물이 없습니다',
         memberProfileImg:
             'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
@@ -182,6 +182,27 @@ class ClubMainModel extends FlutterFlowModel<ClubMainWidget> {
     if (response['success'] == true) {
       return true;
     } else {
+      return false;
+    }
+  }
+
+  /* 
+  * Club 해체
+  * 클럽 관리자만 사용 가능
+  * @param clubId, memberIdx
+  * @return bool:
+  * 생성자 : 이정훈
+  */
+  Future<bool?> deleteClub(int clubId) async {
+    DioApiCall api = DioApiCall();
+    String? memberIdx = await UserData.getMemberIdx();
+    debugPrint(memberIdx);
+    final response = await api
+        .delete('/club/delete?clubId=${clubId}&memberIdx=${memberIdx}');
+    if (response['success'] == true) {
+      return true;
+    } else {
+      debugPrint(response.toString());
       return false;
     }
   }

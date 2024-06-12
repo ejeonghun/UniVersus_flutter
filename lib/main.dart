@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +56,12 @@ import 'package:intl/date_symbol_data_local.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("백그라운드 메시지 처리.. ${message.notification!.body!}");
+  print("target 메세지 처리 ${message.data['target'] ?? '없음'}");
+  print("data 메세지 처리 ${message.data['data'] ?? '없음'}");
+}
+
+void handleNotificationClick(String payload) {
+  print("알림 클릭: $payload");
 }
 
 void initializeNotification() async {
@@ -62,29 +70,29 @@ void initializeNotification() async {
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
-  final InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid, iOS: null); // ios 설정은 안함
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails(
-    'Universus',
-    '알림',
-    importance: Importance.max,
-    priority: Priority.high,
+  final InitializationSettings initializationSettings =
+      InitializationSettings(android: initializationSettingsAndroid, iOS: null);
+
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    onDidReceiveNotificationResponse:
+        (NotificationResponse notificationResponse) async {
+      if (notificationResponse.payload != null) {
+        handleNotificationClick(notificationResponse.payload!);
+      }
+    },
   );
-  const NotificationDetails platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
 
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(const AndroidNotificationChannel(
-          'high_importance_channel', 'high_importance_notification',
-          importance: Importance.max));
-
-  await flutterLocalNotificationsPlugin.initialize(const InitializationSettings(
-    android: AndroidInitializationSettings("@mipmap/ic_launcher"),
-  ));
+      ?.createNotificationChannel(
+        const AndroidNotificationChannel(
+          'high_importance_channel',
+          'high_importance_notification',
+          importance: Importance.max,
+        ),
+      );
 
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
@@ -103,11 +111,15 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  initializeDateFormatting().then((_) => runApp(MyApp()));
+  // initializeDateFormatting().then((_) => runApp(MyApp()));
+  final message = await FirebaseMessaging.instance.getInitialMessage();
+  runApp(MyApp(initialMessage: message));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final RemoteMessage? initialMessage;
+
+  const MyApp({Key? key, this.initialMessage}) : super(key: key);
 
   static final ValueNotifier<ThemeMode> themeNotifier =
       ValueNotifier(ThemeMode.light);
@@ -117,8 +129,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  // Firebase FCM, Flutter Local Notification 관련 변수
   var messageTitle = "";
   var messageBody = "";
+  var messageTarget = "";
+  var messageData = "";
 
   void getMyDeviceToken() async {
     final token = await FirebaseMessaging.instance.getToken();
@@ -129,8 +144,14 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    super.initState();
     getMyDeviceToken();
     initializeNotification();
+
+    if (widget.initialMessage != null) {
+      handleNotificationClick(jsonEncode(widget.initialMessage!.data));
+    }
+
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       RemoteNotification? notification = message.notification;
 
@@ -146,16 +167,24 @@ class _MyAppState extends State<MyApp> {
               importance: Importance.max,
             ),
           ),
+          payload: jsonEncode(message.data),
         );
 
         setState(() {
           messageBody = message.notification!.body!;
           messageTitle = message.notification!.title!;
-          print("Foreground 메시지 수신: $messageBody, $messageTitle");
+          messageTarget = message.data['target'] ?? '';
+          messageData = message.data['data'] ?? '';
+          print(
+              "Foreground 메시지 수신: $messageBody, $messageTitle, $messageData, $messageTarget");
         });
       }
     });
-    super.initState();
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      handleNotificationClick(jsonEncode(message.data));
+    });
+
     _loginInfo = checkLoginInfo();
   }
 
