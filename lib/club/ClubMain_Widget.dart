@@ -863,7 +863,7 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                                       .spaceBetween,
                                               children: [
                                                 Text(
-                                                  '  게시글 목록',
+                                                  '',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium,
