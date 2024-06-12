@@ -1,6 +1,7 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:universus/BottomBar2.dart';
 import 'package:universus/Community/PostElement.dart';
 import 'package:universus/Community/replyElement.dart';
 import 'package:universus/Community/reply_Widget.dart';
@@ -328,7 +329,8 @@ class _PostWidgetState extends State<PostWidget> {
                                       ),
                               ),
                       ),
-    if (post.categoryName == '모집' && post.place != '없음') // 모집글이면서 주소 정보가 있는 경우에만 컨테이너 표시
+                      if (post.categoryName == '모집' &&
+                          post.place != '없음') // 모집글이면서 주소 정보가 있는 경우에만 컨테이너 표시
                         Container(
                           width: MediaQuery.sizeOf(context).width * 0.8,
                           height: 200.0,
@@ -346,7 +348,7 @@ class _PostWidgetState extends State<PostWidget> {
                       if (post.categoryName == '모집') // 모집글인 경우에만 해당 위젯을 표시합니다.
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
-                              5.0, 5.0, 0.0, 0.0),
+                              0.0, 5.0, 0.0, 0.0),
                           child: Text(
                             '주소 : ${post!.place}',
                             style: FlutterFlowTheme.of(context)
@@ -529,6 +531,7 @@ class _PostWidgetState extends State<PostWidget> {
                   ),
                 ),
               ),
+              bottomNavigationBar: BottomBar2(),
             ),
           );
         }

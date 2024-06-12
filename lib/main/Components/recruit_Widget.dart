@@ -73,7 +73,7 @@ class _RecruitWidgetState extends State<RecruitWidget> {
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.network(
-                'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png', // Example placeholder image
+                widget.recruitmentElement.getImageUrl!, // Example placeholder image
                 width: 90,
                 height: 90,
                 fit: BoxFit.cover,

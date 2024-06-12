@@ -115,7 +115,7 @@ class MainModel extends FlutterFlowModel<MainWidget> {
           latitude: item['lat'] ?? '',
           longitude: item['lng'] ?? '',
           place: item['place'] ?? '',
-          imageUrl: item['imageUrl'],
+          imageUrl: item['imageUrl'] ?? 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
         ));
       }
       return recruitmentlist;

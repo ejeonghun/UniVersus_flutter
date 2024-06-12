@@ -18,6 +18,6 @@ class RecruitmentElement {
   });
 
   get getImageUrl =>
-      imageUrl ??
-      'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png';
+      imageUrl == 'null'?
+      'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png' : imageUrl;
 }
