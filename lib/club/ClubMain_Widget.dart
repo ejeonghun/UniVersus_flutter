@@ -227,6 +227,27 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                     content: "모임장만 가능합니다!",
                                   );
                                 }
+                              } else if (value == 'ClubDelete') {
+                                IOSAlertDialog.confirm(
+                                    context: context,
+                                    title: "경고",
+                                    content: "모임을 해체하시겠습니까?",
+                                    onConfirm: () async {
+                                      if (await _model
+                                              .deleteClub(widget.clubId) ==
+                                          true) {
+                                        IOSAlertDialog.show(
+                                          context: context,
+                                          title: "완료",
+                                          content: "모임이 해체되었습니다",
+                                        );
+                                      } else {
+                                        IOSAlertDialog.show(
+                                            context: context,
+                                            title: "실패",
+                                            content: "관리자만 가능합니다.");
+                                      }
+                                    });
                               }
                             },
                             itemBuilder: (BuildContext context) {
@@ -238,6 +259,10 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                 PopupMenuItem(
                                   value: 'ClubUpdate',
                                   child: Text('정보 수정'),
+                                ),
+                                PopupMenuItem(
+                                  value: 'ClubDelete',
+                                  child: Text('모임 삭제'),
                                 ),
                               ];
                             },

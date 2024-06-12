@@ -18,13 +18,11 @@ class MyClubWidget extends StatefulWidget {
 class _MyClubWidgetState extends State<MyClubWidget> {
   late MyClubModel _model;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final int memberIdx = 1; // Replace with the actual member index
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => MyClubModel());
-    _model.fetchJoinedClubs(memberIdx); // Fetch joined clubs on initialization
   }
 
   @override
@@ -104,7 +102,7 @@ class _MyClubWidgetState extends State<MyClubWidget> {
         body: SafeArea(
           top: true,
           child: FutureBuilder(
-            future: _model.fetchJoinedClubs(memberIdx),
+            future: _model.fetchJoinedClubs(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());

@@ -52,13 +52,15 @@ class _ClubPostWidgetState extends State<ClubPostWidget> {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PostWidget(
-                          univBoardId: widget.clubPost.univBoardId,
-                        )),
-              );
+              if (widget.clubPost.univBoardId != 0) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PostWidget(
+                            univBoardId: widget.clubPost.univBoardId,
+                          )),
+                );
+              }
             },
             child: Padding(
               padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),

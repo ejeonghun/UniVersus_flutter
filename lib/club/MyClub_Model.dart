@@ -12,8 +12,9 @@ class MyClubModel extends FlutterFlowModel {
     myClubComponentModel = MyClubComponentModel();
   }
 
-  Future<void> fetchJoinedClubs(int memberIdx) async {
-    joinedClubs = await getJoinedClubsList(memberIdx);
+  Future<void> fetchJoinedClubs() async {
+    await getMemberIdx();
+    joinedClubs = await getJoinedClubsList();
   }
 
   @override

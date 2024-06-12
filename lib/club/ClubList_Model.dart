@@ -26,10 +26,11 @@ class ClubListModel extends FlutterFlowModel<ClubListWidget> {
     clublistExModel.dispose();
   }
 
-Future<List<ClubElement>> getClubList() async {
+  Future<List<ClubElement>> getClubList() async {
     try {
       DioApiCall api = DioApiCall();
-      final response = await api.get('/club/list?memberIdx=${await UserData.getMemberIdx()}');
+      final response = await api
+          .get('/club/list?memberIdx=${await UserData.getMemberIdx()}');
       List<ClubElement> clubList = [];
       for (var item in response['data']) {
         clubList.add(ClubElement(
@@ -38,7 +39,9 @@ Future<List<ClubElement>> getClubList() async {
           clubName: item['clubName'],
           introduction: item['introduction'],
           currentMembers: item['currentMembers'],
-          imageUrl: item['clubImageUrl'] ?? 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
+          imageUrl: item['clubImageUrl'] != ''
+              ? item['clubImageUrl']
+              : 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
         ));
       }
 
