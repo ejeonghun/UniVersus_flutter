@@ -3,26 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:universus/BottomBar2.dart';
 import 'package:universus/Community/CommunityPost_Widget.dart';
 import 'package:universus/Community/PostElement.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:universus/Community/Write_Widget.dart';
 import 'package:universus/class/user/userProfile.dart';
-import 'Community_Model.dart';
-export 'Community_Model.dart';
+import 'package:universus/club/ClubPostWrite_Widget.dart';
+import 'ClubPostList_Model.dart';
+export 'ClubPostList_Model.dart';
 
-class CommunityWidget extends StatefulWidget {
-  final int initialTabIndex; // 초기 탭 인덱스를 받을 필드 추가
-
-  const CommunityWidget(
-      {super.key, this.initialTabIndex = 0}); // 초기 탭 인덱스의 기본값은 0
+class ClubPostListWidget extends StatefulWidget {
+  final int clubId;
+  final String clubName;
+  const ClubPostListWidget(
+      {super.key, required this.clubId, required this.clubName});
 
   @override
-  State<CommunityWidget> createState() => _CommunityWidgetState();
+  State<ClubPostListWidget> createState() => _ClubPostListWidgetState();
 }
 
-class _CommunityWidgetState extends State<CommunityWidget>
+class _ClubPostListWidgetState extends State<ClubPostListWidget>
     with TickerProviderStateMixin {
   late CommunityModel _model;
   Future<List<PostElement>>? _futurePostList;
@@ -34,11 +34,7 @@ class _CommunityWidgetState extends State<CommunityWidget>
     super.initState();
     _model = createModel(context, () => CommunityModel());
 
-    _model.tabBarController = TabController(
-      vsync: this,
-      length: 4,
-      initialIndex: widget.initialTabIndex, // 인자로 받은 초기 탭 인덱스 설정
-    )..addListener(() => setState(() {}));
+    _futurePostList = _model.getPostList(widget.clubId); // '전체' 카테고리의 게시물 로드
   }
 
   @override
@@ -50,7 +46,10 @@ class _CommunityWidgetState extends State<CommunityWidget>
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: Future.wait([_model.getMemberIdx(), _model.getProfile()]),
+        future: Future.wait([
+          _model.getMemberIdx(),
+          _model.getProfile(),
+        ]),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasError) {
             return Text('오류: ${snapshot.error}');
@@ -70,7 +69,7 @@ class _CommunityWidgetState extends State<CommunityWidget>
                         FlutterFlowTheme.of(context).secondaryBackground,
                     automaticallyImplyLeading: false,
                     title: Text(
-                      profile.getUnivName,
+                      widget.clubName + ' 게시판',
                       style:
                           FlutterFlowTheme.of(context).headlineMedium.override(
                                 fontFamily: 'Noto Serif',
@@ -109,7 +108,8 @@ class _CommunityWidgetState extends State<CommunityWidget>
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => WriteWidget(),
+                              builder: (context) =>
+                                  ClubPostWriteWidget(clubId: widget.clubId),
                             ),
                           );
                         },
@@ -123,48 +123,9 @@ class _CommunityWidgetState extends State<CommunityWidget>
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Align(
-                          alignment: Alignment(0, 0),
-                          child: TabBar(
-                            labelColor:
-                                FlutterFlowTheme.of(context).primaryText,
-                            unselectedLabelColor:
-                                FlutterFlowTheme.of(context).secondaryText,
-                            labelStyle: FlutterFlowTheme.of(context)
-                                .displaySmall
-                                .override(
-                                  fontFamily: 'Outfit',
-                                  fontSize: 18,
-                                  letterSpacing: 0,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                            unselectedLabelStyle: FlutterFlowTheme.of(context)
-                                .displaySmall
-                                .override(
-                                  fontFamily: 'Outfit',
-                                  fontSize: 18,
-                                  letterSpacing: 0,
-                                ),
-                            indicatorColor: FlutterFlowTheme.of(context).error,
-                            tabs: [
-                              Tab(text: '전체'),
-                              Tab(text: '자유'),
-                              Tab(text: '모집'),
-                              Tab(text: '정보'),
-                            ],
-                            controller: _model.tabBarController,
-                            onTap: (i) {
-                              setState(() {
-                                _futurePostList =
-                                    _model.getPostList(i); // categoryId를 i로 설정
-                              });
-                            },
-                          ),
-                        ),
                         Expanded(
                           child: FutureBuilder<List<PostElement>>(
-                            future: _model
-                                .getPostList(_model.tabBarController!.index),
+                            future: _futurePostList,
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -198,7 +159,6 @@ class _CommunityWidgetState extends State<CommunityWidget>
                       ],
                     ),
                   ),
-                  bottomNavigationBar: BottomBar2(),
                 ),
               ); // 끝
             } else {

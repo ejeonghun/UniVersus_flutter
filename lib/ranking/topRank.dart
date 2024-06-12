@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:universus/ranking/ranking_model.dart';
+import 'package:universus/winloseRecord/record.dart';
 
 class TopRankWidget extends StatefulWidget {
   const TopRankWidget({Key? key}) : super(key: key);
@@ -147,33 +148,45 @@ class _TopRankWidgetState extends State<TopRankWidget> {
       double verticalOffset) {
     return Transform.translate(
       offset: Offset(0, verticalOffset),
-      child: Column(
-        children: [
-          Container(
-            width: isElevated ? 90 : 70,
-            height: isElevated ? 90 : 70,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: NetworkImage(ranking.logoImg),
-                fit: BoxFit.cover,
-              ),
-              border: Border.all(color: Colors.white, width: 3),
+      child: GestureDetector(
+        onTap: () {
+          // Define the action to perform on tap.
+          // For example, navigate to a detailed page:
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) =>
+                  UnivBattleRecordPage(univId: ranking.univId),
             ),
-          ),
-          SizedBox(height: isElevated ? 5 : 10),
-          Text(
-            ranking.schoolName,
-            style: TextStyle(color: Colors.white, fontSize: 16),
-            textAlign: TextAlign.center, // Ensure text is centered
-          ),
-          Text(
-            ' $medal ${ranking.rankPoint} Points ',
-            style: TextStyle(color: Colors.white, fontSize: 14),
-            textAlign: TextAlign.center, // Ensure text is centered
-          ),
-        ],
+          );
+        },
+        child: Column(
+          children: [
+            Container(
+              width: isElevated ? 90 : 70,
+              height: isElevated ? 90 : 70,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: NetworkImage(ranking.logoImg),
+                  fit: BoxFit.cover,
+                ),
+                border: Border.all(color: Colors.white, width: 3),
+              ),
+            ),
+            SizedBox(height: isElevated ? 5 : 10),
+            Text(
+              ranking.schoolName,
+              style: TextStyle(color: Colors.white, fontSize: 16),
+              textAlign: TextAlign.center, // Ensure text is centered
+            ),
+            Text(
+              ' $medal ${ranking.rankPoint} Points ',
+              style: TextStyle(color: Colors.white, fontSize: 14),
+              textAlign: TextAlign.center, // Ensure text is centered
+            ),
+          ],
+        ),
       ),
     );
   }

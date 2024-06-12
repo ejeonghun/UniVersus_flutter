@@ -6,7 +6,10 @@ import 'package:universus/shared/Template.dart';
 import 'package:universus/winloseRecord/record_model.dart';
 
 class UnivBattleRecordPage extends StatefulWidget {
-  const UnivBattleRecordPage({Key? key}) : super(key: key);
+  final int univId;
+
+  const UnivBattleRecordPage({Key? key, required this.univId})
+      : super(key: key);
 
   @override
   _UnivBattleRecordPageState createState() => _UnivBattleRecordPageState();
@@ -18,7 +21,6 @@ class _UnivBattleRecordPageState extends State<UnivBattleRecordPage> {
   @override
   void initState() {
     super.initState();
-    _recordsFuture = UnivBattleRecordModel().getUnivBattleRecords();
   }
 
   String formatTimeAgo(String dateString) {
@@ -43,7 +45,7 @@ class _UnivBattleRecordPageState extends State<UnivBattleRecordPage> {
         title: Text('승패 기록'),
       ),
       body: FutureBuilder<List<UnivBattleRecord>>(
-        future: _recordsFuture,
+        future: UnivBattleRecordModel().getUnivBattleRecords(widget.univId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:provider/provider.dart';
+import 'package:universus/BottomBar2.dart';
 import 'package:universus/class/versus/versusElement.dart';
 import 'package:universus/versus/component/versusElement_Widget.dart';
 import 'package:universus/versus/component/versusSearch_Widget.dart';
@@ -105,7 +106,7 @@ class _VersusListWidgetState extends State<VersusListWidget>
           : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.of(context).pushNamed('/versusCreate');
@@ -114,12 +115,12 @@ class _VersusListWidgetState extends State<VersusListWidget>
           elevation: 6.0,
           child: Icon(
             Icons.add,
-            color: FlutterFlowTheme.of(context).primaryBackground,
+            color: FlutterFlowTheme.of(context).secondaryBackground,
             size: 24.0,
           ),
         ),
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
           iconTheme:
               IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
           automaticallyImplyLeading: true,
@@ -183,7 +184,8 @@ class _VersusListWidgetState extends State<VersusListWidget>
             _buildVersusList(context),
             _buildVersusList(context),
           ],
-        ),
+        ),      
+        bottomNavigationBar: BottomBar2(), // 바텀 네비게이션 추가
       ),
     );
   }

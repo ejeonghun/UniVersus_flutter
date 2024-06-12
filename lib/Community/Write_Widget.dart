@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -12,7 +13,6 @@ import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:universus/shared/CustomSnackbar.dart';
 import 'package:universus/shared/placepicker.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'Write_Model.dart';
 export 'Write_Model.dart';
@@ -55,7 +55,15 @@ class _WriteWidgetState extends State<WriteWidget> {
     var status = await Permission.location.status;
     var status2 = await Permission.locationWhenInUse.status;
     var status3 = await Permission.locationAlways.status;
-    if (status.isGranted || status2.isGranted || status3.isGranted) {
+    var statusIos = await Permission.locationWhenInUse.serviceStatus;
+    var statusIos2 = await Permission.location.request();
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (status.isGranted ||
+        status2.isGranted ||
+        status3.isGranted ||
+        statusIos2.isGranted ||
+        permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
       debugPrint("권한 허용되어 있음 ");
       return true;
     } else {
@@ -307,7 +315,7 @@ class _WriteWidgetState extends State<WriteWidget> {
                     errorBorder: InputBorder.none,
                     focusedErrorBorder: InputBorder.none,
                     contentPadding:
-                        EdgeInsetsDirectional.fromSTEB(20, 10, 0, 0),
+                        EdgeInsetsDirectional.fromSTEB(20, 10, 20, 0),
                   ),
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Readex Pro',
@@ -361,92 +369,99 @@ class _WriteWidgetState extends State<WriteWidget> {
               ),
               if (showLocationButton) // 위치 선택 버튼은 모집일 때만 표시
                 Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 16.0),
-                      child: FFButtonWidget(
-                        onPressed: () async {
-                          if (kIsWeb) {
-                            // 웹일 때
-                            CustomSnackbar.error(
-                                context, "위치 허용", "웹에서는 지원하지 않습니다.", 2);
-                            return;
-                          }
-                          if (await checkPermission() == true) {
-                            // 권한이 허용되어 있을 때 실행됨
-                            // PlacePickerScreen을 표시하고 결과를 기다립니다.
-                            PickResult? selectedPlace = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PlacePickerScreen()),
-                            );
-                            // 결과를 출력합니다.
-                            if (selectedPlace != null) {
-                              print(
-                                  'Selected place: ${selectedPlace.formattedAddress}');
-                              print(
-                                  'Selected place lat: ${selectedPlace.geometry?.location.lat}');
-                              print(
-                                  'Selected place lng: ${selectedPlace.geometry?.location.lng}');
-                              print(selectedPlace.name);
-                              String? placeName = '';
-                              if (selectedPlace.name != null) {
-                                // 만약 장소명이 있으면
-                                placeName = selectedPlace.name; // 장소명 저장
-                              } else {
-                                placeName =
-                                    selectedPlace.formattedAddress; // 장소 주소 저장
-                              }
-                              print(placeName);
-                              _model.lat = selectedPlace.geometry?.location.lat;
-                              _model.lng = selectedPlace.geometry?.location.lng;
-                              _model.placeName = placeName;
-                            }
-                            setState(() {}); // UI 리랜더링
-                          } else {
-                            // 권한이 허용되어 있지 않을 때 실행됨
-                            CustomSnackbar.error(
-                                context, "위치 허용", "위치를 허용해 주세요", 2);
-                            if (await Permission.location.request() ==
-                                PermissionStatus.granted) {
-                              CustomSnackbar.success(
-                                  context, "위치 허용", "위치가 허용 되었습니다.", 2);
-                            }
-                          }
-                        },
-                        text: '장소 선택',
-                        icon: Icon(
-                          Icons.place,
-                          size: 20.0,
-                        ),
-                        options: FFButtonOptions(
-                          width: 200.0,
-                          height: 40.0,
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              24.0, 0.0, 24.0, 0.0),
-                          iconPadding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
-                          color: FlutterFlowTheme.of(context).tertiary,
-                          textStyle:
-                              FlutterFlowTheme.of(context).titleSmall.override(
-                                    fontFamily: 'Readex Pro',
-                                    color: Colors.white,
-                                    letterSpacing: 0.0,
-                                  ),
-                          elevation: 3.0,
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1.0,
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 16.0, 0.0, 16.0),
+                            child: FFButtonWidget(
+                              onPressed: () async {
+                                if (kIsWeb) {
+                                  // 웹일 때
+                                  CustomSnackbar.error(
+                                      context, "위치 허용", "웹에서는 지원하지 않습니다.", 2);
+                                  return;
+                                }
+                                if (await checkPermission() == true) {
+                                  // 권한이 허용되어 있을 때 실행됨
+                                  // PlacePickerScreen을 표시하고 결과를 기다립니다.
+                                  PickResult? selectedPlace =
+                                      await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            PlacePickerScreen()),
+                                  );
+                                  // 결과를 출력합니다.
+                                  if (selectedPlace != null) {
+                                    print(
+                                        'Selected place: ${selectedPlace.formattedAddress}');
+                                    print(
+                                        'Selected place lat: ${selectedPlace.geometry?.location.lat}');
+                                    print(
+                                        'Selected place lng: ${selectedPlace.geometry?.location.lng}');
+                                    print(selectedPlace.name);
+                                    String? placeName = '';
+                                    if (selectedPlace.name != null) {
+                                      // 만약 장소명이 있으면
+                                      placeName = selectedPlace.name; // 장소명 저장
+                                    } else {
+                                      placeName = selectedPlace
+                                          .formattedAddress; // 장소 주소 저장
+                                    }
+                                    print(placeName);
+                                    _model.lat =
+                                        selectedPlace.geometry?.location.lat;
+                                    _model.lng =
+                                        selectedPlace.geometry?.location.lng;
+                                    _model.placeName = placeName;
+                                  }
+                                  setState(() {}); // UI 리랜더링
+                                } else {
+                                  // 권한이 허용되어 있지 않을 때 실행됨
+                                  CustomSnackbar.error(
+                                      context, "위치 허용", "위치를 허용해 주세요", 2);
+                                  if (await Permission.location.request() ==
+                                      PermissionStatus.granted) {
+                                    CustomSnackbar.success(
+                                        context, "위치 허용", "위치가 허용 되었습니다.", 2);
+                                  }
+                                }
+                              },
+                              text: _model.placeName != null
+                                  ? '${_model.placeName}'
+                                  : '장소 선택',
+                              icon: Icon(
+                                Icons.place,
+                                size: 20.0,
+                              ),
+                              options: FFButtonOptions(
+                                width: 200.0,
+                                height: 40.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    24.0, 0.0, 24.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: FlutterFlowTheme.of(context).tertiary,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'Readex Pro',
+                                      color: Colors.white,
+                                      letterSpacing: 0.0,
+                                    ),
+                                elevation: 3.0,
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
               if (_model.dropDownValue == '모집')
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 16),
@@ -490,7 +505,7 @@ class _WriteWidgetState extends State<WriteWidget> {
                     ),
                     options: FFButtonOptions(
                       width: 200,
-                      height: 44,
+                      height: 40,
                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                       iconPadding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                       color: FlutterFlowTheme.of(context).tertiary,

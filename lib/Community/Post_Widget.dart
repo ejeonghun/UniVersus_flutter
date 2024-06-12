@@ -1,10 +1,11 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:universus/Community/PostElement.dart';
+import 'package:universus/BottomBar2.dart';
 import 'package:universus/Community/PostElement.dart';
 import 'package:universus/Community/replyElement.dart';
 import 'package:universus/Community/reply_Widget.dart';
+import 'package:universus/shared/GoogleMap.dart';
 import 'package:universus/shared/Template.dart';
 import 'package:universus/shared/memberDetails.dart';
 
@@ -245,7 +246,8 @@ class _PostWidgetState extends State<PostWidget> {
                       Align(
                         alignment: AlignmentDirectional(-1, 0),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(60, 15, 0, 0),
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(20, 15, 20, 0),
                           child: _isModifying
                               ? TextFormField(
                                   controller: _contentController,
@@ -327,6 +329,41 @@ class _PostWidgetState extends State<PostWidget> {
                                       ),
                               ),
                       ),
+                      if (post.categoryName == '모집' &&
+                          post.place != '없음') // 모집글이면서 주소 정보가 있는 경우에만 컨테이너 표시
+                        Container(
+                          width: MediaQuery.sizeOf(context).width * 0.8,
+                          height: 200.0,
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
+                          ),
+                          child: post!.place != '없음'
+                              ? GoogleMapWidget(
+                                  lat: post!.getLat!,
+                                  lng: post!.getLng!,
+                                )
+                              : SizedBox(), // Render an empty SizedBox if any of the values are null
+                        ),
+                      if (post.categoryName == '모집') // 모집글인 경우에만 해당 위젯을 표시합니다.
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 5.0, 0.0, 0.0),
+                          child: Text(
+                            '주소 : ${post!.place}',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Readex Pro',
+                                  fontSize: 15.0,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.w600,
+                                  useGoogleFonts: false,
+                                ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ),
                       Padding(
                         padding: EdgeInsets.only(left: 15),
                         child: Column(
@@ -494,6 +531,7 @@ class _PostWidgetState extends State<PostWidget> {
                   ),
                 ),
               ),
+              bottomNavigationBar: BottomBar2(),
             ),
           );
         }

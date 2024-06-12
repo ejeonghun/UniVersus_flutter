@@ -52,8 +52,8 @@ class UnivBattleRecord {
 class UnivBattleRecordModel {
   DioApiCall api = DioApiCall();
 
-  Future<List<UnivBattleRecord>> getUnivBattleRecords() async {
-    String? univId = await UserData.getUnivId();
+  Future<List<UnivBattleRecord>> getUnivBattleRecords(int univId) async {
+    // String? univId = await UserData.getUnivId();
     try {
       final response = await api.get('/univBattle/ulist?univId=$univId');
       if (response['success'] == true && response['data'] != null) {

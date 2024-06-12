@@ -531,7 +531,7 @@ class _updateProfileWidgetState extends State<updateProfileWidget> {
                                   },
                                   text: '프로필 저장',
                                   options: FFButtonOptions(
-                                    width: 270.0,
+                                    width: 150.0,
                                     height: 50.0,
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 0.0, 0.0, 0.0),

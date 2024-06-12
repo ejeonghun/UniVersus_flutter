@@ -48,7 +48,7 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: FlutterFlowTheme.of(context).primaryBackground,
+        color: FlutterFlowTheme.of(context).secondaryBackground,
       ),
       child: InkWell(
         splashColor: Colors.transparent,
@@ -60,44 +60,52 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
           // 만약 대학 대항전이라면 대학 대항전 상세 페이지로 이동
           if (widget.element.univBattleId != null) {
             Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => VersusDetailWidget(
-                            battleId: widget.element.univBattleId!,
-                          ),
-                        ),
-                      );
-          }
-          else {
+              context,
+              MaterialPageRoute(
+                builder: (context) => VersusDetailWidget(
+                  battleId: widget.element.univBattleId!,
+                ),
+              ),
+            );
+          } else {
             debugPrint("학과 임");
             Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => deptVersusDetailWidget(
-                            battleId: widget.element.deptBattleId!,
-                          ),
-                        ),
-                      );
+              context,
+              MaterialPageRoute(
+                builder: (context) => deptVersusDetailWidget(
+                  battleId: widget.element.deptBattleId!,
+                ),
+              ),
+            );
           }
         },
         child: Column(
           mainAxisSize: MainAxisSize.max,
-          children: [
-            Align(
-  alignment: AlignmentDirectional(-1, 0),
-  child: Padding(
-    padding: EdgeInsetsDirectional.fromSTEB(20, 5, 0, 0),
-    child: Text(
-      '${widget.element.content}',
-      style: FlutterFlowTheme.of(context).bodyMedium.override(
-            fontFamily: 'Readex Pro',
-            letterSpacing: 0,
-            fontWeight: FontWeight.w600,
-            useGoogleFonts: false,
-          ),
-    ),
-  ),
-),
+          children: [                  
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 10.0, 0.0, 0.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              _model.getIcon(widget.element.eventId!),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    3.0, 0.0, 15.0, 0.0),
+                                child: Text(
+                                  "${_model.getEventText(widget.element.eventId!)}",
+                  textAlign: TextAlign.center,
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Readex Pro',
+                        letterSpacing: 0,
+                        fontWeight: FontWeight.bold,
+                        useGoogleFonts: false,
+                        fontSize: 20.0,
+                      ),
+                ),),]
+              ),
+            ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
               child: Row(
@@ -271,7 +279,7 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
               ),
             ),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(10.0, 5.0, 10.0, 5.0),
+              padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
               child: Container(
                 decoration: BoxDecoration(
                   color: _model.getColor(widget.element.status!),
@@ -294,6 +302,10 @@ class _VersusElementWidgetState extends State<VersusElementWidget> {
                   ),
                 ),
               ),
+            ),
+            Divider(
+              thickness: 1,
+              color: Color(0xCCA5A5A5),
             ),
           ],
         ),

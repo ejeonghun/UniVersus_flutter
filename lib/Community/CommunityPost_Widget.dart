@@ -56,6 +56,8 @@ class CommunityPostWidget extends StatelessWidget {
                 padding: EdgeInsetsDirectional.fromSTEB(3, 3, 0, 0),
                 child: Text(
                   post.content,
+                  maxLines: 2, // 최대 2줄까지만 표시
+                  overflow: TextOverflow.ellipsis, // 2줄이 넘으면 생략 표시
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Readex Pro',
                         letterSpacing: 0,

@@ -39,6 +39,10 @@ class PostElement {
     this.eventId,
   });
 
+  double? get getLat => double.parse(this.lat!);
+  double? get getLng => double.parse(this.lng!);
+  String? get getPlace => this.place;
+  
   get getProfileImgUrl =>
       profileImgUrl ??
       'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png';

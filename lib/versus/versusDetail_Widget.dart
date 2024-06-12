@@ -72,10 +72,11 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
               child: Scaffold(
                 key: scaffoldKey,
                 resizeToAvoidBottomInset: false,
-                backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+                backgroundColor:
+                    FlutterFlowTheme.of(context).secondaryBackground,
                 appBar: AppBar(
                   backgroundColor:
-                      FlutterFlowTheme.of(context).primaryBackground,
+                      FlutterFlowTheme.of(context).secondaryBackground,
                   iconTheme: IconThemeData(
                       color: FlutterFlowTheme.of(context).primaryText),
                   automaticallyImplyLeading: true,
@@ -168,21 +169,24 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                         if (snapshot.data!.status == 'COMPLETED')
                           Container(
                             child: Padding(
-                              padding: EdgeInsets.all(10),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 10.0, 0.0, 0.0),
                               child: Text(
-                                '${snapshot.data!.hostTeamName} ${snapshot.data!.hostScore} Score : ${snapshot.data!.guestTeamName} ${snapshot.data!.guestScore} Score',
+                                '${snapshot.data!.hostScore}  :  ${snapshot.data!.guestScore}',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
+                                      color: Color(0xFFFF5963),
+                                      fontSize: 30.0,
                                       fontFamily: 'Readex Pro',
-                                      letterSpacing: 0,
+                                      letterSpacing: 3,
                                     ),
                               ),
                             ),
                           ),
                         Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 10.0, 0.0, 0.0),
+                              0.0, 0.0, 0.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -504,12 +508,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 10.0, 0.0, 0.0),
-                            child: Container(
-                              width: MediaQuery.sizeOf(context).width * 0.85,
-                              height: 30.0,
-                              decoration: BoxDecoration(
-                                color: Color(0xC6ABA4A4),
-                              ),
+                            child: Center(
                               child: GestureDetector(
                                 onTap: () {
                                   final invitationCode =
@@ -521,21 +520,26 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                         content: Text('초대코드가 클립보드에 복사되었습니다.')),
                                   );
                                 },
-                                child: Text(
-                                  '초대코드 : ${snapshot.data!.invitationCode ?? "모집 중"}',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Readex Pro',
-                                        fontSize: 16.0,
-                                        letterSpacing: 0.0,
-                                        fontWeight: FontWeight.bold,
-                                        useGoogleFonts: false,
-                                      ),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  child: Text(
+                                    '초대코드 : ${snapshot.data!.invitationCode ?? "모집 중"}',
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily: 'Readex Pro',
+                                          fontSize: 16.0,
+                                          letterSpacing: 0.0,
+                                          fontWeight: FontWeight.bold,
+                                          useGoogleFonts: false,
+                                        ),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
+
                         /* 
                           현재 "준비완료" 상태이고 host리더만이 경기를 시작할 수 있다.
                           */
@@ -647,7 +651,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                       MediaQuery.sizeOf(context).width * 0.85,
                                   height: 30.0,
                                   decoration: BoxDecoration(
-                                    color: Color(0xC6ABA4A4),
+                                    color: Color.fromARGB(197, 250, 249, 249),
                                   ),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
@@ -659,16 +663,19 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             5.0, 0.0, 0.0, 0.0),
                                         child: Text(
-                                          '주소 : ${snapshot.data!.place}',
+                                          '주소 : ${snapshot.data!.place}',                                          
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
+                                                
                                                 fontFamily: 'Readex Pro',
                                                 fontSize: 15.0,
                                                 letterSpacing: 0.0,
                                                 fontWeight: FontWeight.w600,
                                                 useGoogleFonts: false,
                                               ),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
                                         ),
                                       ),
                                     ].divide(SizedBox(width: 0.0)),
