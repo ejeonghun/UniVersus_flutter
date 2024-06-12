@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:universus/class/club/clubInfo.dart';
 import 'package:universus/class/club/clubMember.dart';
 import 'package:universus/class/club/clubPost.dart';
+import 'package:universus/club/ClubPostList_Widget.dart';
 import 'package:universus/club/ClubPostWrite_Widget.dart';
 import 'package:universus/club/Components/clubPost_Widget.dart';
 import 'package:universus/club/UpdateClub_Widget.dart';
@@ -855,29 +856,69 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                           mainAxisSize: MainAxisSize.max,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
-                                          children: clubPosts.isEmpty
-                                              ? [
-                                                  Text(
-                                                    '작성된 게시글이 없습니다',
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  '  게시글 목록',
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium,
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ClubPostListWidget(
+                                                          clubId: widget.clubId,
+                                                          clubName:
+                                                              clubInfoValue
+                                                                  .clubName,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: Text(
+                                                    '더보기  ',
                                                     style: FlutterFlowTheme.of(
                                                             context)
+                                                        .bodyText1
+                                                        .override(
+                                                          fontFamily: 'Roboto',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .tertiary,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          useGoogleFonts: true,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            if (clubPosts.isEmpty)
+                                              Text(
+                                                '작성된 게시글이 없습니다',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
                                                         .bodyText1,
-                                                  )
-                                                ]
-                                              : clubPosts
-                                                  .map((post) {
-                                                    return wrapWithModel(
-                                                      model:
-                                                          _model.clubPostModel,
-                                                      updateCallback: () =>
-                                                          setState(() {}),
-                                                      child: ClubPostWidget(
-                                                          clubPost: post),
-                                                    );
-                                                  })
-                                                  .toList()
-                                                  .divide(
-                                                      SizedBox(height: 4.0)),
+                                              )
+                                            else
+                                              ...clubPosts.map((post) {
+                                                return Padding(
+                                                  padding: EdgeInsets.only(
+                                                      bottom: 15),
+                                                  child: ClubPostWidget(
+                                                      clubPost: post),
+                                                );
+                                              }).toList()
+                                          ],
                                         ),
                                       ),
                                     ),

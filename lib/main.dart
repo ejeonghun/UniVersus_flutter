@@ -9,6 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:universus/chat/chats.dart';
 import 'package:universus/club/ClubList_Model.dart';
 import 'package:universus/club/ClubList_Widget.dart';
+import 'package:universus/club/ClubPostList_Widget.dart';
 import 'package:universus/main/Components/clubElement_Widget.dart';
 import 'package:universus/main/Components/clubelement_widget.dart';
 import 'package:universus/notice/notice.dart';
@@ -250,6 +251,10 @@ class _MyAppState extends State<MyApp> {
               '/checkversus': (context) => VersusCheckWidget(
                     battleId: 1,
                   ),
+              '/morePost': (context) => ClubPostListWidget(
+                    clubId: 1,
+                    clubName: "테스트",
+                  ), // 테스트 용도
             },
           );
         });

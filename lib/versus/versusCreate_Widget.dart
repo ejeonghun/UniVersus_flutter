@@ -120,15 +120,14 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
               autovalidateMode: AutovalidateMode.disabled,
               child: Padding(
                 padding: EdgeInsets.all(15.0),
-                child: SingleChildScrollView(                  
+                child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                          padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
                           child: EventList(
                             onEventSelected: (Event? selectedEvent) {
                               if (selectedEvent != null) {
