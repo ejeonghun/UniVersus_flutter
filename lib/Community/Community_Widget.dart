@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:universus/BottomBar2.dart';
 import 'package:universus/Community/CommunityPost_Widget.dart';
 import 'package:universus/Community/PostElement.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
@@ -197,6 +198,7 @@ class _CommunityWidgetState extends State<CommunityWidget>
                       ],
                     ),
                   ),
+                  bottomNavigationBar: BottomBar2(),
                 ),
               ); // 끝
             } else {

@@ -424,7 +424,7 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                                         size: 24,
                                                       ),
                                                       Text(
-                                                        '글 : ${clubPosts.length.toString()}',
+                                                        '${clubPosts.length.toString()}',
                                                         style: FlutterFlowTheme
                                                                 .of(context)
                                                             .bodyMedium

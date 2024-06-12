@@ -97,8 +97,8 @@ class _ClubPostWidgetState extends State<ClubPostWidget> {
                         ),
                       ),
                       Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(55.0, 0.0, 0.0, 0.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            140.0, 0.0, 0.0, 0.0),
                         child: Text(
                           '${widget.clubPost.getRegDt}',
                           style: FlutterFlowTheme.of(context)
@@ -152,24 +152,25 @@ class _ClubPostWidgetState extends State<ClubPostWidget> {
                           ),
                         ],
                       ),
+                      SizedBox(width: 12.0), // 텍스트와 이미지 사이 여백 조절
                       Align(
                         alignment: Alignment.centerRight,
-                        // AlignmentDirectional(0.0, 0.0),
-
-                        child: (widget.clubPost.imageUrl != null &&
-                                widget.clubPost.imageUrl != 'none')
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: Image.network(
-                                  widget.clubPost.imageUrl!,
-                                  width: 100.0,
-                                  height: 70.0,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            : Text(''),
+                        child: SizedBox(
+                          width: 100.0,
+                          height: 70.0,
+                          child: (widget.clubPost.imageUrl != null &&
+                                  widget.clubPost.imageUrl != 'none')
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Image.network(
+                                    widget.clubPost.imageUrl!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : Text(''),
+                        ),
                       ),
-                    ].divide(SizedBox(width: 50.0)),
+                    ].divide(SizedBox(width: 30.0)),
                   ),
                 ],
               ),

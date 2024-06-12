@@ -53,7 +53,7 @@ class _ReplyWidgetState extends State<ReplyWidget> {
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(7, 0, 0, 0),
                 child: Text(
                   widget.reply.nickname,
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
