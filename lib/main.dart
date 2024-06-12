@@ -247,7 +247,6 @@ class _MyAppState extends State<MyApp> {
               '/result': (context) => PaymentResult(),
               '/ranking': (context) => RankingPage(),
               '/notice': (context) => NoticePage(),
-              '/UnivBattleRecordPage': (context) => UnivBattleRecordPage(),
               '/checkversus': (context) => VersusCheckWidget(
                     battleId: 1,
                   ),
