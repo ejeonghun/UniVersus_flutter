@@ -245,7 +245,7 @@ class _PostWidgetState extends State<PostWidget> {
                       Align(
                         alignment: AlignmentDirectional(-1, 0),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(60, 15, 0, 0),
+                          padding: EdgeInsetsDirectional.fromSTEB(20, 15, 0, 0),
                           child: _isModifying
                               ? TextFormField(
                                   controller: _contentController,

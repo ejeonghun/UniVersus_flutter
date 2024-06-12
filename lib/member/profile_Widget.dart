@@ -66,7 +66,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           iconTheme:
               IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
           automaticallyImplyLeading: true,
@@ -75,9 +75,9 @@ class _ProfileWidgetState extends State<ProfileWidget> {
             style: FlutterFlowTheme.of(context).displaySmall.override(
                   fontFamily: 'Outfit',
                   color: FlutterFlowTheme.of(context).primaryText,
-                  fontSize: 24.0,
+                  fontSize: 22.0,
                   letterSpacing: 0.0,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.normal,
                 ),
           ),
           actions: [],
@@ -111,6 +111,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 profileImage = snapshot.data!.getProfileImage;
                 univLogoImage = snapshot.data!.getUnivLogoImage;
                 return Column(
+                
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -121,7 +122,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           width: MediaQuery.sizeOf(context).width * 1.0,
                           decoration: BoxDecoration(
                             color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
+                                .primaryBackground,
                             boxShadow: [
                               BoxShadow(
                                 blurRadius: 1.0,
@@ -214,7 +215,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                       children: [
                         Material(
                           color: Colors.transparent,
-                          elevation: 0.1,
+                          elevation: 0.0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
                           ),
@@ -223,7 +224,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                             height: 100.0,
                             decoration: BoxDecoration(
                               color: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
+                                  .primaryBackground,
                               boxShadow: [
                                 BoxShadow(
                                   blurRadius: 4.0,
@@ -234,13 +235,13 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                   ),
                                 )
                               ],
-                              borderRadius: BorderRadius.circular(5.0),
+                              borderRadius: BorderRadius.circular(0.0),
                               border: Border.all(
                                 color: FlutterFlowTheme.of(context)
                                     .secondaryBackground,
                                 width: 1.0,
                               ),
-                            ),
+                            ),                          
                             child: Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 1.0, 0.0, 0.0),
@@ -332,7 +333,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                 width: MediaQuery.sizeOf(context).width * 1.0,
                                 decoration: BoxDecoration(
                                   color: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
+                                      .primaryBackground,
                                 ),
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -515,7 +516,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                       ),
                     ),
                     Column(
-                      mainAxisSize: MainAxisSize.max,
+                      mainAxisSize: MainAxisSize.max,              
                       children: [
                         Row(
                           mainAxisSize: MainAxisSize.max,
@@ -555,7 +556,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                   20.0, 0.0, 20.0, 0.0),
                               child: Container(
                                 width: double.infinity,
-                                height: 60.0,
+                                height: 50.0,
                                 decoration: BoxDecoration(
                                   color: FlutterFlowTheme.of(context)
                                       .primaryBackground,
@@ -627,7 +628,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                     20.0, 12.0, 20.0, 0.0),
                                 child: Container(
                                   width: double.infinity,
-                                  height: 60.0,
+                                  height: 50.0,
                                   decoration: BoxDecoration(
                                     color: FlutterFlowTheme.of(context)
                                         .primaryBackground,
@@ -699,7 +700,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                     20.0, 12.0, 20.0, 0.0),
                                 child: Container(
                                   width: double.infinity,
-                                  height: 60.0,
+                                  height: 50.0,
                                   decoration: BoxDecoration(
                                     color: FlutterFlowTheme.of(context)
                                         .primaryBackground,
@@ -793,7 +794,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                               20.0, 0.0, 20.0, 0.0),
                           child: Container(
                             width: double.infinity,
-                            height: 60.0,
+                            height: 50.0,
                             decoration: BoxDecoration(
                               color: FlutterFlowTheme.of(context)
                                   .primaryBackground,
@@ -876,16 +877,16 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                       0.0, 0.0, 0.0, 0.0),
                                   iconPadding: EdgeInsetsDirectional.fromSTEB(
                                       0.0, 0.0, 0.0, 0.0),
-                                  color: FlutterFlowTheme.of(context).alternate,
+                                  color: FlutterFlowTheme.of(context).error,
                                   textStyle: FlutterFlowTheme.of(context)
                                       .bodySmall
                                       .override(
                                         fontFamily: 'Lexend Deca',
                                         color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
+                                            .primaryText,
                                         fontSize: 14.0,
                                         letterSpacing: 0.0,
-                                        fontWeight: FontWeight.normal,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                   elevation: 1.0,
                                   borderSide: BorderSide(

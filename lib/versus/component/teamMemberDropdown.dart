@@ -149,8 +149,8 @@ class _TeamMemberDropdownState extends State<TeamMemberDropdown> {
       child: DropdownButton<String>(
       hint: Text.rich(
   TextSpan(
-    text: '멤버 선택', // 텍스트
-    style: TextStyle(fontSize: 14), // 텍스트 스타일
+    text: '참가 멤버', // 텍스트
+    style: TextStyle(fontSize: 16), // 텍스트 스타일
     children: [
       WidgetSpan(
         child: Padding(

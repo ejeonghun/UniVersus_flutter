@@ -77,7 +77,7 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+      backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
       appBar: AppBar(
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         automaticallyImplyLeading: false,
@@ -114,13 +114,13 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
         child: Align(
           alignment: AlignmentDirectional(0.0, 0.0),
           child: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
+            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
             child: Form(
               key: _model.formKey,
               autovalidateMode: AutovalidateMode.disabled,
               child: Padding(
                 padding: EdgeInsets.all(15.0),
-                child: SingleChildScrollView(
+                child: SingleChildScrollView(                  
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -128,7 +128,7 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
                     children: [
                       Padding(
                           padding:
-                              EdgeInsetsDirectional.fromSTEB(20, 0, 20, 16),
+                              EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
                           child: EventList(
                             onEventSelected: (Event? selectedEvent) {
                               if (selectedEvent != null) {
@@ -261,7 +261,7 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
                             fillColor:
                                 FlutterFlowTheme.of(context).primaryBackground,
                             contentPadding: EdgeInsetsDirectional.fromSTEB(
-                                20.0, 24.0, 0.0, 24.0),
+                                20.0, 24.0, 0.0, 14.0),
                           ),
                           style: FlutterFlowTheme.of(context)
                               .bodyMedium
@@ -340,7 +340,7 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
                             fillColor:
                                 FlutterFlowTheme.of(context).primaryBackground,
                             contentPadding: EdgeInsetsDirectional.fromSTEB(
-                                20.0, 24.0, 0.0, 24.0),
+                                20.0, 24.0, 0.0, 30.0),
                           ),
                           style: FlutterFlowTheme.of(context)
                               .bodyMedium

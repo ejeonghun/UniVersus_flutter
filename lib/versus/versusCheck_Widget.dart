@@ -118,9 +118,9 @@ class _CheckVersusWidgetState extends State<VersusCheckWidget> {
                                 ),
                           ),
                         ],
-                      ),
+                      ),                      
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                         child: Row(
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -203,18 +203,20 @@ class _CheckVersusWidgetState extends State<VersusCheckWidget> {
                                   ),
                                 ),
                                 Container(
-                                  decoration: BoxDecoration(
-                                    color:
-                                        FlutterFlowTheme.of(context).alternate,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
+                                  // decoration: BoxDecoration(
+                                  //   color:
+                                  //       FlutterFlowTheme.of(context).alternate,
+                                  //   borderRadius: BorderRadius.circular(15),
+                                  // ),
                                   child: Padding(
                                     padding: EdgeInsets.all(10),
                                     child: Text(
-                                      '점수 : ${snapshot.data!.hostScore}',
+                                      '${snapshot.data!.hostScore}',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
+                                            fontSize: 30,
+                                            color: Colors.red,
                                             fontFamily: 'Readex Pro',
                                             letterSpacing: 0,
                                           ),
@@ -287,7 +289,7 @@ class _CheckVersusWidgetState extends State<VersusCheckWidget> {
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 5.0),
+                                      0.0, 0.0, 0.0, 0.0),
                                   child: Text(
                                     snapshot.data!.guestTeamName ??= '모집중 ..',
                                     style: FlutterFlowTheme.of(context)
@@ -302,18 +304,14 @@ class _CheckVersusWidgetState extends State<VersusCheckWidget> {
                                   ),
                                 ),
                                 Container(
-                                  decoration: BoxDecoration(
-                                    color:
-                                        FlutterFlowTheme.of(context).alternate,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
                                   child: Padding(
-                                    padding: EdgeInsets.all(10),
+                                    padding: EdgeInsets.all(0),
                                     child: Text(
-                                      '점수 : ${snapshot.data!.guestScore}',
+                                      '${snapshot.data!.guestScore}',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
+                                            fontSize: 30,
                                             fontFamily: 'Readex Pro',
                                             letterSpacing: 0,
                                           ),
@@ -330,7 +328,7 @@ class _CheckVersusWidgetState extends State<VersusCheckWidget> {
                         children: [
                           Padding(
                             padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                             child: FFButtonWidget(
                               onPressed: () async {
                                 if (await _model.resultRes(

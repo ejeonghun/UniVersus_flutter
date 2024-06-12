@@ -9,6 +9,7 @@ class versusElement {
   String? status; // 대항전 상태
   String? content; // 대항전 내용
   int? deptBattleId; // 학과 대항전 id
+  int? eventId; //대항전 카테고리 id
 
   versusElement(
       {this.hostTeamName,
@@ -20,6 +21,7 @@ class versusElement {
       this.univBattleId,
       this.status,
       this.content,
+      this.eventId,
       this.deptBattleId});
 
   // Getter methods
@@ -33,4 +35,5 @@ class versusElement {
   String? get getStatus => this.status;
   String? get getContent => this.content;
   int? get getDeptBattleId => this.deptBattleId;
+  int? get getEventId => this.eventId;
 }
