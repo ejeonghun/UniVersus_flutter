@@ -10,12 +10,14 @@ import 'package:universus/chat/chats.dart';
 import 'package:universus/club/ClubList_Model.dart';
 import 'package:universus/club/ClubList_Widget.dart';
 import 'package:universus/club/ClubPostList_Widget.dart';
+import 'package:universus/handleNotificationClick.dart';
 import 'package:universus/main/Components/clubElement_Widget.dart';
 import 'package:universus/main/Components/clubelement_widget.dart';
 import 'package:universus/notice/notice.dart';
 import 'package:universus/permissonManage.dart';
 import 'package:universus/permissonManage.dart';
 import 'package:universus/shared/paymentResult.dart';
+import 'package:universus/versus/versusDetail_Widget.dart';
 import 'package:universus/winloseRecord/record.dart';
 import 'package:universus/winloseRecord/record_model.dart';
 import 'package:universus/versus/versusCheck_Widget.dart';
@@ -55,16 +57,14 @@ import 'package:universus/Community/Post_Widget.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
 
+// 백그라운드 FCM 메세지 핸들러
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("백그라운드 메시지 처리.. ${message.notification!.body!}");
   print("target 메세지 처리 ${message.data['target'] ?? '없음'}");
   print("data 메세지 처리 ${message.data['data'] ?? '없음'}");
 }
 
-void handleNotificationClick(String payload) {
-  print("알림 클릭: $payload");
-}
-
+// 알림 init
 void initializeNotification() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -102,12 +102,15 @@ void initializeNotification() async {
   );
 }
 
+final GlobalKey<NavigatorState> navigatorKey =
+    GlobalKey<NavigatorState>(); // 네비게이션 키 상태관리
+
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // 1번코드
+  WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(
       nativeAppKey: 'c42d4f7154f511f29ae715dc77565878',
       javaScriptAppKey: '240cc5ab531ff61f42c8e0a1723a4f96');
-  await dotenv.load(fileName: ".env"); // 2번코드
+  await dotenv.load(fileName: ".env"); // .env 파일을 불러옴
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -138,7 +141,7 @@ class _MyAppState extends State<MyApp> {
 
   void getMyDeviceToken() async {
     final token = await FirebaseMessaging.instance.getToken();
-    print("내 디바이스 토큰: $token");
+    print("내 디바이스 토큰: $token"); // FCM 토큰
   }
 
   late Future<bool> _loginInfo;
@@ -195,6 +198,7 @@ class _MyAppState extends State<MyApp> {
         valueListenable: MyApp.themeNotifier,
         builder: (context, ThemeMode value, child) {
           return MaterialApp(
+            navigatorKey: navigatorKey, // 네비게이터 상태 관리
             darkTheme: ThemeData(
               brightness: Brightness.dark,
               fontFamily: 'Ownglyph', // 다크모드에 대한 글꼴

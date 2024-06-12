@@ -123,6 +123,7 @@ class _ReplyWidgetState extends State<ReplyWidget> {
                               setState(() {
                                 _model.textController?.clear();
                               });
+                              _isModifying = false;
                             });
                           },
                         ),

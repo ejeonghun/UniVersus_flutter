@@ -22,7 +22,6 @@ class CommunityModel extends FlutterFlowModel<ClubPostListWidget> {
 
   Future<List<PostElement>> getPostList(int clubId) async {
     DioApiCall api = DioApiCall();
-    await getMemberIdx();
     final response = await api.get(
         '/univBoard/list?memberIdx=${memberIdx}&clubId=${clubId}&categoryId=1');
     List<PostElement> list = [];
