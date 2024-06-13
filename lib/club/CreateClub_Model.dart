@@ -97,10 +97,10 @@ class CreateClubModel extends FlutterFlowModel<CreateClubWidget> {
       var formData = FormData.fromMap({
         'clubImage': await MultipartFile.fromFile(filePath),
         'memberIdx': await UserData.getMemberIdx(),
-        'clubName': clubNameController?.text,
-        'price': clubPriceController?.text,
-        'introduction': clubIntroController?.text,
-        'eventId': eventId,
+        'clubName': clubNameController?.text ?? '없음',
+        'price': clubPriceController?.text ?? 0,
+        'introduction': clubIntroController?.text ?? '없음',
+        'eventId': eventId ?? 1,
         'maximumMembers': countControllerValue,
         'univId': await UserData.getUnivId(),
       });
@@ -115,11 +115,11 @@ class CreateClubModel extends FlutterFlowModel<CreateClubWidget> {
       var dio = Dio();
       var formData = FormData.fromMap({
         'memberIdx': await UserData.getMemberIdx(),
-        'clubName': clubNameController?.text,
-        'price': clubPriceController?.text,
-        'introduction': clubIntroController?.text,
-        'eventId': eventId.toString(),
-        'maximumMembers': countControllerValue.toString(),
+        'clubName': clubNameController?.text ?? '없음',
+        'price': clubPriceController?.text ?? 0,
+        'introduction': clubIntroController?.text ?? '없음',
+        'eventId': eventId ?? 1,
+        'maximumMembers': countControllerValue ?? 4,
         'univId': await UserData.getUnivId(),
       });
 

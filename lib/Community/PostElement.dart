@@ -42,19 +42,19 @@ class PostElement {
   double? get getLat => double.parse(this.lat!);
   double? get getLng => double.parse(this.lng!);
   String? get getPlace => this.place;
-  
+
   get getProfileImgUrl =>
       profileImgUrl ??
       'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png';
 
   PostElement.empty()
       : univBoardId = 0,
-        nickname = '',
-        categoryName = '',
-        clubName = null, // Initialize as null
-        title = '',
-        content = '',
-        regDt = '',
+        nickname = '관리자',
+        categoryName = '축구',
+        clubName = "테스트",
+        title = '작성을 해보세요',
+        content = '지금 바로 게시글을 작성해보세요!',
+        regDt = DateTime.now().toString(),
         postImageUrls = [],
         lat = null, // Initialize as null
         lng = null, // Initialize as null

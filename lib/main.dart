@@ -1,11 +1,15 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:universus/chat/chats.dart';
 import 'package:universus/chat/chatList.dart';
 import 'package:universus/club/ClubList_Model.dart';
 import 'package:universus/club/ClubList_Widget.dart';
@@ -14,7 +18,6 @@ import 'package:universus/handleNotificationClick.dart';
 import 'package:universus/main/Components/clubElement_Widget.dart';
 import 'package:universus/main/Components/clubelement_widget.dart';
 import 'package:universus/notice/notice.dart';
-import 'package:universus/permissonManage.dart';
 import 'package:universus/permissonManage.dart';
 import 'package:universus/ranking/ranking.dart';
 import 'package:universus/service_center/service_center.dart';
@@ -58,14 +61,12 @@ import 'package:universus/Community/Post_Widget.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
 
-// 백그라운드 FCM 메세지 핸들러
+// 백그라운드 FCM 핸들러
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("백그라운드 메시지 처리.. ${message.notification!.body!}");
-  print("target 메세지 처리 ${message.data['target'] ?? '없음'}");
-  print("data 메세지 처리 ${message.data['data'] ?? '없음'}");
+  print("Handling a background message: ${message.messageId}");
 }
 
-// 알림 init
+// 알림 init 작업
 void initializeNotification() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -103,20 +104,29 @@ void initializeNotification() async {
   );
 }
 
-final GlobalKey<NavigatorState> navigatorKey =
-    GlobalKey<NavigatorState>(); // 네비게이션 키 상태관리
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(
       nativeAppKey: 'c42d4f7154f511f29ae715dc77565878',
       javaScriptAppKey: '240cc5ab531ff61f42c8e0a1723a4f96');
-  await dotenv.load(fileName: ".env"); // .env 파일을 불러옴
+  await dotenv.load(fileName: "dotenv");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // initializeDateFormatting().then((_) => runApp(MyApp()));
+  FlutterError.onError = (FlutterErrorDetails details) {
+    print(details);
+    FlutterError.dumpErrorToConsole(details);
+  };
+
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+    print(error);
+    print(stack);
+    return true;
+  };
+
   final message = await FirebaseMessaging.instance.getInitialMessage();
   runApp(MyApp(initialMessage: message));
 }
@@ -141,8 +151,21 @@ class _MyAppState extends State<MyApp> {
   var messageData = "";
 
   void getMyDeviceToken() async {
-    final token = await FirebaseMessaging.instance.getToken();
-    print("내 디바이스 토큰: $token"); // FCM 토큰
+    // 디바이스 토큰 가져오기
+    Future<void> requestNotificationPermission(BuildContext context) async {
+      if (kIsWeb) {
+        // 웹은 권한 요청을 실행하지 않음
+      } else {
+        // 알림 권한 요청
+        PermissionStatus status = await Permission.notification.request();
+        if (status.isGranted) {
+          final token = await FirebaseMessaging.instance.getToken();
+          print("내 디바이스 토큰: $token"); // FCM 토큰
+        } else {
+          print("알림 권한이 거부되었습니다.");
+        }
+      }
+    }
   }
 
   late Future<bool> _loginInfo;
@@ -175,14 +198,9 @@ class _MyAppState extends State<MyApp> {
           payload: jsonEncode(message.data),
         );
 
-        setState(() {
-          messageBody = message.notification!.body!;
-          messageTitle = message.notification!.title!;
-          messageTarget = message.data['target'] ?? '';
-          messageData = message.data['data'] ?? '';
-          print(
-              "Foreground 메시지 수신: $messageBody, $messageTitle, $messageData, $messageTarget");
-        });
+        // 포그라운드(앱 실행중)에서 알림 수신 시 핸들러
+        print(
+            "Foreground 메시지 수신: ${notification.body}, ${notification.title}, ${message.data}");
       }
     });
 
@@ -199,14 +217,14 @@ class _MyAppState extends State<MyApp> {
         valueListenable: MyApp.themeNotifier,
         builder: (context, ThemeMode value, child) {
           return MaterialApp(
-            navigatorKey: navigatorKey, // 네비게이터 상태 관리
+            navigatorKey: navigatorKey,
             darkTheme: ThemeData(
               brightness: Brightness.dark,
-              fontFamily: 'Ownglyph', // 다크모드에 대한 글꼴
+              fontFamily: 'Ownglyph',
             ),
             theme: ThemeData(
               brightness: Brightness.light,
-              fontFamily: 'Ownglyph', // 라이트모드에 대한 글꼴
+              fontFamily: 'Ownglyph',
             ),
             themeMode: value,
             initialRoute: '/',
@@ -231,7 +249,7 @@ class _MyAppState extends State<MyApp> {
               '/register': (context) => CreateAccountWidget(),
               '/passwordforgot': (context) => PasswordForgetWidget(),
               '/testscreen': (context) => TestscreenWidget(),
-              '/testplacepicker': (context) => new PlacePickerScreen(),
+              '/testplacepicker': (context) => PlacePickerScreen(),
               '/createClub': (context) => CreateClubWidget(),
               '/club/update': (context) => UpdateClubWidget(
                   clubId: "9"), // 테스트용 나중에 clubId 파라미터도 같이 전달해야함
@@ -260,6 +278,7 @@ class _MyAppState extends State<MyApp> {
                     clubId: 1,
                     clubName: "테스트",
                   ), // 테스트 용도
+              'ServiceCenterWidget': (context) => ServiceCenterWidget(),
               '/ServiceCenterWidget': (context) => ServiceCenterWidget(),
             },
           );
@@ -267,7 +286,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<bool> checkLoginInfo() async {
-    // 유저 정보 확인 메서드
     await Future.delayed(Duration(seconds: 3)); // Show logo for 3 seconds
     UserData? user = await UserData.getUser();
     return user != null;
@@ -287,7 +305,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     _animateLogo();
-    _permissionManage.requestPermissions(context); // 권한 요청
+    _permissionManage.requestPermissions(context);
+
     // _requestAllPermissions();
   }
 

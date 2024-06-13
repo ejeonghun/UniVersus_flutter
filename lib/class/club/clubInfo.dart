@@ -14,6 +14,7 @@ class clubInfo {
   String? LeaderProfileImg; // 클럽 개설자 프로필 이미지
   String? LeaderNickname; // 클럽 개설자 닉네임
   int? joinedStatus; // 클럽 가입 여부 0 , 1
+  int? chatRoomId; // 채팅방 아이디
 
   clubInfo({
     required this.clubId,
@@ -29,6 +30,7 @@ class clubInfo {
     this.LeaderNickname,
     this.LeaderProfileImg,
     this.joinedStatus,
+    this.chatRoomId,
   });
 
   String? get getRegDate {

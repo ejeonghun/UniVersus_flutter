@@ -77,10 +77,10 @@ class _versusProceedingWidgetState extends State<versusProceedingWidget> {
                   : FocusScope.of(context).unfocus(),
               child: Scaffold(
                 key: scaffoldKey,
-                backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+                backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
                 appBar: AppBar(
                   backgroundColor:
-                      FlutterFlowTheme.of(context).primaryBackground,
+                      FlutterFlowTheme.of(context).secondaryBackground,
                   automaticallyImplyLeading: false,
                   actions: [
                     Padding(
@@ -126,7 +126,7 @@ class _versusProceedingWidgetState extends State<versusProceedingWidget> {
                               ),
                               decoration: BoxDecoration(
                                 color: FlutterFlowTheme.of(context)
-                                    .primaryBackground,
+                                    .secondaryBackground,
                                 boxShadow: [
                                   BoxShadow(
                                     blurRadius: 3.0,
@@ -246,7 +246,7 @@ class _versusProceedingWidgetState extends State<versusProceedingWidget> {
                                                             letterSpacing: 0.0,
                                                             useGoogleFonts:
                                                                 false,
-                                                            fontSize: 20),
+                                                            fontSize: 16),
                                                   ),
                                                 ],
                                               ),

@@ -157,8 +157,10 @@ class _PostWidgetState extends State<PostWidget> {
                               children: [
                                 GestureDetector(
                                   onTap: () async {
-                                    await MemberDetails(post.PostMemberIdx)
-                                        .showMemberDetailsModal(context);
+                                    if (post.nickname != '익명') {
+                                      await MemberDetails(post.PostMemberIdx)
+                                          .showMemberDetailsModal(context);
+                                    }
                                   },
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(24),

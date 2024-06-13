@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:universus/Community/Post_Widget.dart';
 import 'package:universus/club/ClubList_Widget.dart';
 import 'package:universus/main.dart';
 import 'package:universus/main/main_Widget.dart';
@@ -38,6 +39,13 @@ void handleNotificationClick(String payload) {
         ));
         break;
       case 'notice':
+        break;
+      case 'univBoard/info': // 댓글 달렸을 때 알림 시 해당 게시글로 이동
+        navigatorKey.currentState?.push(MaterialPageRoute(
+          builder: (context) => PostWidget(
+            univBoardId: int.parse(dataValue),
+          ),
+        ));
         break;
       default:
         print("알 수 없는 target: $target");
