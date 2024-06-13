@@ -60,85 +60,87 @@ class _ClublistExWidgetState extends State<ClublistExWidget> {
                 ),
               );
             },
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Align(
-                alignment: AlignmentDirectional(-1.01, 0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(18),
-                  child: Image.network(
-                    club.imageUrl,
-                    width: 60,
-                    height: 60,
-                    fit: BoxFit.cover,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Align(
+                  alignment: AlignmentDirectional(-1.01, 0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(18),
+                    child: Image.network(
+                      club.imageUrl,
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Align(
-                      alignment: AlignmentDirectional(-0.2, -0.96),
-                      child: Text(
-                        club.clubName,
-                        style: GoogleFonts.getFont(
-                          'Readex Pro',
-                          fontSize: 17,
-                          letterSpacing: 0,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: AlignmentDirectional(0.13, 0.02),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 3, 0, 0),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Align(
+                        alignment: AlignmentDirectional(-0.2, -0.96),
                         child: Text(
-                          club.introduction ?? 'no',
+                          club.clubName,
                           style: GoogleFonts.getFont(
                             'Readex Pro',
-                            color: FlutterFlowTheme.of(context).secondaryText,
-                            fontSize: 13,
+                            fontSize: 17,
                             letterSpacing: 0,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w900,
                           ),
                         ),
                       ),
-                    ),
-                    Row(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.end, // 텍스트 위젯의 상단 정렬
-                      children: [
-                        Text(
-                          '${club.eventName}',
-                          style: GoogleFonts.getFont(
-                            'Readex Pro',
-                            letterSpacing: 0,
-                            fontSize: 12,
-                            fontStyle: FontStyle.italic,
+                      Align(
+                        alignment: AlignmentDirectional(0.13, 0.02),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 3, 0, 0),
+                          child: Text(
+                            club.introduction ?? 'no',
+                            style: GoogleFonts.getFont(
+                              'Readex Pro',
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                              fontSize: 13,
+                              letterSpacing: 0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        SizedBox(width: 10), // 가로 간격 조절을 위한 SizedBox
-                        Text(
-                          '👨‍🦳${club.currentMembers}',
-                          style: GoogleFonts.getFont(
-                            'Readex Pro',
-                            letterSpacing: 0,
-                            fontStyle: FontStyle.italic,
+                      ),
+                      Row(
+                        crossAxisAlignment:
+                            CrossAxisAlignment.end, // 텍스트 위젯의 상단 정렬
+                        children: [
+                          Text(
+                            '${club.eventName}',
+                            style: GoogleFonts.getFont(
+                              'Readex Pro',
+                              letterSpacing: 0,
+                              fontSize: 12,
+                              fontStyle: FontStyle.italic,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          SizedBox(width: 10), // 가로 간격 조절을 위한 SizedBox
+                          Text(
+                            '👨‍🦳${club.currentMembers}',
+                            style: GoogleFonts.getFont(
+                              'Readex Pro',
+                              letterSpacing: 0,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
         );
       },
     );
