@@ -227,8 +227,13 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
                                   snapshot.data!.isEmpty) {
                                 return Center(child: Text('No results found.'));
                               } else {
-                                return CommunityPostWidget(
-                                    post: snapshot.data![0]);
+                                return ListView.builder(
+                                  itemCount: snapshot.data!.length,
+                                  itemBuilder: (context, index) {
+                                    return CommunityPostWidget(
+                                        post: snapshot.data![index]);
+                                  },
+                                );
                               }
                             },
                           ),
