@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:universus/Community/reply_Model.dart';
+import 'package:universus/shared/IOSAlertDialog.dart';
+import 'package:universus/shared/memberDetails.dart';
 import 'replyElement.dart';
 import 'package:provider/provider.dart';
 
@@ -40,16 +42,32 @@ class _ReplyWidgetState extends State<ReplyWidget> {
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Container(
-                width: 25,
-                height: 25,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: Image.network(
-                  widget.reply.profileImageUrl,
-                  fit: BoxFit.cover,
+              GestureDetector(
+                onTap: () async {
+                  debugPrint(widget.reply.memberIdx.toString());
+                  if (widget.reply.nickname != "익명") {
+                    // 익명이 아니라면 프로필 조회 가능
+                    await MemberDetails(widget.reply.memberIdx)
+                        .showMemberDetailsModal(context);
+                  } else {
+                    // 익명은 프로필 조회 불가능
+                    IOSAlertDialog.show(
+                        context: context,
+                        title: "프로필 조회 실패",
+                        content: "익명 사용자입니다.");
+                  }
+                },
+                child: Container(
+                  width: 25,
+                  height: 25,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  child: Image.network(
+                    widget.reply.profileImageUrl,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Padding(

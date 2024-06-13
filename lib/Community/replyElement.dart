@@ -6,6 +6,7 @@ class Reply {
   final String content;
   final String timestamp;
   final int replyId;
+  final int memberIdx;
 
   Reply({
     required this.profileImageUrl,
@@ -13,6 +14,7 @@ class Reply {
     required this.content,
     required this.timestamp,
     required this.replyId,
+    required this.memberIdx,
   });
 
   String getFormattedDate() {
@@ -28,6 +30,7 @@ class Reply {
         nickname: '사용자',
         content: '첫 댓글을 작성해보세요!',
         timestamp: DateTime.now().toString(),
-        replyId: 0);
+        replyId: 0,
+        memberIdx: 0);
   }
 }
