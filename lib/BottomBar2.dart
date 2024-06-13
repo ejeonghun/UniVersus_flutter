@@ -55,12 +55,10 @@ class _BottomBar2State extends State<BottomBar2> {
       type: BottomNavigationBarType.fixed,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       unselectedItemColor: FlutterFlowTheme.of(context).primaryText,
-      selectedItemColor: FlutterFlowTheme.of(context).tertiary,
+      selectedItemColor: FlutterFlowTheme.of(context).primaryText, // 선택된 항목의 아이콘 색상을 선택되지 않은 항목과 같게 설정
       currentIndex: _selectedIndex, // 현재 선택된 인덱스 반영
-      selectedLabelStyle: TextStyle(color: Colors.amber[800]),
-      unselectedLabelStyle: TextStyle(
-          color: const Color.fromARGB(
-              255, 0, 0, 0)), // Set text color for unselected items
+      selectedLabelStyle: TextStyle(color: FlutterFlowTheme.of(context).primaryText), // 선택된 항목의 텍스트 색상을 선택되지 않은 항목과 같게 설정
+      unselectedLabelStyle: TextStyle(color: FlutterFlowTheme.of(context).primaryText), // 선택되지 않은 항목의 텍스트 색상
     );
   }
 }

@@ -58,7 +58,7 @@ class _ClubListWidgetState extends State<ClubListWidget> {
             },
           ),
           title: Text(
-            '지금 뜨는 인기 모임',
+            '지금 뜨는 인기 클럽',
             textAlign: TextAlign.start,
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Outfit',

@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
-# platform :ios, '12.0'
+# platform :ios, '13.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -26,8 +26,11 @@ end
 require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
 
 flutter_ios_podfile_setup
+platform :ios, '14.0'
 
 target 'Runner' do
+  # pod 'Firebase/Core'
+  # pod 'Firebase/Messaging'  # Firebase SDK가 요구하는 최소 iOS 버전을 여기에 지정합니다
   use_frameworks!
   use_modular_headers!
 

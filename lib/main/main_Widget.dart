@@ -156,65 +156,91 @@ class _MainWidgetState extends State<MainWidget> {
                                                 PageController(initialPage: 0),
                                             scrollDirection: Axis.horizontal,
                                             children: [
-                                              Stack(
-                                                children: [
-                                                  Align(
-                                                    alignment:
-                                                        AlignmentDirectional(
-                                                            0, 0),
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      child: Image.asset(
-                                                        'assets/images/Main1.png',
-                                                        width: 382,
-                                                        height: 362,
-                                                        fit: BoxFit.cover,
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context)
+                                                      .pushNamed('/versusList');
+                                                },
+                                                child: Stack(
+                                                  children: [
+                                                    Align(
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                              0, 0),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        child: Image.asset(
+                                                          'assets/images/Main1.png',
+                                                          width: 382,
+                                                          height: 362,
+                                                          fit: BoxFit.cover,
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
-                                              Stack(
-                                                children: [
-                                                  Align(
-                                                    alignment:
-                                                        AlignmentDirectional(
-                                                            0, 0),
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      child: Image.asset(
-                                                        'assets/images/Main2.png',
-                                                        width: 382,
-                                                        height: 362,
-                                                        fit: BoxFit.cover,
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          CommunityWidget(
+                                                        initialTabIndex:
+                                                            2, // 초기 탭 인덱스를 2로 설정하여 모집 탭 선택
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  );
+                                                },
+                                                child: Stack(
+                                                  children: [
+                                                    Align(
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                              0, 0),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        child: Image.asset(
+                                                          'assets/images/Main2.png',
+                                                          width: 382,
+                                                          height: 362,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                              Stack(
-                                                children: [
-                                                  Align(
-                                                    alignment:
-                                                        AlignmentDirectional(
-                                                            0, 0),
-                                                    child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                      child: Image.asset(
-                                                        'assets/images/Main3.png',
-                                                        width: 382,
-                                                        height: 362,
-                                                        fit: BoxFit.cover,
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.of(context)
+                                                      .pushNamed('/Community');
+                                                },
+                                                child: Stack(
+                                                  children: [
+                                                    Align(
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                              0, 0),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                        child: Image.asset(
+                                                          'assets/images/Main3.png',
+                                                          width: 382,
+                                                          height: 362,
+                                                          fit: BoxFit.cover,
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             ],
                                           ),

@@ -106,6 +106,8 @@ class _SearchResultClubListWidgetState
                               letterSpacing: 0,
                               fontWeight: FontWeight.w500,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ),

@@ -162,10 +162,7 @@ class _CreateClubWidgetState extends State<CreateClubWidget> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    '사진을 등록해주세요.',
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyText1,
+                                                    '사진을 등록해주세요.',                                                    
                                                   ),
                                                 ],
                                               ),
@@ -496,10 +493,10 @@ class _CreateClubWidgetState extends State<CreateClubWidget> {
                                       } else {
                                         debugPrint('실패');
                                         CustomSnackbar.error(context,
-                                            '모임 생성 실패', '모임 생성에 실패했습니다.', 3);
+                                            '클럽 생성 실패', '클럽 생성에 실패했습니다.', 3);
                                       }
                                     },
-                                    text: '모임 생성 ',
+                                    text: '클럽 생성 ',
                                     options: FFButtonOptions(
                                       width: 270,
                                       height: 50,
