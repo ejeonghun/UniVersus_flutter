@@ -49,7 +49,7 @@ class NotificationModel {
     String? memberIdx = await UserData.getMemberIdx();
     try {
       final response = await api.get('/notify/list?memberIdx=${memberIdx}');
-      print("API Response:  $response");
+      print("API Response: $response");
       if (response['success'] == true && response['data'] != null) {
         List<Notification> notifications = (response['data'] as List)
             .map((data) => Notification.fromJson(data))

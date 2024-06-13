@@ -6,20 +6,20 @@ import 'package:web_socket_channel/io.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:universus/chat/chats.dart';
+import 'package:universus/chat/chatList.dart';
+import 'package:intl/intl.dart'; // intl 패키지 추가
 
 class ChatScreen extends StatefulWidget {
   final int chatRoomId; // chatRoomId를 위한 필드 추가
   final int chatRoomType;
   final String? customChatRoomName;
 
-// 네비게이터 연결 해야함
   ChatScreen({
     Key? key,
     required this.chatRoomId,
     required this.chatRoomType,
     this.customChatRoomName,
-  }) : super(key: key); // 생성자 수정
+  }) : super(key: key);
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -67,13 +67,16 @@ class _ChatScreenState extends State<ChatScreen> {
         if (decoded is Map<String, dynamic> &&
             decoded.containsKey('type') &&
             decoded['type'] == 'system') {
+          // 시스템 메시지일 경우
+          String systemMessage = '${decoded['nickname']} 님이 나갔습니다.';
           messages.add(ChatMessage(
-              nickname: 'System',
-              content: decoded['content'],
-              memberIdx: 0,
-              profileImg: decoded['profileImg'],
-              regDt: DateTime.now().toIso8601String(),
-              type: 'system'));
+            nickname: 'System',
+            content: decoded['content'],
+            memberIdx: 0,
+            profileImg: decoded['profileImg'] ?? '',
+            regDt: DateTime.now().toIso8601String(),
+            type: 'system',
+          ));
         } else {
           messages
               .addAll(List.from(decoded).map((m) => ChatMessage.fromJson(m)));
@@ -81,12 +84,13 @@ class _ChatScreenState extends State<ChatScreen> {
         }
       } catch (e) {
         messages.add(ChatMessage(
-            nickname: 'System',
-            content: data,
-            memberIdx: 0,
-            profileImg: '',
-            regDt: DateTime.now().toIso8601String(),
-            type: 'system'));
+          nickname: 'System',
+          content: data,
+          memberIdx: 0,
+          profileImg: '',
+          regDt: DateTime.now().toIso8601String(),
+          type: 'system',
+        ));
       }
     });
   }
@@ -142,7 +146,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 },
               ),
             ),
-            // 기존의 입력 필드 및 전송 버튼 코드
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -169,6 +172,8 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildMessageBubble(ChatMessage message) {
+    bool isSystemMessage = message.type == 'system'; // 시스템 메시지 여부 확인
+
     bool isMine = int.parse(currentMemberIdx ?? '0') == message.memberIdx;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10),
@@ -201,36 +206,62 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _messageContentBubble(ChatMessage message, bool isMine) {
-    return Container(
-      decoration: BoxDecoration(
-        color: isMine ? Color(0xFF7465F6) : Color(0xFFE8E8E8),
-        borderRadius: BorderRadius.circular(12),
-        border: isMine ? Border.all(color: Color(0xFF7465F6), width: 2) : null,
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      child: Column(
-        crossAxisAlignment:
-            isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
-          Text(
-            message.content,
-            style: TextStyle(
-              color: isMine ? Colors.white : Colors.black,
-              fontSize: 16,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 5),
-            child: Text(
-              message.regDt, // 'regDt' should be formatted to show only time.
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 10,
+    // 시간 형식을 변환하는 함수
+    String formatTime(String isoTime) {
+      final dateTime = DateTime.parse(isoTime);
+      return DateFormat('h:mm a').format(dateTime); // 시간을 AM/PM 형식으로 변환
+    }
+
+    return Column(
+      crossAxisAlignment:
+          isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment:
+              isMine ? MainAxisAlignment.start : MainAxisAlignment.end,
+          children: [
+            if (isMine)
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Text(
+                  formatTime(message.regDt),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 10,
+                  ),
+                ),
+              ),
+            Container(
+              decoration: BoxDecoration(
+                color: isMine ? Color(0xFF7465F6) : Color(0xFFE8E8E8),
+                borderRadius: BorderRadius.circular(12),
+                border: isMine
+                    ? Border.all(color: Color(0xFF7465F6), width: 2)
+                    : null,
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              child: Text(
+                message.content,
+                style: TextStyle(
+                  color: isMine ? Colors.white : Colors.black,
+                  fontSize: 16,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
+            if (!isMine)
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  formatTime(message.regDt),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 10,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ],
     );
   }
 }
