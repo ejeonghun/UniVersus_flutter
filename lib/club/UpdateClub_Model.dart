@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:universus/class/api/ApiCall.dart';
+import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/user/user.dart';
 import 'UpdateClub_Widget.dart' show UpdateClubWidget;
 import 'package:flutter/material.dart';
@@ -29,7 +31,9 @@ class UpdateClubModel extends FlutterFlowModel<UpdateClubWidget> {
 
   int? eventId; // 카테고리 아이디
   String? uploadedImageUrl; // 이미지 URL
-  String? clubId; // 모임 id
+  String? _clubId; // 모임 id
+  String? memberIdx;
+  String? univId;
 
   void inputTest() {
     debugPrint(clubNameController?.text);
@@ -37,10 +41,14 @@ class UpdateClubModel extends FlutterFlowModel<UpdateClubWidget> {
     debugPrint(clubIntroController?.text);
     debugPrint(dropDownValue);
     debugPrint(countControllerValue.toString());
+    debugPrint(_clubId);
   }
 
   Future<bool> getClub(String clubId) async {
     ApiCall api = ApiCall();
+    _clubId = clubId;
+    memberIdx = await UserData.getMemberIdx();
+    univId = await UserData.getUnivId();
     final response = await api.get(
         '/club/info?clubId=${clubId}&memberIdx=${await UserData.getMemberIdx()}');
     if (response['success'] == true) {
@@ -54,7 +62,6 @@ class UpdateClubModel extends FlutterFlowModel<UpdateClubWidget> {
       eventId = response['data']['eventId'];
       print(response['data']['clubImage'][0]['imageUrl']);
       uploadedImageUrl = response['data']['clubImage'][0]['imageUrl'];
-      this.clubId = clubId;
       return true;
     } else {
       debugPrint(response.toString());
@@ -66,58 +73,105 @@ class UpdateClubModel extends FlutterFlowModel<UpdateClubWidget> {
 // 1개의 파일 업로드
   XFile? imageFile;
 
-  Future<bool> pickImage() async {
+  /**
+   * 이미지 선택
+   * @return 성공 여부
+   */
+  Future<void> pickImage() async {
     final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(
-      source: ImageSource.gallery, //위치는 갤러리
-      maxHeight: 300,
-      maxWidth: 800,
-      imageQuality: 70, // 이미지 크기 압축을 위해 퀄리티를 30으로 낮춤.
-    );
+    final XFile? image;
+
+    if (kIsWeb) {
+      // 웹일 경우
+      image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: 300,
+        maxWidth: 800,
+        imageQuality: 90, // 이미지 크기 압축을 위해 퀄리티를 90으로 설정.
+      );
+    } else {
+      // 모바일일 경우
+      image = await _picker.pickImage(
+        source: ImageSource.gallery, //위치는 갤러리
+        maxHeight: 300,
+        maxWidth: 800,
+        imageQuality: 90, // 이미지 크기 압축을 위해 퀄리티를 90으로 설정.
+      );
+    }
+
     if (image != null) {
       imageFile = image;
-      return true;
-    } else {
-      return false;
     }
   }
 
+  /**
+   * 동아리 수정
+   * @return 성공 여부
+   * 생성자 : 이정훈
+   */
   Future<bool> updateClub() async {
     var formData;
     if (imageFile != null) {
-      final filePath = imageFile!.path;
-
-      // 파일 경로를 통해 formData 생성
-      formData = FormData.fromMap({
-        'clubId': clubId,
-        'clubImage': await MultipartFile.fromFile(filePath),
-        'memberIdx': await UserData.getMemberIdx(),
-        'clubName': clubNameController?.text,
-        'price': clubPriceController?.text,
-        'introduction': clubIntroController?.text,
-        'eventId': eventId.toString(),
-        'maximumMembers': countControllerValue.toString(),
-        'univId': await UserData.getUnivId(),
-      });
+      // 이미지가 있을 때
+      MultipartFile clubImage;
+      if (kIsWeb) {
+        debugPrint("웹 이미지 업로드");
+        Uint8List imageBytes = await imageFile!.readAsBytes();
+        clubImage = MultipartFile.fromBytes(
+          imageBytes,
+          filename: imageFile!.name,
+        );
+        formData = FormData.fromMap({
+          'clubImage': clubImage,
+          'clubId': _clubId,
+          'memberIdx': memberIdx,
+          'clubName': clubNameController?.text,
+          'price': clubPriceController?.text,
+          'introduction': clubIntroController?.text,
+          'eventId': eventId.toString(),
+          'maximumMembers': countControllerValue.toString(),
+          'univId': univId,
+        });
+      } else {
+        debugPrint("모바일 이미지 업로드");
+        formData = FormData.fromMap({
+          'clubId': _clubId,
+          'clubImage': await MultipartFile.fromFile(imageFile!.path),
+          'memberIdx': memberIdx,
+          'clubName': clubNameController?.text,
+          'price': clubPriceController?.text,
+          'introduction': clubIntroController?.text,
+          'eventId': eventId.toString(),
+          'maximumMembers': countControllerValue.toString(),
+          'univId': univId,
+        });
+      }
     } else {
-      // 이미지 파일이 없을 경우.
+      // 이미지가 없을 때
+      debugPrint("이미지 없음");
       formData = FormData.fromMap({
-        'clubId': clubId,
-        'memberIdx': await UserData.getMemberIdx(),
+        'clubId': _clubId,
+        'memberIdx': memberIdx,
         'clubName': clubNameController?.text,
         'price': clubPriceController?.text,
         'introduction': clubIntroController?.text,
         'eventId': eventId.toString(),
         'maximumMembers': countControllerValue.toString(),
-        'univId': await UserData.getUnivId(),
+        'univId': univId,
       });
     }
+
     // 업로드 요청
-    var dio = Dio();
-    final response = await dio.patch(
-        'https://moyoapi.lunaweb.dev/api/v1/club/modify',
-        data: formData);
-    return response.statusCode == 200;
+    var dio = DioApiCall();
+    debugPrint(formData.toString());
+    final response = await dio.multipartPatchReq('/club/modify', formData);
+    if (response['success']) {
+      debugPrint("동아리 수정 성공");
+      return true;
+    } else {
+      debugPrint("동아리 수정 실패");
+      return false;
+    }
   }
 
   @override

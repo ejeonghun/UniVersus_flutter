@@ -15,15 +15,16 @@ class CommunityModel extends FlutterFlowModel<ClubPostListWidget> {
   int get tabBarCurrentIndex =>
       tabBarController != null ? tabBarController!.index : 0;
 
-  late String? memberIdx;
+  String? memberIdx;
   Future<void> getMemberIdx() async {
     memberIdx = await UserData.getMemberIdx();
   }
 
   Future<List<PostElement>> getPostList(int clubId) async {
+    String? _memberIdx = await UserData.getMemberIdx();
     DioApiCall api = DioApiCall();
     final response = await api.get(
-        '/univBoard/list?memberIdx=${memberIdx}&clubId=${clubId}&categoryId=1');
+        '/univBoard/list?memberIdx=${_memberIdx}&clubId=${clubId}&categoryId=1');
     List<PostElement> list = [];
     debugPrint(memberIdx.toString());
     if (response['data'] == null) {
@@ -51,6 +52,7 @@ class CommunityModel extends FlutterFlowModel<ClubPostListWidget> {
               'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
         ));
       }
+      debugPrint(list.toString());
     }
 
     return list;

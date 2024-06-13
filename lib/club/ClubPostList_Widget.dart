@@ -135,24 +135,25 @@ class _ClubPostListWidgetState extends State<ClubPostListWidget>
                                 return Center(
                                     child: Text('Error: ${snapshot.error}'));
                               } else if (!snapshot.hasData ||
-                                  snapshot.data!.isEmpty) {
+                                  snapshot.data!.isEmpty ||
+                                  snapshot.data == []) {
                                 return Center(child: Text('게시물이 없습니다.'));
+                              } else {
+                                List<PostElement> postList = snapshot.data!;
+                                postList.sort((a, b) => DateTime.parse(b.regDt)
+                                    .compareTo(DateTime.parse(a.regDt)));
+                                return SingleChildScrollView(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: postList.map((post) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(bottom: 15),
+                                        child: CommunityPostWidget(post: post),
+                                      );
+                                    }).toList(),
+                                  ),
+                                );
                               }
-
-                              List<PostElement> postList = snapshot.data!;
-                              postList.sort((a, b) => DateTime.parse(b.regDt)
-                                  .compareTo(DateTime.parse(a.regDt)));
-                              return SingleChildScrollView(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: postList.map((post) {
-                                    return Padding(
-                                      padding: EdgeInsets.only(bottom: 15),
-                                      child: CommunityPostWidget(post: post),
-                                    );
-                                  }).toList(),
-                                ),
-                              );
                             },
                           ),
                         ),

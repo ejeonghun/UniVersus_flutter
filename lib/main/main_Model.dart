@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/user/user.dart';
 import 'package:universus/class/user/userProfile.dart';
@@ -61,11 +63,30 @@ class MainModel extends FlutterFlowModel<MainWidget> {
   }
 
   Future<List<ClubElement>> getClubList() async {
-    final token = await FirebaseMessaging.instance.getToken();
+    String? token;
+    if (kIsWeb) {
+      // 웹은 권한 요청을 실행하지 않음
+    } else {
+      // 알림 권한 요청
+      PermissionStatus status = await Permission.notification.request();
+      if (status.isGranted) {
+        token = await FirebaseMessaging.instance.getToken();
+        print("내 디바이스 토큰: $token"); // FCM 토큰
+      } else {
+        print("알림 권한이 거부되었습니다.");
+      }
+    }
+
     try {
       DioApiCall api = DioApiCall();
-      final response = await api.get(
-          '/club/suggest?memberIdx=${await UserData.getMemberIdx()}&fcmToken=${token}');
+      String? apiUrl;
+      if (token == null) {
+        apiUrl = '/club/suggest?memberIdx=${await UserData.getMemberIdx()}';
+      } else {
+        apiUrl =
+            '/club/suggest?memberIdx=${await UserData.getMemberIdx()}&fcmToken=${token}';
+      }
+      final response = await api.get(apiUrl);
 
       // 가져온 데이터가 null이거나 List가 아닌 경우 처리
       if (!response.isNotEmpty) {
@@ -115,7 +136,8 @@ class MainModel extends FlutterFlowModel<MainWidget> {
           latitude: item['lat'] ?? '',
           longitude: item['lng'] ?? '',
           place: item['place'] ?? '',
-          imageUrl: item['imageUrl'] ?? 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
+          imageUrl: item['imageUrl'] ??
+              'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
         ));
       }
       return recruitmentlist;

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:universus/class/api/DioApiCall.dart';
@@ -30,6 +31,12 @@ class ProfileEditModel extends FlutterFlowModel<updateProfileWidget> {
   TextEditingController? oneLineIntroController;
   String? Function(BuildContext, String?)? oneLineIntroControllerValidator;
 
+  /**
+   * 사용자 정보 불러오기
+   * @param memberIdx : 사용자 고유번호
+   * @return 사용자 정보
+   * 생성자 : 이정훈
+   */
   Future<userProfile> getProfile(String memberIdx) async {
     // 사용자 정보를 불러오는 메소드
     DioApiCall api = DioApiCall();
@@ -60,15 +67,32 @@ class ProfileEditModel extends FlutterFlowModel<updateProfileWidget> {
 
   XFile? imageFile; // 이미지 파일 저장 변수
 
+  /**
+   * 이미지 선택
+   * @return 성공 여부
+   */
   Future<bool> pickImage() async {
-    // 이미지 선택 메소드
     final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(
-      source: ImageSource.gallery, //위치는 갤러리
-      maxHeight: 300,
-      maxWidth: 800,
-      imageQuality: 70, // 이미지 크기 압축을 위해 퀄리티를 30으로 낮춤.
-    );
+    final XFile? image;
+
+    if (kIsWeb) {
+      // 웹일 경우
+      image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: 300,
+        maxWidth: 800,
+        imageQuality: 90, // 이미지 크기 압축을 위해 퀄리티를 90으로 설정.
+      );
+    } else {
+      // 모바일일 경우
+      image = await _picker.pickImage(
+        source: ImageSource.gallery, //위치는 갤러리
+        maxHeight: 300,
+        maxWidth: 800,
+        imageQuality: 90, // 이미지 크기 압축을 위해 퀄리티를 90으로 설정.
+      );
+    }
+
     if (image != null) {
       imageFile = image;
       return updateProfileImage();
@@ -77,14 +101,29 @@ class ProfileEditModel extends FlutterFlowModel<updateProfileWidget> {
     }
   }
 
+  /**
+   * 프로필 이미지 수정
+   * @return 성공 여부
+   * 생성자 : 이정훈
+   */
   Future<bool> updateProfileImage() async {
     if (imageFile != null) {
-      final filePath = imageFile!.path;
+      MultipartFile profileImage;
+
+      if (kIsWeb) {
+        Uint8List imageBytes = await imageFile!.readAsBytes();
+        profileImage = MultipartFile.fromBytes(
+          imageBytes,
+          filename: imageFile!.name,
+        );
+      } else {
+        profileImage = await MultipartFile.fromFile(imageFile!.path);
+      }
 
       DioApiCall api = DioApiCall();
       final response = await api.ImageReq('/member/updateImage', {
         'memberIdx': await UserData.getMemberIdx(),
-        'profileImage': await MultipartFile.fromFile(filePath),
+        'profileImage': profileImage,
       });
 
       if (response['success'] == true) {
@@ -99,6 +138,12 @@ class ProfileEditModel extends FlutterFlowModel<updateProfileWidget> {
     }
   }
 
+  /**
+   * 프로필 수정
+   * @param memberIdx : 사용자 고유번호
+   * @return 성공 여부
+   * 생성자 : 이정훈
+   */
   Future<bool> updateProfile(String memberIdx) async {
     DioApiCall api = DioApiCall();
     final response = await api.post('/member/updateProfile', {

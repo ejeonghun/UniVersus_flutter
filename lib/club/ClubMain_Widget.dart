@@ -392,7 +392,7 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                                                         size: 24,
                                                       ),
                                                       Text(
-                                                        '풋살',
+                                                        clubInfoValue.eventId,
                                                         style: FlutterFlowTheme
                                                                 .of(context)
                                                             .bodyMedium

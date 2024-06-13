@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:universus/chat/chats.dart';
 import 'package:universus/club/ClubList_Model.dart';
 import 'package:universus/club/ClubList_Widget.dart';
@@ -110,10 +113,24 @@ void main() async {
   KakaoSdk.init(
       nativeAppKey: 'c42d4f7154f511f29ae715dc77565878',
       javaScriptAppKey: '240cc5ab531ff61f42c8e0a1723a4f96');
-  await dotenv.load(fileName: ".env"); // .env 파일을 불러옴
+  await dotenv.load(fileName: "dotenv"); // .env 파일을 불러옴
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  FlutterError.onError = (FlutterErrorDetails details) {
+    // 에러 핸들링
+
+    print(details);
+    FlutterError.dumpErrorToConsole(details);
+  };
+
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+    // 에러 핸들링
+    print(error);
+    print(stack);
+    return true;
+  };
 
   // initializeDateFormatting().then((_) => runApp(MyApp()));
   final message = await FirebaseMessaging.instance.getInitialMessage();
@@ -140,8 +157,20 @@ class _MyAppState extends State<MyApp> {
   var messageData = "";
 
   void getMyDeviceToken() async {
-    final token = await FirebaseMessaging.instance.getToken();
-    print("내 디바이스 토큰: $token"); // FCM 토큰
+    Future<void> requestNotificationPermission(BuildContext context) async {
+      if (kIsWeb) {
+        // 웹은 권한 요청을 실행하지 않음
+      } else {
+        // 알림 권한 요청
+        PermissionStatus status = await Permission.notification.request();
+        if (status.isGranted) {
+          final token = await FirebaseMessaging.instance.getToken();
+          print("내 디바이스 토큰: $token"); // FCM 토큰
+        } else {
+          print("알림 권한이 거부되었습니다.");
+        }
+      }
+    }
   }
 
   late Future<bool> _loginInfo;
@@ -286,6 +315,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     _animateLogo();
     _permissionManage.requestPermissions(context); // 권한 요청
+
     // _requestAllPermissions();
   }
 
