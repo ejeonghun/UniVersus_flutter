@@ -70,8 +70,9 @@ dependencies:
   flutter_svg: ^2.0.10+1
   lottie: ^3.1.0
   geolocator: ^10.0.1
-  google_maps_flutter: ^2.6.0
-  google_maps_flutter_web: ^0.5.6+2
+  google_maps_flutter: ^2.6.1
+  google_maps_flutter_web: ^0.5.8
+  google_maps_flutter_ios: ^2.7.0
   firebase_core: ^3.1.0
   firebase_messaging: ^15.0.1
   firebase_messaging_web: ^3.8.9

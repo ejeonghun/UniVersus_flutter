@@ -26,12 +26,11 @@ class _ServiceCenterWidgetState extends State<ServiceCenterWidget>
     return Scaffold(
       appBar: AppBar(
         title: Text('고객센터'),
-        centerTitle: true,
+        centerTitle: false,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop(); // 뒤로가기 동작
-
             // Handle back button press
           },
         ),
