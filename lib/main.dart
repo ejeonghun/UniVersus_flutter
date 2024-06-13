@@ -19,6 +19,8 @@ import 'package:universus/main/Components/clubelement_widget.dart';
 import 'package:universus/notice/notice.dart';
 import 'package:universus/permissonManage.dart';
 import 'package:universus/permissonManage.dart';
+import 'package:universus/ranking/ranking.dart';
+import 'package:universus/service_center/service_center.dart';
 import 'package:universus/shared/paymentResult.dart';
 import 'package:universus/versus/versusDetail_Widget.dart';
 import 'package:universus/winloseRecord/record.dart';
@@ -34,7 +36,6 @@ import 'package:universus/Community/Write_Widget.dart';
 import 'package:universus/Search/SearchResult_Widget.dart';
 import 'package:universus/Search/Search_Widget.dart';
 import 'package:universus/auth/AdditionalInfo_Widget.dart';
-import 'package:universus/ranking/ranking.dart';
 import 'package:universus/notice/notice.dart';
 
 import 'package:universus/class/user/user.dart';
@@ -288,6 +289,7 @@ class _MyAppState extends State<MyApp> {
                     clubId: 1,
                     clubName: "테스트",
                   ), // 테스트 용도
+                  'ServiceCenterWidget': (context) => ServiceCenterWidget(),
             },
           );
         });
