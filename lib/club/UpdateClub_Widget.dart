@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -125,10 +126,9 @@ class _UpdateClubWidgetState extends State<UpdateClubWidget> {
                                   children: [
                                     GestureDetector(
                                       onTap: () async {
-                                        if (await _model.pickImage()) {
-                                          debugPrint('이미지 선택');
-                                          setState(() {});
-                                        }
+                                        await _model.pickImage();
+                                        debugPrint('이미지 선택됨');
+                                        setState(() {});
                                       },
                                       child: Container(
                                         width:
@@ -139,16 +139,22 @@ class _UpdateClubWidgetState extends State<UpdateClubWidget> {
                                                 0.25,
                                         decoration: BoxDecoration(
                                           color: Color.fromARGB(
-                                              194, 178, 175, 179),
+                                              194, 241, 241, 241),
                                           borderRadius:
                                               BorderRadius.circular(6),
                                           shape: BoxShape.rectangle,
                                         ),
                                         child: _model.imageFile != null
-                                            ? Image.file(
-                                                File(_model.imageFile!.path),
-                                                fit: BoxFit.cover,
-                                              )
+                                            ? kIsWeb
+                                                ? Image.network(
+                                                    _model.imageFile!.path,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : Image.file(
+                                                    File(
+                                                        _model.imageFile!.path),
+                                                    fit: BoxFit.cover,
+                                                  )
                                             : _model.uploadedImageUrl != null
                                                 ? Image.network(
                                                     _model.uploadedImageUrl!,
@@ -500,8 +506,7 @@ class _UpdateClubWidgetState extends State<UpdateClubWidget> {
                                       0, 24, 0, 24),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      _model.inputTest();
-                                      if (await _model.updateClub() == true) {
+                                      if (await _model.updateClub()) {
                                         debugPrint('성공');
                                         // 수정된 클럽으로 이동하는 로직 필요
                                         Navigator.of(context).pop();

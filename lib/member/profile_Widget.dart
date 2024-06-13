@@ -38,8 +38,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => ProfileModel());
-    getProfile();
-    setProfile();
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
@@ -48,16 +46,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     _model.dispose();
 
     super.dispose();
-  }
-
-  void getProfile() async {
-    res = await _model.getProfile(); // 받아온 데이터 클래스
-  }
-
-  void setProfile() async {
-    setState(() {
-      userName = res!.getUserName;
-    });
   }
 
   @override
@@ -111,7 +99,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 profileImage = snapshot.data!.getProfileImage;
                 univLogoImage = snapshot.data!.getUnivLogoImage;
                 return Column(
-                
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -121,8 +108,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                         Container(
                           width: MediaQuery.sizeOf(context).width * 1.0,
                           decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .primaryBackground,
+                            color:
+                                FlutterFlowTheme.of(context).primaryBackground,
                             boxShadow: [
                               BoxShadow(
                                 blurRadius: 1.0,
@@ -241,7 +228,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                     .secondaryBackground,
                                 width: 1.0,
                               ),
-                            ),                          
+                            ),
                             child: Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 1.0, 0.0, 0.0),
@@ -516,7 +503,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                       ),
                     ),
                     Column(
-                      mainAxisSize: MainAxisSize.max,              
+                      mainAxisSize: MainAxisSize.max,
                       children: [
                         Row(
                           mainAxisSize: MainAxisSize.max,

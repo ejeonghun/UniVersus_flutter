@@ -1,20 +1,28 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:universus/chat/chats.dart';
 import 'package:universus/club/ClubList_Model.dart';
 import 'package:universus/club/ClubList_Widget.dart';
+import 'package:universus/club/ClubPostList_Widget.dart';
+import 'package:universus/handleNotificationClick.dart';
 import 'package:universus/main/Components/clubElement_Widget.dart';
 import 'package:universus/main/Components/clubelement_widget.dart';
 import 'package:universus/notice/notice.dart';
 import 'package:universus/permissonManage.dart';
 import 'package:universus/permissonManage.dart';
+import 'package:universus/ranking/ranking.dart';
+import 'package:universus/service_center/service_center.dart';
 import 'package:universus/shared/paymentResult.dart';
+import 'package:universus/versus/versusDetail_Widget.dart';
 import 'package:universus/winloseRecord/record.dart';
 import 'package:universus/winloseRecord/record_model.dart';
 import 'package:universus/versus/versusCheck_Widget.dart';
@@ -28,7 +36,6 @@ import 'package:universus/Community/Write_Widget.dart';
 import 'package:universus/Search/SearchResult_Widget.dart';
 import 'package:universus/Search/Search_Widget.dart';
 import 'package:universus/auth/AdditionalInfo_Widget.dart';
-import 'package:universus/ranking/ranking.dart';
 import 'package:universus/notice/notice.dart';
 
 import 'package:universus/class/user/user.dart';
@@ -54,16 +61,14 @@ import 'package:universus/Community/Post_Widget.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
 
+// 백그라운드 FCM 메세지 핸들러
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("백그라운드 메시지 처리.. ${message.notification!.body!}");
   print("target 메세지 처리 ${message.data['target'] ?? '없음'}");
   print("data 메세지 처리 ${message.data['data'] ?? '없음'}");
 }
 
-void handleNotificationClick(String payload) {
-  print("알림 클릭: $payload");
-}
-
+// 알림 init
 void initializeNotification() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -101,15 +106,32 @@ void initializeNotification() async {
   );
 }
 
+final GlobalKey<NavigatorState> navigatorKey =
+    GlobalKey<NavigatorState>(); // 네비게이션 키 상태관리
+
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // 1번코드
+  WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(
       nativeAppKey: 'c42d4f7154f511f29ae715dc77565878',
       javaScriptAppKey: '240cc5ab531ff61f42c8e0a1723a4f96');
-  await dotenv.load(fileName: ".env"); // 2번코드
+  await dotenv.load(fileName: "dotenv"); // .env 파일을 불러옴
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  FlutterError.onError = (FlutterErrorDetails details) {
+    // 에러 핸들링
+
+    print(details);
+    FlutterError.dumpErrorToConsole(details);
+  };
+
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+    // 에러 핸들링
+    print(error);
+    print(stack);
+    return true;
+  };
 
   // initializeDateFormatting().then((_) => runApp(MyApp()));
   final message = await FirebaseMessaging.instance.getInitialMessage();
@@ -136,8 +158,20 @@ class _MyAppState extends State<MyApp> {
   var messageData = "";
 
   void getMyDeviceToken() async {
-    final token = await FirebaseMessaging.instance.getToken();
-    print("내 디바이스 토큰: $token");
+    Future<void> requestNotificationPermission(BuildContext context) async {
+      if (kIsWeb) {
+        // 웹은 권한 요청을 실행하지 않음
+      } else {
+        // 알림 권한 요청
+        PermissionStatus status = await Permission.notification.request();
+        if (status.isGranted) {
+          final token = await FirebaseMessaging.instance.getToken();
+          print("내 디바이스 토큰: $token"); // FCM 토큰
+        } else {
+          print("알림 권한이 거부되었습니다.");
+        }
+      }
+    }
   }
 
   late Future<bool> _loginInfo;
@@ -194,6 +228,7 @@ class _MyAppState extends State<MyApp> {
         valueListenable: MyApp.themeNotifier,
         builder: (context, ThemeMode value, child) {
           return MaterialApp(
+            navigatorKey: navigatorKey, // 네비게이터 상태 관리
             darkTheme: ThemeData(
               brightness: Brightness.dark,
               fontFamily: 'Ownglyph', // 다크모드에 대한 글꼴
@@ -250,6 +285,11 @@ class _MyAppState extends State<MyApp> {
               '/checkversus': (context) => VersusCheckWidget(
                     battleId: 1,
                   ),
+              '/morePost': (context) => ClubPostListWidget(
+                    clubId: 1,
+                    clubName: "테스트",
+                  ), // 테스트 용도
+                  'ServiceCenterWidget': (context) => ServiceCenterWidget(),
             },
           );
         });
@@ -277,6 +317,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     _animateLogo();
     _permissionManage.requestPermissions(context); // 권한 요청
+
     // _requestAllPermissions();
   }
 

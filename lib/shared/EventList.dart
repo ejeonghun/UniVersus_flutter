@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import 'package:universus/class/api/ApiCall.dart';
 
 class Event with CustomDropdownListFilter {

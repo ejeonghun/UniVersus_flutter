@@ -97,6 +97,7 @@ class PostModel extends FlutterFlowModel<PostWidget> {
       }
       for (var data in response['data']) {
         Reply reply = Reply(
+          memberIdx: data['memberIdx'] ?? 0,
           profileImageUrl: data['profileImgUrl'] ?? '',
           nickname: data['nickOrAnon'] ?? '',
           content: data['content'] ?? '',

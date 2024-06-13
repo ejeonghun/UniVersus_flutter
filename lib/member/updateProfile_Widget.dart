@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -146,10 +147,17 @@ class _updateProfileWidgetState extends State<updateProfileWidget> {
                                         shape: BoxShape.rectangle,
                                       ),
                                       child: _model.imageFile != null
-                                          ? Image.file(
-                                              File(_model.imageFile!.path),
-                                              fit: BoxFit.cover,
-                                            )
+                                          ? kIsWeb // 만약 웹이면
+                                              ? Image.network(
+                                                  // 네트워크 이미지를 가져옵니다.
+                                                  _model.imageFile!.path,
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Image.file(
+                                                  // 웹이 아니면 파일 이미지를 가져옵니다.
+                                                  File(_model.imageFile!.path),
+                                                  fit: BoxFit.cover,
+                                                )
                                           : FlutterFlowIconButton(
                                               borderColor: Colors.transparent,
                                               borderRadius: 20.0,
@@ -166,7 +174,6 @@ class _updateProfileWidgetState extends State<updateProfileWidget> {
                                               onPressed: () async {
                                                 if (await _model.pickImage()) {
                                                   debugPrint('이미지 선택');
-                                                  // AlertDia로 변경하자!
                                                   CustomSnackbar.success(
                                                       context,
                                                       '성공',
@@ -174,10 +181,6 @@ class _updateProfileWidgetState extends State<updateProfileWidget> {
                                                       3);
                                                   setState(
                                                       () {}); // 이미지가 선택되었으므로 화면을 다시 그립니다.
-                                                  // Future.delayed(
-                                                  //     Duration(seconds: 1), () {
-                                                  //   Navigator.of(context).pop();
-                                                  // }); 1초 뒤 뒤로가기
                                                 }
                                               },
                                             ),
@@ -346,7 +349,7 @@ class _updateProfileWidgetState extends State<updateProfileWidget> {
                                     .asValidator(context),
                               ),
                             ),
-                            
+
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   20.0, 0.0, 20.0, 16.0),

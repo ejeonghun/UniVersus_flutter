@@ -226,20 +226,32 @@ class _ClubPostWriteWidgetState extends State<ClubPostWriteWidget> {
                       _model.textController2Validator.asValidator(context),
                 ),
               ),
-              if (_model.imageFile !=
-                  null) // Display the selected image if it exists
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Image.file(
-                      File(_model.imageFile!.path),
-                      width: 110,
-                      height: 110,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+              if (_model.imageFile != null)
+                kIsWeb
+                    ? // 만약 웹이면
+                    Align(
+                        alignment: Alignment.bottomRight,
+                        child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Image.network(
+                              // 네트워크 이미지를 가져옵니다.
+                              _model.imageFile!.path,
+                              fit: BoxFit.cover,
+                              width: 110,
+                              height: 110,
+                            )),
+                      )
+                    : Align(
+                        alignment: Alignment.bottomRight,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Image.file(
+                            // 웹이 아니면 파일 이미지를 가져옵니다.
+                            File(_model.imageFile!.path),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
               Align(
                 //이미지 업로드
                 alignment: AlignmentDirectional(-1, 1),

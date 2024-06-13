@@ -81,7 +81,7 @@ class UserData {
     if (await storage.read(key: 'memberIdx') == null) {
       return null;
     }
-    return storage.read(key: 'memberIdx');
+    return await storage.read(key: 'memberIdx');
   }
 
   static Future<String?> getUnivId() async {

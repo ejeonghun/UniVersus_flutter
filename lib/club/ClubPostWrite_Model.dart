@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:universus/class/api/DioApiCall.dart';
@@ -63,10 +64,23 @@ class ClubPostWriteModel extends FlutterFlowModel<ClubPostWriteWidget> {
 
     // image파일이 있으면 이미지 파라미터 추가
     if (imageFile != null) {
-      formData.files.add(MapEntry(
-        'postImage',
-        await MultipartFile.fromFile(imageFile!.path, filename: 'upload.jpg'),
-      ));
+      if (!kIsWeb) {
+        // 모바일 기기라면
+        formData.files.add(MapEntry(
+          'postImage',
+          await MultipartFile.fromFile(imageFile!.path, filename: 'upload.jpg'),
+        ));
+      } else {
+        // 웹 이라면
+        Uint8List imageBytes = await imageFile!.readAsBytes();
+        formData.files.add(MapEntry(
+          'postImage',
+          MultipartFile.fromBytes(
+            imageBytes,
+            filename: imageFile!.name,
+          ),
+        ));
+      }
     }
     final response = await api.multipartReq('/univBoard/create', formData);
     if (response['success'] == true) {
@@ -78,19 +92,32 @@ class ClubPostWriteModel extends FlutterFlowModel<ClubPostWriteWidget> {
     }
   }
 
-  /*
- * 이미지 선택 조회
- * @return boolean: 이미지가 선택 여부
- * 생성자 : 이정훈
- * */
+  /**
+   * 이미지 선택
+   * @return 성공 여부
+   */
   Future<bool> pickImage() async {
     final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(
-      source: ImageSource.gallery, //위치는 갤러리
-      maxHeight: 500,
-      maxWidth: 800,
-      imageQuality: 90, // 이미지 크기 압축을 위해 퀄리티를 30으로 낮춤.
-    );
+    final XFile? image;
+
+    if (kIsWeb) {
+      // 웹일 경우
+      image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: 300,
+        maxWidth: 800,
+        imageQuality: 90, // 이미지 크기 압축을 위해 퀄리티를 90으로 설정.
+      );
+    } else {
+      // 모바일일 경우
+      image = await _picker.pickImage(
+        source: ImageSource.gallery, //위치는 갤러리
+        maxHeight: 300,
+        maxWidth: 800,
+        imageQuality: 90, // 이미지 크기 압축을 위해 퀄리티를 90으로 설정.
+      );
+    }
+
     if (image != null) {
       imageFile = image;
       return true;

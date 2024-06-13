@@ -55,7 +55,8 @@ class SearchResultModel extends FlutterFlowModel {
           clubName: clubData['clubName'],
           introduction: clubData['introduction'],
           currentMembers: clubData['currentMembers'],
-          imageUrl: item['imageUrl'] ?? 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
+          imageUrl: item['imageUrl'] ??
+              'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
         ));
       }
 
@@ -69,39 +70,35 @@ class SearchResultModel extends FlutterFlowModel {
   @override
   void initState(BuildContext context) {}
 
-Future<List<PostElement>> getSearchPost(String? query) async {
-  debugPrint(query);
-  try {
-    DioApiCall api = DioApiCall();
-    final response = await api
-        .getDynamic('/search/1?query=${Uri.encodeQueryComponent(query!)}');
+  Future<List<PostElement>> getSearchPost(String? query) async {
+    debugPrint(query);
+    try {
+      DioApiCall api = DioApiCall();
+      final response = await api
+          .getDynamic('/search/1?query=${Uri.encodeQueryComponent(query!)}');
 
-    if (!response.isNotEmpty) {
-      print('Failed to fetch post list');
+      if (!response.isNotEmpty) {
+        print('Failed to fetch post list');
+        return [];
+      }
+
+      List<PostElement> postList = [];
+      for (var postData in response) {
+        postList.add(PostElement(
+          univBoardId: postData['univBoardId'],
+          title: postData['title'],
+          content: postData['content'],
+          regDt: postData['regDt'],
+          nickname: postData['nickname'] ?? 'sa',
+          categoryName: postData['categoryName'].toString(),
+          postImageUrls: [],
+        ));
+      }
+
+      return postList;
+    } catch (e) {
+      print('Error fetching post list: $e');
       return [];
     }
-
-    List<PostElement> postList = [];
-    for (var postData in response) {
-      postList.add(PostElement(
-        univBoardId: postData['univBoardId'],
-        title: postData['title'],
-        content: postData['content'],
-        regDt: postData['regDt'],
-        nickname: postData['nickname'] ?? 'sa',
-        categoryName: postData['categoryName'].toString(),
-        postImageUrls: postData['postImageUrls'] ?? [],
-      ));
-    }
-
-    return postList;
-  } catch (e) {
-    print('Error fetching post list: $e');
-    return [];
   }
 }
-
-
-
-}
-
