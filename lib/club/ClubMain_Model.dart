@@ -59,7 +59,8 @@ class ClubMainModel extends FlutterFlowModel<ClubMainWidget> {
           maximumMembers: response['data']['maximumMembers'],
           LeaderNickname: response['data']['nickname'],
           LeaderProfileImg: response['data']['memberImageUrl'],
-          joinedStatus: response['data']['joinedStatus']);
+          joinedStatus: response['data']['joinedStatus'],
+          chatRoomId: response['data']['chatRoomId']);
     } else {
       return clubInfo.nullPut();
     }
