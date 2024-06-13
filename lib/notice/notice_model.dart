@@ -41,13 +41,6 @@ class Notification {
       read: json['read'],
     );
   }
-
-
-
-
-
-
-
 }
 
 class NotificationModel {
