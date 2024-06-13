@@ -165,7 +165,7 @@ class _VersusResultWidgetState extends State<VersusResultWidget>
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .primaryText,
-                                                fontSize: 33.0,
+                                                fontSize: 30.0,
                                                 letterSpacing: 0.0,
                                                 fontWeight: FontWeight.w300,
                                                 useGoogleFonts: false,
