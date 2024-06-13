@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:universus/chat/chatRoom.dart';
 import 'package:universus/class/club/clubInfo.dart';
 import 'package:universus/class/club/clubMember.dart';
 import 'package:universus/class/club/clubPost.dart';
@@ -142,8 +143,23 @@ class _ClubMainWidgetState extends State<ClubMainWidget> {
                               color: FlutterFlowTheme.of(context).primaryText,
                               size: 24,
                             ),
-                            onPressed: () {
-                              print('IconButton pressed ...12312');
+                            onPressed: () async {
+                              // 채팅방으로 이동
+                              if (clubInfoValue.joinedStatus == 1) {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => ChatScreen(
+                                          chatRoomId: clubInfoValue.chatRoomId!,
+                                          chatRoomType: 3,
+                                          customChatRoomName:
+                                              clubInfoValue.clubName,
+                                        )));
+                              } else {
+                                IOSAlertDialog.show(
+                                  context: context,
+                                  title: "실패",
+                                  content: "클럽에 가입되어 있지 않습니다!",
+                                );
+                              }
                             },
                           ),
                           PopupMenuButton<String>(

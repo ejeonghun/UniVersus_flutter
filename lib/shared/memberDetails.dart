@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:universus/chat/chatRoom.dart';
 import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/user/user.dart';
 import 'package:universus/shared/IOSAlertDialog.dart';
@@ -163,7 +164,16 @@ class MemberDetails {
           '/chat/direct', {'senderIdx': senderIdx, 'receiverIdx': receiverIdx});
       if (response != null && response.isNotEmpty) {
         if (response['success'] == true) {
-          Navigator.of(context).pushNamed('/chat/main');
+          int roomId = response['data']['chatRoomId'];
+          String roomName = response['data']['customChatRoomName'];
+          // ChatScreen으로 roomId를 가지고 이동
+          debugPrint(response.toString());
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ChatScreen(
+                    chatRoomId: roomId,
+                    chatRoomType: 2,
+                    customChatRoomName: roomName ?? '채팅방',
+                  )));
         } else {
           IOSAlertDialog.show(
               context: context, title: '실패', content: '채팅방 생성에 실패했습니다.');
