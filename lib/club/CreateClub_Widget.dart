@@ -77,7 +77,7 @@ class _CreateClubWidgetState extends State<CreateClubWidget> {
             },
           ),
           title: Text(
-            '모임 생성',
+            '클럽 생성',
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   fontFamily: 'Outfit',
                   fontSize: 22,
@@ -183,7 +183,7 @@ class _CreateClubWidgetState extends State<CreateClubWidget> {
                                   textCapitalization: TextCapitalization.words,
                                   obscureText: false,
                                   decoration: InputDecoration(
-                                    labelText: '모임 이름',
+                                    labelText: '클럽 이름',
                                     labelStyle: FlutterFlowTheme.of(context)
                                         .labelMedium
                                         .override(
@@ -250,7 +250,7 @@ class _CreateClubWidgetState extends State<CreateClubWidget> {
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(24, 0, 0, 0),
                                 child: Text(
-                                  '최대 모임 인원수',
+                                  '최대 클럽 인원수',
                                   style:
                                       FlutterFlowTheme.of(context).bodyMedium,
                                 ),

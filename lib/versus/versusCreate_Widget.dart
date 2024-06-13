@@ -598,7 +598,7 @@ class _versusCreateWidgetState extends State<versusCreateWidget> {
                           ),
                           options: FFButtonOptions(
                             width: 200,
-                            height: 44,
+                            height: 40,
                             padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
                             iconPadding:
                                 EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),

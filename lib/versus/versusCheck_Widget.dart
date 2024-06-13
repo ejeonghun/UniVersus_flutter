@@ -61,7 +61,7 @@ class _CheckVersusWidgetState extends State<VersusCheckWidget> {
                   : FocusScope.of(context).unfocus(),
               child: Scaffold(
                 key: scaffoldKey,
-                backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+                backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
                 body: SafeArea(
                   top: true,
                   child: Column(

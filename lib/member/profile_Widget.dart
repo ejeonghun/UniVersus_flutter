@@ -731,7 +731,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                               EdgeInsetsDirectional.fromSTEB(
                                                   12.0, 0.0, 0.0, 0.0),
                                           child: Text(
-                                            '내 모임',
+                                            '내 클럽',
                                             style: FlutterFlowTheme.of(context)
                                                 .labelMedium
                                                 .override(
