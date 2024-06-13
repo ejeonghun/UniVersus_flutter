@@ -28,7 +28,7 @@ class Template {
       case 'E-Sport':
         return Icon(Icons.sports_esports, size: size);
       default:
-        return Icon(Icons.help_outline, size: size);
+        return Icon(Icons.apps, size: size);
     }
   }
 
@@ -52,6 +52,8 @@ class Template {
         return '탁구';
       case 'E-Sport':
         return 'E-Sport';
+      case '기타':
+        return '기타';
       default:
         return '알 수 없음';
     }
@@ -76,6 +78,8 @@ class Template {
       case '탁구':
         return Colors.red;
       case 'E-Sport':
+        return Colors.black;
+      case '기타':
         return Colors.black;
       // 다른 종목에 대한 색상을 반환합니다.
       default:
@@ -103,6 +107,8 @@ class Template {
         return 8;
       case 'E-sport':
         return 9;
+      case '기타':
+        return 10;
       default:
         return 0;
     }
@@ -128,6 +134,8 @@ class Template {
         return '탁구';
       case 9:
         return 'E-sport';
+      case 10:
+        return '기타';
       default:
         return '';
     }

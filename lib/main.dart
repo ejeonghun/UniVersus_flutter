@@ -236,14 +236,14 @@ class _MyAppState extends State<MyApp> {
                         return SplashScreen();
                       } else {
                         if (snapshot.data == true) {
-                          return TestscreenWidget();
+                          return MainWidget();
                         } else {
                           return LoginWidget();
                         }
                       }
                     },
                   ),
-              '/main': (context) => TestscreenWidget(),
+              '/main': (context) => MainWidget(),
               '/login': (context) => LoginWidget(),
               '/register': (context) => CreateAccountWidget(),
               '/passwordforgot': (context) => PasswordForgetWidget(),
@@ -254,7 +254,7 @@ class _MyAppState extends State<MyApp> {
                   clubId: "9"), // 테스트용 나중에 clubId 파라미터도 같이 전달해야함
               '/profile': (context) => ProfileWidget(),
               '/chat/main': (context) => ChatsPage(),
-              '/main1': (context) => MainWidget(),
+              '/main1': (context) => TestscreenWidget(),
               '/versusList': (context) => VersusListWidget(),
               '/versusCreate': (context) => versusCreateWidget(),
               '/Search': (context) => SearchWidget(),
@@ -285,8 +285,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<bool> checkLoginInfo() async {
-    await Future.delayed(Duration(seconds: 3)); // Show logo for 3 seconds
     UserData? user = await UserData.getUser();
+    await Future.delayed(Duration(seconds: 3)); // Show logo for 3 secondss
     return user != null;
   }
 }
@@ -305,27 +305,7 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     _animateLogo();
     _permissionManage.requestPermissions(context);
-
-    // _requestAllPermissions();
   }
-
-  // void _requestAllPermissions() async {
-  //   bool cameraPermission =
-  //       await _permissionManage.requestCameraPermission(context);
-  //   bool storagePermission =
-  //       await _permissionManage.requestStoragePermission(context);
-  //   bool locationPermission =
-  //       await _permissionManage.requestLocationPermission(context);
-  //   bool notificationPermission =
-  //       await _permissionManage.requestNotificationPermission(context);
-
-  //   if (!cameraPermission ||
-  //       !storagePermission ||
-  //       !locationPermission ||
-  //       !notificationPermission) {
-  //     // 하나 이상의 권한이 허용되지 않았을 경우, 추가적인 처리를 할 수 있습니다.
-  //   }
-  // }
 
   void _animateLogo() {
     Future.delayed(Duration(milliseconds: 50), () {
