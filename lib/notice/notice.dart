@@ -150,7 +150,12 @@ class _NoticePageState extends State<NoticePage> {
             backgroundColor: Colors.transparent,
             onBackgroundImageError: (_, __) => Icon(Icons.error),
           ),
-          title: Text(chatRoom.customChatRoomName ?? '상대가 지정되지 않음'),
+          title: Text(
+            chatRoom.customChatRoomName ?? '상대가 지정되지 않음',
+            style: TextStyle(
+              color: Colors.black, // 예시로 검정색을 사용합니다. 원하는 색상으로 변경하세요.
+            ),
+          ),
           subtitle: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -230,7 +230,7 @@ class _VersusDetailWidgetState extends State<VersusDetailWidget> {
                                     height: 100.0,
                                     decoration: BoxDecoration(
                                       color: FlutterFlowTheme.of(context)
-                                          .secondary,
+                                          .alternate,
                                       borderRadius: BorderRadius.circular(50.0),
                                     ),
                                     child: Container(

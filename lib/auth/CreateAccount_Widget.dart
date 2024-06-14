@@ -245,7 +245,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                               ],
                                               obscureText: false,
                                               decoration: InputDecoration(
-                                                labelText: '이메일',
+                                                labelText: '대학 이메일',
                                                 labelStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .labelLarge
@@ -484,7 +484,7 @@ class _CreateAccountWidgetState extends State<CreateAccountWidget>
                                                     fontFamily:
                                                         'Plus Jakarta Sans',
                                                     color: Color(0xFF101213),
-                                                    fontSize: 13,
+                                                    fontSize: 16,
                                                     fontWeight: FontWeight.w500,
                                                   ),
                                               elevation: 0,
