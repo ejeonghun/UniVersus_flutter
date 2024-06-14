@@ -88,7 +88,7 @@ class _MainWidgetState extends State<MainWidget> {
             List<ClubElement> clubList = snapshot.data![0];
             userProfile userInfo = snapshot.data![1];
             List<RecruitmentElement> recruitList = snapshot.data![2];
-            String schoolName = "${userInfo.getUnivName}"; // 학교 이름 가져오기
+            String schoolName = " ${userInfo.getUnivName}"; // 학교 이름 가져오기
             return GestureDetector(
               onTap: () => _model.unfocusNode.canRequestFocus
                   ? FocusScope.of(context).requestFocus(_model.unfocusNode)
