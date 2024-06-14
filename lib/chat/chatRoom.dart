@@ -49,7 +49,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
     _channel.stream.listen((data) {
       _processMessage(data);
-      _scrollToBottom();
     });
   }
 
@@ -57,10 +56,7 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       try {
         var decoded = jsonDecode(data);
-        if (decoded is Map<String, dynamic> &&
-            decoded.containsKey('type') &&
-            decoded['type'] == 'system') {
-          // 시스템 메시지 처리
+        if (decoded is Map<String, dynamic> && decoded['type'] == 'system') {
           _messages.add(ChatMessage(
             nickname: 'System',
             content: decoded['content'],
@@ -69,14 +65,18 @@ class _ChatScreenState extends State<ChatScreen> {
             regDt: DateTime.now().toIso8601String(),
             type: 'system',
           ));
-        } else {
-          // 일반 메시지 처리
+        } else if (decoded is List) {
+          // 메시지 리스트를 처리
           _messages
-              .addAll(List.from(decoded).map((m) => ChatMessage.fromJson(m)));
-          _messages.sort((a, b) => a.regDt.compareTo(b.regDt));
+              .addAll(decoded.map((m) => ChatMessage.fromJson(m)).toList());
+          _messages.sort((a, b) => b.regDt.compareTo(a.regDt)); // 최신순으로 정렬
+        } else {
+          // 단일 메시지 처리
+          var message = ChatMessage.fromJson(decoded);
+          _messages.add(message);
+          _messages.sort((a, b) => b.regDt.compareTo(a.regDt)); // 최신순으로 정렬
         }
       } catch (e) {
-        // 예외 발생 시 처리
         _messages.add(ChatMessage(
           nickname: 'System',
           content: data,
@@ -86,6 +86,7 @@ class _ChatScreenState extends State<ChatScreen> {
           type: 'system',
         ));
       }
+      _scrollToBottom();
     });
   }
 
@@ -148,7 +149,7 @@ class _ChatScreenState extends State<ChatScreen> {
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,
-                reverse: true, // Reverse the ListView
+                reverse: true,
                 itemCount: _messages.length,
                 itemBuilder: (context, index) {
                   final message = _messages[index];
@@ -182,7 +183,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildMessageBubble(ChatMessage message) {
-    bool isSystemMessage = message.profileImg == 'system';
+    bool isSystemMessage = message.type == 'system';
     bool isMine = int.parse(_currentMemberIdx ?? '0') == message.memberIdx;
 
     return Padding(
@@ -293,11 +294,11 @@ class ChatMessage {
 
   factory ChatMessage.fromJson(Map<String, dynamic> json) {
     return ChatMessage(
-      nickname: json['nickname'],
-      content: json['content'],
-      memberIdx: json['memberIdx'],
-      profileImg: json['profileImg'],
-      regDt: json['regDt'],
+      nickname: json['nickname'] ?? 'Unknown',
+      content: json['content'] ?? '',
+      memberIdx: json['memberIdx'] ?? 0,
+      profileImg: json['profileImg'] ?? '',
+      regDt: json['regDt'] ?? DateTime.now().toIso8601String(),
       type: json.containsKey('type') ? json['type'] : 'message',
     );
   }
