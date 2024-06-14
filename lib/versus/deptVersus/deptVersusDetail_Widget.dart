@@ -158,14 +158,17 @@ class _deptVersusDetailWidgetState extends State<deptVersusDetailWidget> {
                         if (snapshot.data!.status == 'COMPLETED')
                           Container(
                             child: Padding(
-                              padding: EdgeInsets.all(10),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 10.0, 0.0, 0.0),
                               child: Text(
-                                '${snapshot.data!.hostScore} Score : ${snapshot.data!.guestScore} Score',
+                                '${snapshot.data!.hostScore}  :  ${snapshot.data!.guestScore}',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
+                                      color: Color(0xFFFF5963),
+                                      fontSize: 30.0,
                                       fontFamily: 'Readex Pro',
-                                      letterSpacing: 0,
+                                      letterSpacing: 3,
                                     ),
                               ),
                             ),
