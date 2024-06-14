@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:universus/Community/Post_Widget.dart';
+import 'package:universus/chat/chatRoom.dart';
 import 'package:universus/club/ClubList_Widget.dart';
 import 'package:universus/main.dart';
 import 'package:universus/main/main_Widget.dart';
@@ -20,9 +20,12 @@ void handleNotificationClick(String payload) {
     final target = data['target'];
     final dataValue = data['data'];
     print("target: $target, data: $dataValue");
+
     switch (target) {
       case 'club':
-        ClubListWidget();
+        navigatorKey.currentState?.push(MaterialPageRoute(
+          builder: (context) => ClubListWidget(),
+        ));
         break;
       case 'univBattle/info': // 대항전 관련 알림 시 대항전 상세페이지로 이동
         navigatorKey.currentState?.push(MaterialPageRoute(
@@ -30,7 +33,18 @@ void handleNotificationClick(String payload) {
               VersusDetailWidget(battleId: int.parse(dataValue)),
         ));
         break;
-      case 'chat':
+      case 'chat': // 채팅 알림 핸들러
+        final parts = dataValue.split('/');
+        if (parts.length == 2) {
+          final chatRoomType = int.parse(parts[0]);
+          final chatRoomId = int.parse(parts[1]);
+          navigatorKey.currentState?.push(MaterialPageRoute(
+            builder: (context) =>
+                ChatScreen(chatRoomId: chatRoomId, chatRoomType: chatRoomType),
+          ));
+        } else {
+          print("Invalid data format for chat target: $dataValue");
+        }
         break;
       case 'univBattle/resultRes': // 참가자 결과 전송 알림 시
         navigatorKey.currentState?.push(MaterialPageRoute(

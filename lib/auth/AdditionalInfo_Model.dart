@@ -1,6 +1,7 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:universus/class/api/ApiCall.dart';
 import 'package:universus/shared/CustomSnackbar.dart';
+import 'package:universus/shared/IOSAlertDialog.dart';
 import 'AdditionalInfo_Widget.dart' show AdditionalInfoWidget;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -59,15 +60,11 @@ class AdditionalInfoModel extends FlutterFlowModel<AdditionalInfoWidget> {
 
   String? gender;
 
-  Future<bool> RegisterUser(BuildContext context) async {
+  Future<bool> registerUser(BuildContext context) async {
     ApiCall api = ApiCall();
 
-    // Backend 정보 가공
-    if (radioButtonValue.toString() == '남성') {
-      gender = 'M';
-    } else {
-      gender = 'F';
-    }
+    // 성별 정보 가공
+    String gender = (radioButtonValue.toString() == '남성') ? 'M' : 'F';
 
     // 변수들이 null인지 체크
     if (univId == null ||
@@ -79,30 +76,16 @@ class AdditionalInfoModel extends FlutterFlowModel<AdditionalInfoWidget> {
         datePicked == null ||
         selectedDeptId == null) {
       // AlertDialog 띄우기
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("회원가입 실패"),
-            content: Text("모든 필수 정보를 입력해주세요."),
-            actions: <Widget>[
-              TextButton(
-                child: Text("확인"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-      return false;
+      IOSAlertDialog.show(
+          context: context, title: "실패", content: "모든 필드를 채워주세요.");
+      return false; // 모든 필드가 채워지지 않았으므로 false 반환
     }
-    inputTest();
+
+    // API 호출
     var response = await api.post('/auth/join', {
       'univId': univId,
       'email': emailController?.text,
-      'password': passwordController?.text,
+      'password': passwordController?.text.toString(),
       'userName': fullNameController?.text,
       'birth': DateFormat('yyyyMMdd').format(datePicked!),
       'phone': phoneNumberController?.text,
@@ -111,6 +94,8 @@ class AdditionalInfoModel extends FlutterFlowModel<AdditionalInfoWidget> {
       'address': '주소',
       'deptId': selectedDeptId,
     });
+
+    // API 응답 처리
     if (response['success'] == true) {
       debugPrint("회원가입 성공");
       debugPrint(response.toString());
@@ -118,7 +103,8 @@ class AdditionalInfoModel extends FlutterFlowModel<AdditionalInfoWidget> {
     } else {
       debugPrint(response.toString());
       debugPrint("회원가입 실패");
-
+      IOSAlertDialog.show(
+          context: context, title: "실패", content: response['message']);
       return false;
     }
   }

@@ -57,6 +57,7 @@ class _UnivListState extends State<UnivList> {
         if (snapshot.hasData) {
           final universityList = snapshot.data!;
           return CustomDropdown<Univ>.search(
+            noResultFoundText: "검색 결과가 없습니다.",
             hintText: '대학 선택',
             items: universityList,
             excludeSelected: false,

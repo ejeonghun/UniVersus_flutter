@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:universus/class/api/ApiCall.dart';
+import 'package:universus/shared/Template.dart';
 
 class Event with CustomDropdownListFilter {
   final int eventId;
@@ -71,6 +73,42 @@ class _EventListState extends State<EventList> {
           final eventList = snapshot.data!;
           return CustomDropdown<Event>(
             hintText: '카테고리 선택',
+            listItemBuilder: (context, item, isSelected, onItemSelect) =>
+                Container(
+              decoration: BoxDecoration(
+                // color: isSelected ? const Color.fromARGB(255, 0, 0, 0).withOpacity(0.2) : Colors.white,
+                border: Border.all(color: Colors.orange, width: 1.5),
+                borderRadius: BorderRadius.circular(10.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    blurRadius: 5.0,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: ListTile(
+                leading: Template.getIcon(item.eventName),
+                title: Text(
+                  item.eventName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
+                    color: isSelected
+                        ? const Color.fromARGB(255, 115, 124, 131)
+                        : Colors.black87,
+                  ),
+                ),
+                trailing: isSelected
+                    ? Icon(Icons.check_circle, color: Colors.green)
+                    : null,
+                // tileColor: isSelected ? Colors.lightBlueAccent : null,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                onTap: onItemSelect,
+              ),
+            ),
             items: eventList,
             excludeSelected: false,
             onChanged: (value) {
@@ -81,9 +119,9 @@ class _EventListState extends State<EventList> {
             },
           );
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return Center(child: Text('Error: ${snapshot.error}'));
         }
-        return Center(child: LinearProgressIndicator());
+        return Center(child: CircularProgressIndicator());
       },
     );
   }

@@ -80,7 +80,7 @@ class MemberDetails {
                       ElevatedButton(
                         onPressed: () async {
                           await DirectChat(
-                              memberId, int.parse(senderIdx!), context);
+                              int.parse(senderIdx!), memberId, context);
                         },
                         child: Text('1대 1 채팅'),
                         style: ElevatedButton.styleFrom(

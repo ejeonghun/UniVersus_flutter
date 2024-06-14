@@ -105,17 +105,25 @@ class LoginModel extends FlutterFlowModel<LoginWidget> {
     if (responseBody['success'] == true) {
       // 로그인 성공
       print('Login successful');
-      var userdata = await UserData(
+      var userdata = UserData(
         id: emailAddressController.text,
         token: responseBody['data']['tokenDto']['accessToken'].toString(),
         platform: 'email',
         memberIdx: responseBody['data']['memberIdx'].toString(),
         univId: responseBody['data']['univId'],
       );
-      userdata.saveUser(); // 유저 정보 디바이스 저장
-      print(responseBody['data']['tokenDto']['accessToken']
-          .toString()); // 백엔드 token 반환
-      return true;
+      if (await userdata.saveUser()) {
+        // 유저 정보 디바이스 저장
+        debugPrint(
+            "memberIdx ${responseBody['data']['memberIdx'].toString()} 저장완료");
+        print(responseBody['data']['tokenDto']['accessToken']
+            .toString()); // 백엔드 token 반환
+        return true;
+      } else {
+        // 예외 처리 필요
+        debugPrint("Login Failed");
+        return false;
+      }
     } else {
       // 예외 처리 필요
       debugPrint("Login Failed");

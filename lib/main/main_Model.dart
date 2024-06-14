@@ -128,17 +128,29 @@ class MainModel extends FlutterFlowModel<MainWidget> {
       // 조회 성공
       print(response);
       List<RecruitmentElement> recruitmentlist = [];
-      for (var item in response['data']) {
+      if (response['data'] == null || response['data'].length == 0) {
         recruitmentlist.add(RecruitmentElement(
-          univBoardId: item['univBoardId'],
-          title: item['title'].toString(),
-          eventName: item['eventName'] ?? '',
-          latitude: item['lat'] ?? '',
-          longitude: item['lng'] ?? '',
-          place: item['place'] ?? '',
-          imageUrl: item['imageUrl'] ??
-              'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
-        ));
+            univBoardId: 1000000000,
+            title: "모집글을 생성해보세요!",
+            eventName: "축구",
+            latitude: "",
+            longitude: "",
+            place: "",
+            imageUrl:
+                "https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png"));
+      } else {
+        for (var item in response['data']) {
+          recruitmentlist.add(RecruitmentElement(
+            univBoardId: item['univBoardId'],
+            title: item['title'].toString(),
+            eventName: item['eventName'] ?? '',
+            latitude: item['lat'] ?? '',
+            longitude: item['lng'] ?? '',
+            place: item['place'] ?? '',
+            imageUrl: item['imageUrl'] ??
+                'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
+          ));
+        }
       }
       return recruitmentlist;
     } else {

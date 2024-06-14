@@ -62,6 +62,7 @@ class _DeptListState extends State<DeptList> {
         if (snapshot.hasData) {
           final deptList = snapshot.data!;
           return CustomDropdown<Dept>.search(
+            noResultFoundText: "검색 결과가 없습니다.",
             hintText: '학과 선택',
             items: deptList,
             excludeSelected: false,

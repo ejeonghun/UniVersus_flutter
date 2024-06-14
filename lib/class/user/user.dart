@@ -8,6 +8,7 @@ class UserData {
   String platform; // 플랫폼 -> 'kakao' , 'email'
   String memberIdx; // 회원번호
   int univId; // 대학 Id값
+  final storage = FlutterSecureStorage();
 
   UserData(
       {required this.id,
@@ -18,8 +19,6 @@ class UserData {
 
   // 사용자 정보를 Secure Storage에 저장하는 메소드
   Future<bool> saveUser() async {
-    final storage = FlutterSecureStorage();
-
     await storage.write(key: 'user_id', value: this.id);
     await storage.write(key: 'token', value: this.token);
     await storage.write(key: 'memberIdx', value: this.memberIdx);
