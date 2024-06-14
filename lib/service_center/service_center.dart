@@ -115,8 +115,11 @@ class _ServiceCenterWidgetState extends State<ServiceCenterWidget>
                 Tab(text: '공지사항'),
                 Tab(text: '탈퇴하기'),
               ],
-              labelColor: Theme.of(context).primaryColor,
-              unselectedLabelColor: Colors.black,
+              labelColor: Colors.red,
+              unselectedLabelColor: Theme.of(context)
+                  .primaryTextTheme
+                  .bodyText2!
+                  .color, // 선택되지 않은 탭의 글자 색상
               indicatorColor: Theme.of(context).primaryColor,
             ),
           ),

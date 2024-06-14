@@ -31,7 +31,10 @@ class WithdrawWidget extends StatelessWidget {
                           '${userData.id}',
                           style: TextStyle(
                             fontFamily: 'Readex Pro',
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context)
+                  .primaryTextTheme
+                  .bodyText2!
+                  .color,
                             fontSize: 20,
                             letterSpacing: 0,
                             fontWeight: FontWeight.w600,
@@ -44,12 +47,12 @@ class WithdrawWidget extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                         child: Text(
-                          '님 정말 탈퇴하시겠어요?',
+                          '님 탈퇴하시겠습니까?',
                           style: TextStyle(
                             fontFamily: 'Readex Pro',
                             fontSize: 20,
                             letterSpacing: 0,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w600,                            
                           ),
                         ),
                       ),
