@@ -114,11 +114,12 @@ class _SearchResultClubListWidgetState
                       Align(
                         alignment: AlignmentDirectional(-0.32, 1.13),
                         child: Text(
-                          '👨‍🦳${club.currentMembers}',
+                          '멤버 ${club.currentMembers}',
                           style: GoogleFonts.getFont(
                             'Readex Pro',
                             letterSpacing: 0,
                             fontStyle: FontStyle.italic,
+                            color: Colors.orange,
                           ),
                         ),
                       ),

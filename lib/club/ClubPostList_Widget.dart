@@ -68,6 +68,13 @@ class _ClubPostListWidgetState extends State<ClubPostListWidget>
                     backgroundColor:
                         FlutterFlowTheme.of(context).secondaryBackground,
                     automaticallyImplyLeading: false,
+                    leading: IconButton(
+                      icon: Icon(Icons.arrow_back),
+                      color: FlutterFlowTheme.of(context).primaryText,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
                     title: Text(
                       widget.clubName + ' 게시판',
                       style:

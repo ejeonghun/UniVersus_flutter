@@ -31,7 +31,7 @@ class WithdrawWidget extends StatelessWidget {
                           '${userData.id}',
                           style: TextStyle(
                             fontFamily: 'Readex Pro',
-                            color: Theme.of(context).primaryColor,
+                            color: FlutterFlowTheme.of(context).primaryText,
                             fontSize: 20,
                             letterSpacing: 0,
                             fontWeight: FontWeight.w600,
@@ -44,7 +44,7 @@ class WithdrawWidget extends StatelessWidget {
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                         child: Text(
-                          '님 정말 탈퇴하시겠어요?',
+                          '님 탈퇴하시겠습니까?',
                           style: TextStyle(
                             fontFamily: 'Readex Pro',
                             fontSize: 20,
@@ -67,13 +67,13 @@ class WithdrawWidget extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.check_circle_outline,
-                        color: Theme.of(context).primaryColor,
+                        color: Colors.grey,
                         size: 24,
                       ),
                       Opacity(
                         opacity: 0.7,
                         child: Text(
-                          '회원 탈퇴 유의사항을 확인하였으며 동의합니다.',
+                          ' 회원 탈퇴 유의사항을 확인하였으며 동의합니다.',
                           style: TextStyle(
                             fontFamily: 'Readex Pro',
                             color: Colors.red,
@@ -97,7 +97,7 @@ class WithdrawWidget extends StatelessWidget {
                         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 18),
                         child: Icon(
                           Icons.warning_outlined,
-                          color: Theme.of(context).primaryColor,
+                          color: Colors.red,
                           size: 24,
                         ),
                       ),
@@ -127,7 +127,7 @@ class WithdrawWidget extends StatelessWidget {
                         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 18),
                         child: Icon(
                           Icons.warning_outlined,
-                          color: Theme.of(context).primaryColor,
+                          color: Colors.red,
                           size: 24,
                         ),
                       ),
@@ -157,7 +157,7 @@ class WithdrawWidget extends StatelessWidget {
                         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 18),
                         child: Icon(
                           Icons.warning_outlined,
-                          color: Theme.of(context).primaryColor,
+                          color: Colors.red,
                           size: 24,
                         ),
                       ),
