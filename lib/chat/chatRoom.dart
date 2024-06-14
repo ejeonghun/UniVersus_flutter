@@ -24,7 +24,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   late IOWebSocketChannel _channel;
-  List<ChatMessage> _messages = [];
+  final List<ChatMessage> _messages = []; // Make it final and part of state
   String? _currentMemberIdx;
 
   @override
@@ -49,7 +49,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
     _channel.stream.listen((data) {
       _processMessage(data);
-      _scrollToBottom();
     });
   }
 
@@ -57,31 +56,37 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       try {
         var decoded = jsonDecode(data);
-
-        if (decoded is Map<String, dynamic>) {
-          _messages.insert(
-              0,
-              ChatMessage.fromJson(
-                  decoded)); // Insert at the beginning for reversed order
-        } else if (decoded is Iterable<dynamic>) {
-          _messages.insertAll(
-              0,
-              decoded.map((m) =>
-                  ChatMessage.fromJson(m))); // Insert all at the beginning
-        }
-      } catch (e) {
-        _messages.insert(
-          0,
-          ChatMessage(
-            nickname: '',
-            content: '상대방이 채팅방을 나갔습니다',
+        if (decoded is Map<String, dynamic> && decoded['type'] == 'system') {
+          _messages.add(ChatMessage(
+            nickname: 'System',
+            content: decoded['content'],
             memberIdx: 0,
-            profileImg: '',
+            profileImg: decoded['profileImg'] ?? '',
             regDt: DateTime.now().toIso8601String(),
             type: 'system',
-          ),
-        );
+          ));
+        } else if (decoded is List) {
+          // 메시지 리스트를 처리
+          _messages
+              .addAll(decoded.map((m) => ChatMessage.fromJson(m)).toList());
+          _messages.sort((a, b) => b.regDt.compareTo(a.regDt)); // 최신순으로 정렬
+        } else {
+          // 단일 메시지 처리
+          var message = ChatMessage.fromJson(decoded);
+          _messages.add(message);
+          _messages.sort((a, b) => b.regDt.compareTo(a.regDt)); // 최신순으로 정렬
+        }
+      } catch (e) {
+        _messages.add(ChatMessage(
+          nickname: 'System',
+          content: data,
+          memberIdx: 0,
+          profileImg: '',
+          regDt: DateTime.now().toIso8601String(),
+          type: 'system',
+        ));
       }
+      _scrollToBottom();
     });
   }
 
@@ -144,7 +149,7 @@ class _ChatScreenState extends State<ChatScreen> {
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,
-                reverse: true, // Reverse the ListView
+                reverse: true,
                 itemCount: _messages.length,
                 itemBuilder: (context, index) {
                   final message = _messages[index];
@@ -178,7 +183,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildMessageBubble(ChatMessage message) {
-    bool isSystemMessage = message.profileImg == 'system';
+    bool isSystemMessage = message.type == 'system';
     bool isMine = int.parse(_currentMemberIdx ?? '0') == message.memberIdx;
 
     return Padding(
@@ -289,11 +294,11 @@ class ChatMessage {
 
   factory ChatMessage.fromJson(Map<String, dynamic> json) {
     return ChatMessage(
-      nickname: json['nickname'],
-      content: json['content'],
-      memberIdx: json['memberIdx'],
-      profileImg: json['profileImg'],
-      regDt: json['regDt'],
+      nickname: json['nickname'] ?? 'Unknown',
+      content: json['content'] ?? '',
+      memberIdx: json['memberIdx'] ?? 0,
+      profileImg: json['profileImg'] ?? '',
+      regDt: json['regDt'] ?? DateTime.now().toIso8601String(),
       type: json.containsKey('type') ? json['type'] : 'message',
     );
   }
