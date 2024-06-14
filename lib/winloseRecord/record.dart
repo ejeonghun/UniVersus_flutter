@@ -152,10 +152,11 @@ class _UnivBattleRecordPageState extends State<UnivBattleRecordPage> {
                               alignment: AlignmentDirectional(0, 1),
                               child: Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    0, 10, 40, 0),
+                                    0, 10, 80, 40), // 여기서 간격을 조정합니다.
                                 child: Text(
                                   '${record.result == 'win' ? '승리' : '패배'}\n${formatTimeAgo(record.matchStartDt)}',
                                   style: TextStyle(
+                                    color: Colors.black,
                                     fontFamily: 'Readex Pro',
                                     letterSpacing: 0,
                                   ),
@@ -223,8 +224,10 @@ class _UnivBattleRecordPageState extends State<UnivBattleRecordPage> {
                                         width: 27,
                                         height: 27,
                                         decoration: BoxDecoration(
-                                          color: Color(
-                                              0xFF230bfd), // Change to a darker, more vivid blue
+                                          color: record.result == 'win'
+                                              ? Color(0xFF230bfd)
+                                              : Color(
+                                                  0xFFFF0044), // 패배시 빨간색으로 변경
                                           shape: BoxShape.circle,
                                         ),
                                         alignment: AlignmentDirectional(0, 0),
@@ -236,7 +239,7 @@ class _UnivBattleRecordPageState extends State<UnivBattleRecordPage> {
                                                 fontFamily: 'Readex Pro',
                                                 color:
                                                     FlutterFlowTheme.of(context)
-                                                        .secondaryBackground,
+                                                        .primaryBackground,
                                                 fontSize: 15,
                                                 letterSpacing: 0,
                                               ),

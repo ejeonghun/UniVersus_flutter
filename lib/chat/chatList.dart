@@ -195,7 +195,7 @@ class _ChatsPageState extends State<ChatsPage> {
     _model = ChatsModel();
     _refreshData(); // 초기 데이터 로드
     _timer = Timer.periodic(
-        Duration(seconds: 30), (Timer t) => _refreshData()); // 30초마다 데이터 업데이트
+        Duration(seconds: 1), (Timer t) => _refreshData()); // 30초마다 데이터 업데이트
   }
 
   void _refreshData() {

@@ -1,4 +1,5 @@
 import 'package:universus/class/api/DioApiCall.dart';
+import 'package:universus/class/user/user.dart';
 import 'package:universus/class/versus/versusElement.dart';
 import 'package:universus/versus/component/versusElement_Widget.dart';
 import 'package:universus/versus/component/versusSearch_Model.dart';
@@ -64,7 +65,9 @@ class VersusListModel extends FlutterFlowModel<VersusListWidget> {
   Future<List<versusElement>> getVersusListDept(int statusCode) async {
     // 대결 리스트를 불러오는 메소드
     DioApiCall api = DioApiCall();
-    final response = await api.get('/deptBattle/list?status=${statusCode}');
+    String? memberIdx = await UserData.getMemberIdx();
+    final response = await api
+        .get('/deptBattle/list?status=${statusCode}&memberIdx=${memberIdx}');
     if (response.isNotEmpty) {
       // response가 null이 아니면
       // 조회 성공
