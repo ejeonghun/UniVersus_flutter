@@ -1,16 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:intl/intl.dart';
 import 'package:universus/class/user/user.dart';
 import 'package:web_socket_channel/io.dart';
-import '/flutter_flow/flutter_flow_icon_button.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:universus/chat/chatList.dart';
-import 'package:intl/intl.dart'; // intl 패키지 추가
 
 class ChatScreen extends StatefulWidget {
-  final int chatRoomId; // chatRoomId를 위한 필드 추가
+  final int chatRoomId; // 채팅방 ID 필드 추가
   final int chatRoomType;
   final String? customChatRoomName;
 
@@ -28,48 +23,46 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  late IOWebSocketChannel channel;
-  List<ChatMessage> messages = [];
-  String? currentMemberIdx;
+  late IOWebSocketChannel _channel;
+  List<ChatMessage> _messages = [];
+  String? _currentMemberIdx;
 
   @override
   void initState() {
     super.initState();
-    getCurrentMemberIdxAndInitializeWebSocket();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToBottom(); // UI 빌드 완료 후 스크롤
+    _initWebSocketConnection();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _scrollToBottom(); // UI 빌드 후 맨 아래로 스크롤
     });
   }
 
-  Future<void> getCurrentMemberIdxAndInitializeWebSocket() async {
-    currentMemberIdx = await UserData.getMemberIdx();
+  void _initWebSocketConnection() async {
+    _currentMemberIdx = await UserData.getMemberIdx();
     setState(() {});
 
     // WebSocket 연결 초기화
-    channel = IOWebSocketChannel.connect(
+    _channel = IOWebSocketChannel.connect(
       Uri.parse(
           'ws://moyoapi.lunaweb.dev/ws/chat/${widget.chatRoomType}/${widget.chatRoomId}'),
-      headers: {'memberIdx': currentMemberIdx ?? ''}, // 사용자 식별자 추가
+      headers: {'memberIdx': _currentMemberIdx ?? ''}, // 사용자 식별자 추가
     );
 
     // 메시지 수신 리스너 설정
-    channel.stream.listen((data) {
-      processMessage(data);
-      _scrollToBottom(); // 새 메시지 수신 후 자동으로 스크롤합니다.
+    _channel.stream.listen((data) {
+      _processMessage(data);
+      _scrollToBottom(); // 새 메시지 수신 후 자동 스크롤
     });
   }
 
-  // 서버로부터 받은 데이터를 처리하는 함수
-  void processMessage(String data) {
+  void _processMessage(String data) {
     setState(() {
       try {
         var decoded = jsonDecode(data);
         if (decoded is Map<String, dynamic> &&
             decoded.containsKey('type') &&
             decoded['type'] == 'system') {
-          // 시스템 메시지일 경우
-          String systemMessage = '${decoded['nickname']} 님이 나갔습니다.';
-          messages.add(ChatMessage(
+          // 시스템 메시지 처리
+          _messages.add(ChatMessage(
             nickname: 'System',
             content: decoded['content'],
             memberIdx: 0,
@@ -78,12 +71,14 @@ class _ChatScreenState extends State<ChatScreen> {
             type: 'system',
           ));
         } else {
-          messages
+          // 일반 메시지 처리
+          _messages
               .addAll(List.from(decoded).map((m) => ChatMessage.fromJson(m)));
-          messages.sort((a, b) => a.regDt.compareTo(b.regDt));
+          _messages.sort((a, b) => a.regDt.compareTo(b.regDt));
         }
       } catch (e) {
-        messages.add(ChatMessage(
+        // 예외 발생 시 처리
+        _messages.add(ChatMessage(
           nickname: 'System',
           content: data,
           memberIdx: 0,
@@ -95,7 +90,14 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  // 채팅 목록의 끝으로 자동 스크롤하는 함수
+  void _sendMessage() {
+    if (_controller.text.isNotEmpty) {
+      _channel.sink.add(_controller.text);
+      _controller.clear();
+      _scrollToBottom(); // 메시지 전송 후 자동 스크롤
+    }
+  }
+
   void _scrollToBottom() {
     if (_scrollController.hasClients) {
       Future.delayed(Duration(milliseconds: 100), () {
@@ -113,16 +115,8 @@ class _ChatScreenState extends State<ChatScreen> {
     // 리소스 정리
     _controller.dispose();
     _scrollController.dispose();
-    channel.sink.close();
+    _channel.sink.close();
     super.dispose();
-  }
-
-  void _sendMessage() {
-    if (_controller.text.isNotEmpty) {
-      channel.sink.add(_controller.text);
-      _controller.clear();
-      _scrollToBottom(); // 메시지 전송 후 스크롤
-    }
   }
 
   @override
@@ -139,9 +133,9 @@ class _ChatScreenState extends State<ChatScreen> {
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,
-                itemCount: messages.length,
+                itemCount: _messages.length,
                 itemBuilder: (context, index) {
-                  final message = messages[index];
+                  final message = _messages[index];
                   return _buildMessageBubble(message);
                 },
               ),
@@ -172,9 +166,9 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildMessageBubble(ChatMessage message) {
-    bool isSystemMessage = message.type == 'system'; // 시스템 메시지 여부 확인
+    bool isSystemMessage = message.profileImg == 'system'; // 시스템 메시지 여부 확인
+    bool isMine = int.parse(_currentMemberIdx ?? '0') == message.memberIdx;
 
-    bool isMine = int.parse(currentMemberIdx ?? '0') == message.memberIdx;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10),
       child: Row(
@@ -206,10 +200,30 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _messageContentBubble(ChatMessage message, bool isMine) {
-    // 시간 형식을 변환하는 함수
-    String formatTime(String isoTime) {
-      final dateTime = DateTime.parse(isoTime);
-      return DateFormat('h:mm a').format(dateTime); // 시간을 AM/PM 형식으로 변환
+    // Function to format the timestamp
+    String formatTimestamp(String regDt) {
+      DateTime messageTime = DateTime.parse(regDt);
+      DateTime now = DateTime.now();
+      Duration difference = now.difference(messageTime);
+
+      if (difference.inMinutes < 1) {
+        return '방금 전';
+      } else if (difference.inHours < 1) {
+        return '${difference.inMinutes}분 전';
+      } else if (now.year == messageTime.year &&
+          now.month == messageTime.month &&
+          now.day == messageTime.day) {
+        // Format time in HH:mm for messages sent today
+        return DateFormat('HH:mm').format(messageTime);
+      } else if (now.year == messageTime.year &&
+          now.month == messageTime.month &&
+          now.day - messageTime.day == 1) {
+        return '어제 ${DateFormat('').format(messageTime)}';
+      } else if (now.year == messageTime.year) {
+        return DateFormat('MM월 dd일 ').format(messageTime);
+      } else {
+        return DateFormat('yyyy.MM.dd ').format(messageTime);
+      }
     }
 
     return Column(
@@ -224,7 +238,7 @@ class _ChatScreenState extends State<ChatScreen> {
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Text(
-                  formatTime(message.regDt),
+                  formatTimestamp(message.regDt),
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 10,
@@ -232,6 +246,10 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
             Container(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width *
+                    0.6, // Message bubble's maximum width limited to 60% of the screen
+              ),
               decoration: BoxDecoration(
                 color: isMine ? Color(0xFF7465F6) : Color(0xFFE8E8E8),
                 borderRadius: BorderRadius.circular(12),
@@ -242,6 +260,7 @@ class _ChatScreenState extends State<ChatScreen> {
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Text(
                 message.content,
+                softWrap: true,
                 style: TextStyle(
                   color: isMine ? Colors.white : Colors.black,
                   fontSize: 16,
@@ -252,7 +271,7 @@ class _ChatScreenState extends State<ChatScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text(
-                  formatTime(message.regDt),
+                  formatTimestamp(message.regDt),
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 10,

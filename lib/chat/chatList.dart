@@ -1,36 +1,61 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:intl/intl.dart';
 import 'package:universus/BottomBar2.dart';
 import 'package:universus/chat/chatRoom.dart';
-import 'package:universus/chat/createChatRoom.dart';
 import 'package:universus/class/user/user.dart'; // 사용자 클래스 import
-import 'dart:convert';
-import 'chats_Model.dart';
-export 'chats_Model.dart';
+import 'package:universus/chat/chats_Model.dart'; // ChatsModel import
 
-// Singleton class for managing Dio instance with base URL
 class ApiManager {
   static final ApiManager _instance = ApiManager._internal();
-  late Dio dio;
+  late Dio _dio;
 
   factory ApiManager() {
     return _instance;
   }
 
   ApiManager._internal() {
-    // Initialize Dio instance with base URL
-    dio = Dio(BaseOptions(
-      baseUrl: 'https://moyoapi.lunaweb.dev/api/v1', // Your base URL here
+    _dio = Dio(BaseOptions(
+      baseUrl: 'https://moyoapi.lunaweb.dev/api/v1', // 기본 URL 설정
     ));
+  }
+
+  Dio get dio => _dio;
+
+  Future<bool> deleteChatRoom(String chatRoomId, String memberIdx) async {
+    try {
+      final response = await _dio.delete(
+        '/chat/delete',
+        queryParameters: {'chatRoomId': chatRoomId, 'memberIdx': memberIdx},
+      );
+
+      print("API 응답: $response");
+
+      return response.data['success'] ?? false;
+    } catch (e) {
+      print("삭제 API 오류: $e");
+      return false;
+    }
+  }
+
+  Future<void> sendSystemMessage(int chatRoomId, String message) async {
+    try {
+      await _dio.post(
+        '/chat/sendMessage',
+        data: {'chatRoomId': chatRoomId, 'content': message, 'type': 'system'},
+      );
+    } catch (e) {
+      print("시스템 메시지 전송 오류: $e");
+    }
   }
 }
 
 class ChatRoomItem extends StatelessWidget {
   final ChatRoom chatRoom;
+  final Function(ChatRoom) onDismissed;
 
-  ChatRoomItem({Key? key, required this.chatRoom}) : super(key: key);
+  ChatRoomItem({required this.chatRoom, required this.onDismissed});
 
   @override
   Widget build(BuildContext context) {
@@ -65,13 +90,18 @@ class ChatRoomItem extends StatelessWidget {
                   onPressed: () async {
                     String? currentMemberIdx = await UserData.getMemberIdx();
                     if (currentMemberIdx != null) {
-                      bool success = await deleteChatRoom(
-                          chatRoom.chatRoomId.toString(), currentMemberIdx);
+                      bool success = await ApiManager().deleteChatRoom(
+                        chatRoom.chatRoomId.toString(),
+                        currentMemberIdx,
+                      );
                       if (success) {
                         // 채팅방에서 나간 시스템 메시지 생성 및 전송
                         String systemMessage =
                             '${UserData.getMemberIdx()} 님이 나갔습니다.';
-                        sendSystemMessage(systemMessage);
+                        ApiManager().sendSystemMessage(
+                          chatRoom.chatRoomId,
+                          systemMessage,
+                        );
                       }
                       Navigator.of(context).pop(success); // 성공 여부 반환
                     } else {
@@ -86,14 +116,7 @@ class ChatRoomItem extends StatelessWidget {
         );
         return confirm;
       },
-      onDismissed: (direction) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("채팅방에서 나갔습니다."),
-            duration: Duration(seconds: 2),
-          ),
-        );
-      },
+      onDismissed: (direction) => onDismissed(chatRoom),
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 3, horizontal: 3),
         decoration: BoxDecoration(
@@ -125,12 +148,19 @@ class ChatRoomItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (chatRoom.recentChat != null) Text(chatRoom.recentChat!),
+                    if (chatRoom.recentChat != null)
+                      Text(
+                        chatRoom.recentChat!,
+                        maxLines: 1,
+                      ),
                   ],
                 ),
               ),
-              if (chatRoom.getRecentChatDate != null)
-                Text(chatRoom.getRecentChatDate!),
+              SizedBox(width: 10),
+              Text(
+                chatRoom.getRecentChatDate ?? '',
+                style: TextStyle(fontSize: 12, color: Colors.grey),
+              ),
             ],
           ),
           onTap: () {
@@ -146,38 +176,6 @@ class ChatRoomItem extends StatelessWidget {
       ),
     );
   }
-
-  Future<bool> deleteChatRoom(String chatRoomId, String memberIdx) async {
-    try {
-      ApiManager apiManager = ApiManager();
-      final response = await apiManager.dio.delete(
-        '/chat/delete?chatRoomId=$chatRoomId&memberIdx=$memberIdx',
-      );
-
-      print("API 응답: $response");
-
-      return response.data['success'] ?? false;
-    } catch (e) {
-      print("삭제 API 오류: $e");
-      return false;
-    }
-  }
-
-  void sendSystemMessage(String message) {
-    try {
-      ApiManager apiManager = ApiManager();
-      apiManager.dio.post(
-        '/chat/sendMessage',
-        data: {
-          'chatRoomId': chatRoom.chatRoomId,
-          'content': message,
-          'type': 'system'
-        },
-      );
-    } catch (e) {
-      print("시스템 메시지 전송 오류: $e");
-    }
-  }
 }
 
 class ChatsPage extends StatefulWidget {
@@ -189,18 +187,31 @@ class _ChatsPageState extends State<ChatsPage> {
   late ChatsModel _model;
   late Future<List<ChatRoom>> _chatRooms;
   Timer? _timer;
+  List<ChatRoom> _chatRoomList = []; // 채팅방 목록을 유지하는 리스트
 
   @override
   void initState() {
     super.initState();
     _model = ChatsModel();
-    _chatRooms = _model.getChatRoomsListSorted();
-    _timer = Timer.periodic(Duration(seconds: 1), (Timer t) => _refreshData());
+    _refreshData(); // 초기 데이터 로드
+    _timer = Timer.periodic(
+        Duration(seconds: 30), (Timer t) => _refreshData()); // 30초마다 데이터 업데이트
   }
 
   void _refreshData() {
+    _chatRooms = _model.getChatRoomsListSorted();
+    _chatRooms.then((chatRooms) {
+      setState(() {
+        _chatRoomList = chatRooms; // 채팅방 목록 업데이트
+      });
+    }).catchError((error) {
+      print("Failed to fetch and sort chat rooms: $error");
+    });
+  }
+
+  void _removeChatRoom(ChatRoom chatRoom) {
     setState(() {
-      _chatRooms = _model.getChatRoomsListSorted();
+      _chatRoomList.remove(chatRoom);
     });
   }
 
@@ -214,26 +225,22 @@ class _ChatsPageState extends State<ChatsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('채팅방 목록')),
-      body: FutureBuilder<List<ChatRoom>>(
-        future: _chatRooms,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting &&
-              snapshot.data == null) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text("데이터 로드 실패: ${snapshot.error}"));
-          } else if (snapshot.hasData) {
-            return SafeArea(
-              child: ListView(
-                children: snapshot.data!
-                    .map((chatRoom) => ChatRoomItem(chatRoom: chatRoom))
-                    .toList(),
-              ),
-            );
-          } else {
-            return Center(child: Text('데이터가 없습니다.'));
-          }
-        },
+      body: SafeArea(
+        child: RefreshIndicator(
+          onRefresh: () async {
+            _refreshData(); // 새로고침 시 데이터 다시 로드
+          },
+          child: ListView.builder(
+            itemCount: _chatRoomList.length,
+            itemBuilder: (context, index) {
+              ChatRoom chatRoom = _chatRoomList[index];
+              return ChatRoomItem(
+                chatRoom: chatRoom,
+                onDismissed: _removeChatRoom, // 채팅방 제거 콜백 전달
+              );
+            },
+          ),
+        ),
       ),
       bottomNavigationBar: BottomBar2(), // 바텀 네비게이션 추가
     );
