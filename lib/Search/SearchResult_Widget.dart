@@ -206,7 +206,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
                                     child: Text('Error: ${snapshot.error}'));
                               } else if (!snapshot.hasData ||
                                   snapshot.data!.isEmpty) {
-                                return Center(child: Text('No results found.'));
+                                return Center(child: Text('검색결과가 없습니다.'));
                               } else {
                                 return SearchResultClubListWidget(
                                     clubs: snapshot.data!);
@@ -225,7 +225,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget>
                                     child: Text('Error: ${snapshot.error}'));
                               } else if (!snapshot.hasData ||
                                   snapshot.data!.isEmpty) {
-                                return Center(child: Text('No results found.'));
+                                return Center(child: Text('검색결과가 없습니다.'));
                               } else {
                                 return ListView.builder(
                                   itemCount: snapshot.data!.length,

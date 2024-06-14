@@ -74,7 +74,7 @@ class ChatsModel extends FlutterFlowModel<ChatsPage> {
     String? memberIdx = await UserData.getMemberIdx();
     try {
       final response = await api.get('/chat/myChatList?memberIdx=${memberIdx}');
-      print("API Response: $response");
+      
 
       if (response.isNotEmpty && response['data'] != null) {
         List<ChatRoom> chatRoomList = [];

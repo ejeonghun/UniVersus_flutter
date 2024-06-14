@@ -1,7 +1,6 @@
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart'
     as smooth_page_indicator;
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:universus/BottomBar2.dart';
@@ -14,6 +13,7 @@ import 'package:universus/main/Components/recruit_Widget.dart';
 import 'package:universus/main/Components/recruitmentElement.dart';
 import 'main_Model.dart';
 import 'package:universus/main/main_Widget.dart';
+import 'dart:async';
 export 'main_Model.dart';
 
 //
@@ -27,17 +27,41 @@ class MainWidget extends StatefulWidget {
 class _MainWidgetState extends State<MainWidget> {
   late MainModel _model;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  late PageController _pageController;
+  late Timer _timer;
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => MainModel());
+    _pageController = PageController(initialPage: 0);
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _timer = Timer.periodic(Duration(seconds: 3), (Timer timer) {
+        if (_pageController.hasClients && _pageController.page != null) {
+          if (_pageController.page!.round() == 2) {
+            _pageController.animateToPage(
+              0,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeIn,
+            );
+          } else {
+            _pageController.nextPage(
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeIn,
+            );
+          }
+        }
+      });
+    });
   }
+
 
   @override
   void dispose() {
     _model.dispose();
     super.dispose();
+    _pageController.dispose();
+    _timer.cancel(); // 타이머 취소
   }
 
   @override
@@ -151,9 +175,8 @@ class _MainWidgetState extends State<MainWidget> {
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 0, 0, 40),
                                           child: PageView(
-                                            controller: _model
-                                                    .pageViewController ??=
-                                                PageController(initialPage: 0),
+                                            controller: 
+                                                _pageController,
                                             scrollDirection: Axis.horizontal,
                                             children: [
                                               GestureDetector(

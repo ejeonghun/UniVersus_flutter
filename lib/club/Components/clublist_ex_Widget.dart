@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -115,22 +116,31 @@ class _ClublistExWidgetState extends State<ClublistExWidget> {
                         crossAxisAlignment:
                             CrossAxisAlignment.end, // 텍스트 위젯의 상단 정렬
                         children: [
-                          Text(
-                            '${club.eventName}',
-                            style: GoogleFonts.getFont(
-                              'Readex Pro',
-                              letterSpacing: 0,
-                              fontSize: 12,
-                              fontStyle: FontStyle.italic,
+                          Container(
+                            padding: EdgeInsets.all(3), // 텍스트 주변에 여백을 추가합니다
+                            decoration: BoxDecoration(
+                              color: Colors.orangeAccent, // 원하는 배경색을 여기서 설정하세요
+                              borderRadius:
+                                  BorderRadius.circular(12.0), // 모서리를 둥글게 설정합니다
+                            ),
+                            child: Text(
+                              '${club.eventName}',
+                              style: GoogleFonts.getFont(
+                                'Readex Pro',
+                                letterSpacing: 0,
+                                fontSize: 11,
+                              ),
                             ),
                           ),
-                          SizedBox(width: 10), // 가로 간격 조절을 위한 SizedBox
+                          SizedBox(width: 8), // 가로 간격 조절을 위한 SizedBox
                           Text(
-                            '👨‍🦳${club.currentMembers}',
+                            '멤버 ${club.currentMembers}',
                             style: GoogleFonts.getFont(
                               'Readex Pro',
                               letterSpacing: 0,
-                              fontStyle: FontStyle.italic,
+                              // fontStyle: FontStyle.italic,
+                              fontSize: 14,
+                              color:Color.fromARGB(255, 239, 187, 132)
                             ),
                           ),
                         ],

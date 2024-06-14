@@ -40,7 +40,7 @@ class _ReplyWidgetState extends State<ReplyWidget> {
         mainAxisSize: MainAxisSize.max,
         children: [
           Row(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             children: [
               GestureDetector(
                 onTap: () async {
@@ -111,6 +111,7 @@ class _ReplyWidgetState extends State<ReplyWidget> {
                 icon: Icon(
                   Icons.more_vert,
                   color: FlutterFlowTheme.of(context).primaryText,
+
                 ),
               ),
             ],
