@@ -5,7 +5,7 @@ import 'package:universus/class/user/user.dart';
 import 'package:web_socket_channel/io.dart';
 
 class ChatScreen extends StatefulWidget {
-  final int chatRoomId; // 채팅방 ID 필드 추가
+  final int chatRoomId;
   final int chatRoomType;
   final String? customChatRoomName;
 
@@ -32,7 +32,7 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     _initWebSocketConnection();
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      _scrollToBottom(); // UI 빌드 후 맨 아래로 스크롤
+      _scrollToBottom();
     });
   }
 
@@ -40,17 +40,16 @@ class _ChatScreenState extends State<ChatScreen> {
     _currentMemberIdx = await UserData.getMemberIdx();
     setState(() {});
 
-    // WebSocket 연결 초기화
     _channel = IOWebSocketChannel.connect(
       Uri.parse(
-          'ws://moyoapi.lunaweb.dev/ws/chat/${widget.chatRoomType}/${widget.chatRoomId}'),
-      headers: {'memberIdx': _currentMemberIdx ?? ''}, // 사용자 식별자 추가
+        'ws://moyoapi.lunaweb.dev/ws/chat/${widget.chatRoomType}/${widget.chatRoomId}',
+      ),
+      headers: {'memberIdx': _currentMemberIdx ?? ''},
     );
 
-    // 메시지 수신 리스너 설정
     _channel.stream.listen((data) {
       _processMessage(data);
-      _scrollToBottom(); // 새 메시지 수신 후 자동 스크롤
+      _scrollToBottom();
     });
   }
 
@@ -60,28 +59,28 @@ class _ChatScreenState extends State<ChatScreen> {
         var decoded = jsonDecode(data);
 
         if (decoded is Map<String, dynamic>) {
-          // Handle a single message (Map<String, dynamic>)
-          _messages.add(ChatMessage.fromJson(decoded));
+          _messages.insert(
+              0,
+              ChatMessage.fromJson(
+                  decoded)); // Insert at the beginning for reversed order
         } else if (decoded is Iterable<dynamic>) {
-          // Handle a list of messages (Iterable<dynamic>)
-          _messages.addAll(decoded.map((m) => ChatMessage.fromJson(m)));
+          _messages.insertAll(
+              0,
+              decoded.map((m) =>
+                  ChatMessage.fromJson(m))); // Insert all at the beginning
         }
-
-        // Sort messages by timestamp if needed
-        _messages.sort((a, b) => a.regDt.compareTo(b.regDt));
-
-        // Scroll to bottom after processing new messages
-        _scrollToBottom();
       } catch (e) {
-        // Handle exceptions when decoding JSON
-        _messages.add(ChatMessage(
-          nickname: '',
-          content: '상대방이 채팅방을 나갔습니다',
-          memberIdx: 0,
-          profileImg: '',
-          regDt: DateTime.now().toIso8601String(),
-          type: 'system',
-        ));
+        _messages.insert(
+          0,
+          ChatMessage(
+            nickname: '',
+            content: '상대방이 채팅방을 나갔습니다',
+            memberIdx: 0,
+            profileImg: '',
+            regDt: DateTime.now().toIso8601String(),
+            type: 'system',
+          ),
+        );
       }
     });
   }
@@ -90,25 +89,22 @@ class _ChatScreenState extends State<ChatScreen> {
     if (_controller.text.isNotEmpty) {
       _channel.sink.add(_controller.text);
       _controller.clear();
-      _scrollToBottom(); // 메시지 전송 후 자동 스크롤
+      _scrollToBottom();
     }
   }
 
   void _scrollToBottom() {
     if (_scrollController.hasClients) {
-      Future.delayed(Duration(milliseconds: 100), () {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 200),
-          curve: Curves.easeOut,
-        );
-      });
+      _scrollController.animateTo(
+        0.0,
+        duration: Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+      );
     }
   }
 
   @override
   void dispose() {
-    // 리소스 정리
     _controller.dispose();
     _scrollController.dispose();
     _channel.sink.close();
@@ -122,18 +118,14 @@ class _ChatScreenState extends State<ChatScreen> {
     if (messageTime.year == now.year &&
         messageTime.month == now.month &&
         messageTime.day == now.day) {
-      // Today's Messages: Format time in HH:mm
       return DateFormat('HH:mm').format(messageTime);
     } else if (messageTime.year == now.year &&
         messageTime.month == now.month &&
         messageTime.day == now.day - 1) {
-      // Yesterday's Messages: Format time in "어제 HH:mm"
       return '어제 ${DateFormat('').format(messageTime)}';
     } else if (messageTime.year == now.year) {
-      // Messages from the Same Year: Format date and time in "MM월 dd일 HH:mm"
       return DateFormat('MM월 dd일 ').format(messageTime);
     } else {
-      // Messages from Previous Years: Format date and time in "yyyy.MM.dd HH:mm"
       return DateFormat('yyyy.MM.dd').format(messageTime);
     }
   }
@@ -152,6 +144,7 @@ class _ChatScreenState extends State<ChatScreen> {
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,
+                reverse: true, // Reverse the ListView
                 itemCount: _messages.length,
                 itemBuilder: (context, index) {
                   final message = _messages[index];
@@ -185,7 +178,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildMessageBubble(ChatMessage message) {
-    bool isSystemMessage = message.profileImg == 'system'; // 시스템 메시지 여부 확인
+    bool isSystemMessage = message.profileImg == 'system';
     bool isMine = int.parse(_currentMemberIdx ?? '0') == message.memberIdx;
 
     return Padding(
@@ -240,8 +233,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             Container(
               constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width *
-                    0.6, // Message bubble's maximum width limited to 60% of the screen
+                maxWidth: MediaQuery.of(context).size.width * 0.6,
               ),
               decoration: BoxDecoration(
                 color: isMine ? Color(0xFF7465F6) : Color(0xFFE8E8E8),
