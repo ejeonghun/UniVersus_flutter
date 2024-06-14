@@ -1,16 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:intl/intl.dart';
 import 'package:universus/class/user/user.dart';
 import 'package:web_socket_channel/io.dart';
-import '/flutter_flow/flutter_flow_icon_button.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:universus/chat/chatList.dart';
-import 'package:intl/intl.dart'; // intl 패키지 추가
 
 class ChatScreen extends StatefulWidget {
-  final int chatRoomId; // chatRoomId를 위한 필드 추가
+  final int chatRoomId;
   final int chatRoomType;
   final String? customChatRoomName;
 
@@ -28,100 +23,110 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  late IOWebSocketChannel channel;
-  List<ChatMessage> messages = [];
-  String? currentMemberIdx;
+  late IOWebSocketChannel _channel;
+  List<ChatMessage> _messages = [];
+  String? _currentMemberIdx;
 
   @override
   void initState() {
     super.initState();
-    getCurrentMemberIdxAndInitializeWebSocket();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToBottom(); // UI 빌드 완료 후 스크롤
+    _initWebSocketConnection();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _scrollToBottom();
     });
   }
 
-  Future<void> getCurrentMemberIdxAndInitializeWebSocket() async {
-    currentMemberIdx = await UserData.getMemberIdx();
+  void _initWebSocketConnection() async {
+    _currentMemberIdx = await UserData.getMemberIdx();
     setState(() {});
 
-    // WebSocket 연결 초기화
-    channel = IOWebSocketChannel.connect(
+    _channel = IOWebSocketChannel.connect(
       Uri.parse(
-          'ws://moyoapi.lunaweb.dev/ws/chat/${widget.chatRoomType}/${widget.chatRoomId}'),
-      headers: {'memberIdx': currentMemberIdx ?? ''}, // 사용자 식별자 추가
+        'ws://moyoapi.lunaweb.dev/ws/chat/${widget.chatRoomType}/${widget.chatRoomId}',
+      ),
+      headers: {'memberIdx': _currentMemberIdx ?? ''},
     );
 
-    // 메시지 수신 리스너 설정
-    channel.stream.listen((data) {
-      processMessage(data);
-      _scrollToBottom(); // 새 메시지 수신 후 자동으로 스크롤합니다.
+    _channel.stream.listen((data) {
+      _processMessage(data);
+      _scrollToBottom();
     });
   }
 
-  // 서버로부터 받은 데이터를 처리하는 함수
-  void processMessage(String data) {
+  void _processMessage(String data) {
     setState(() {
       try {
         var decoded = jsonDecode(data);
-        if (decoded is Map<String, dynamic> &&
-            decoded.containsKey('type') &&
-            decoded['type'] == 'system') {
-          // 시스템 메시지일 경우
-          String systemMessage = '${decoded['nickname']} 님이 나갔습니다.';
-          messages.add(ChatMessage(
-            nickname: 'System',
-            content: decoded['content'],
-            memberIdx: 0,
-            profileImg: decoded['profileImg'] ?? '',
-            regDt: DateTime.now().toIso8601String(),
-            type: 'system',
-          ));
-        } else {
-          messages
-              .addAll(List.from(decoded).map((m) => ChatMessage.fromJson(m)));
-          messages.sort((a, b) => a.regDt.compareTo(b.regDt));
+
+        if (decoded is Map<String, dynamic>) {
+          _messages.insert(
+              0,
+              ChatMessage.fromJson(
+                  decoded)); // Insert at the beginning for reversed order
+        } else if (decoded is Iterable<dynamic>) {
+          _messages.insertAll(
+              0,
+              decoded.map((m) =>
+                  ChatMessage.fromJson(m))); // Insert all at the beginning
         }
       } catch (e) {
-        messages.add(ChatMessage(
-          nickname: 'System',
-          content: data,
-          memberIdx: 0,
-          profileImg: '',
-          regDt: DateTime.now().toIso8601String(),
-          type: 'system',
-        ));
+        _messages.insert(
+          0,
+          ChatMessage(
+            nickname: '',
+            content: '상대방이 채팅방을 나갔습니다',
+            memberIdx: 0,
+            profileImg: '',
+            regDt: DateTime.now().toIso8601String(),
+            type: 'system',
+          ),
+        );
       }
     });
   }
 
-  // 채팅 목록의 끝으로 자동 스크롤하는 함수
+  void _sendMessage() {
+    if (_controller.text.isNotEmpty) {
+      _channel.sink.add(_controller.text);
+      _controller.clear();
+      _scrollToBottom();
+    }
+  }
+
   void _scrollToBottom() {
     if (_scrollController.hasClients) {
-      Future.delayed(Duration(milliseconds: 100), () {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 200),
-          curve: Curves.easeOut,
-        );
-      });
+      _scrollController.animateTo(
+        0.0,
+        duration: Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+      );
     }
   }
 
   @override
   void dispose() {
-    // 리소스 정리
     _controller.dispose();
     _scrollController.dispose();
-    channel.sink.close();
+    _channel.sink.close();
     super.dispose();
   }
 
-  void _sendMessage() {
-    if (_controller.text.isNotEmpty) {
-      channel.sink.add(_controller.text);
-      _controller.clear();
-      _scrollToBottom(); // 메시지 전송 후 스크롤
+  String _formatTimestamp(String regDt) {
+    DateTime messageTime = DateTime.parse(regDt);
+    DateTime now = DateTime.now();
+
+    if (messageTime.year == now.year &&
+        messageTime.month == now.month &&
+        messageTime.day == now.day) {
+      return DateFormat('HH:mm').format(messageTime);
+    } else if (messageTime.year == now.year &&
+        messageTime.month == now.month &&
+        messageTime.day == now.day - 1) {
+      return '어제 ${DateFormat('').format(messageTime)}';
+    } else if (messageTime.year == now.year) {
+      return DateFormat('MM월 dd일 ').format(messageTime);
+    } else {
+      return DateFormat('yyyy.MM.dd').format(messageTime);
     }
   }
 
@@ -139,9 +144,10 @@ class _ChatScreenState extends State<ChatScreen> {
             Expanded(
               child: ListView.builder(
                 controller: _scrollController,
-                itemCount: messages.length,
+                reverse: true, // Reverse the ListView
+                itemCount: _messages.length,
                 itemBuilder: (context, index) {
-                  final message = messages[index];
+                  final message = _messages[index];
                   return _buildMessageBubble(message);
                 },
               ),
@@ -172,9 +178,9 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _buildMessageBubble(ChatMessage message) {
-    bool isSystemMessage = message.type == 'system'; // 시스템 메시지 여부 확인
+    bool isSystemMessage = message.profileImg == 'system';
+    bool isMine = int.parse(_currentMemberIdx ?? '0') == message.memberIdx;
 
-    bool isMine = int.parse(currentMemberIdx ?? '0') == message.memberIdx;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10),
       child: Row(
@@ -206,12 +212,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _messageContentBubble(ChatMessage message, bool isMine) {
-    // 시간 형식을 변환하는 함수
-    String formatTime(String isoTime) {
-      final dateTime = DateTime.parse(isoTime);
-      return DateFormat('h:mm a').format(dateTime); // 시간을 AM/PM 형식으로 변환
-    }
-
     return Column(
       crossAxisAlignment:
           isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
@@ -224,7 +224,7 @@ class _ChatScreenState extends State<ChatScreen> {
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Text(
-                  formatTime(message.regDt),
+                  _formatTimestamp(message.regDt),
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 10,
@@ -232,6 +232,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
             Container(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * 0.6,
+              ),
               decoration: BoxDecoration(
                 color: isMine ? Color(0xFF7465F6) : Color(0xFFE8E8E8),
                 borderRadius: BorderRadius.circular(12),
@@ -242,6 +245,7 @@ class _ChatScreenState extends State<ChatScreen> {
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               child: Text(
                 message.content,
+                softWrap: true,
                 style: TextStyle(
                   color: isMine ? Colors.white : Colors.black,
                   fontSize: 16,
@@ -252,7 +256,7 @@ class _ChatScreenState extends State<ChatScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text(
-                  formatTime(message.regDt),
+                  _formatTimestamp(message.regDt),
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 10,

@@ -1,10 +1,7 @@
-import 'package:flutterflow_ui/flutterflow_ui.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // intl 패키지 추가
 import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/user/user.dart';
-import 'chatList.dart' show ChatsPage;
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 class ChatRoom {
   final int idx;
@@ -28,29 +25,29 @@ class ChatRoom {
   });
 
   String? get getRecentChatDate {
-    if (this.recentChatDate != null) {
-      DateTime parsedDate = DateTime.parse(this.recentChatDate!);
-      DateTime currentDate = DateTime.now();
+    if (recentChatDate != null) {
+      try {
+        DateTime parsedDate = DateTime.parse(recentChatDate!);
+        DateTime currentDate = DateTime.now();
 
-      if (parsedDate.year == currentDate.year &&
-          parsedDate.month == currentDate.month &&
-          parsedDate.day == currentDate.day) {
-        return DateFormat('HH:mm').format(parsedDate);
-      } else {
-        return DateFormat('yyyy-MM-dd').format(parsedDate);
+        if (parsedDate.year == currentDate.year &&
+            parsedDate.month == currentDate.month &&
+            parsedDate.day == currentDate.day) {
+          return DateFormat('HH:mm').format(parsedDate); // 같은 날이면 HH:mm 형식으로 반환
+        } else {
+          return DateFormat('yyyy-MM-dd')
+              .format(parsedDate); // 그 외는 yyyy-MM-dd 형식으로 반환
+        }
+      } catch (e) {
+        print('날짜 형식 오류: $e');
+        return null; // 날짜 형식 오류 발생 시 null 반환
       }
     }
-    return null; // null 반환 추가
+    return null; // recentChatDate가 null인 경우 null 반환
   }
 }
 
-class ChatsModel extends FlutterFlowModel<ChatsPage> {
-  @override
-  void initState(BuildContext context) {}
-
-  @override
-  void dispose() {}
-
+class ChatsModel extends ChangeNotifier {
   Future<List<ChatRoom>> getChatRoomsListSorted() async {
     try {
       List<ChatRoom> chatRoomList = await getChatRoomsList();
@@ -65,7 +62,7 @@ class ChatsModel extends FlutterFlowModel<ChatsPage> {
       return chatRoomList;
     } catch (e) {
       print("Failed to fetch and sort chat rooms: $e");
-      return [];
+      return []; // 에러 발생 시 빈 리스트 반환
     }
   }
 
@@ -97,11 +94,11 @@ class ChatsModel extends FlutterFlowModel<ChatsPage> {
         return chatRoomList;
       } else {
         print("Empty or invalid response data.");
-        return [];
+        return []; // 데이터 없음 또는 유효하지 않은 응답 데이터인 경우 빈 리스트 반환
       }
     } catch (e) {
       print("Failed to fetch chat rooms: $e");
-      return [];
+      return []; // 에러 발생 시 빈 리스트 반환
     }
   }
 }
