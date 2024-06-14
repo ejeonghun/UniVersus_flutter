@@ -345,11 +345,13 @@ class _WriteWidgetState extends State<WriteWidget> {
                     : Align(
                         alignment: Alignment.bottomRight,
                         child: Padding(
-                          padding: const EdgeInsets.all(10.0),
+                          padding: const EdgeInsets.fromLTRB(0, 0, 10.0, 0),
                           child: Image.file(
                             // 웹이 아니면 파일 이미지를 가져옵니다.
                             File(_model.imageFile!.path),
                             fit: BoxFit.cover,
+                            width: 110,
+                            height: 110,
                           ),
                         ),
                       ),
