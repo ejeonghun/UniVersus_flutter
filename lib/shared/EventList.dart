@@ -71,7 +71,12 @@ class _EventListState extends State<EventList> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final eventList = snapshot.data!;
-          return CustomDropdown<Event>(
+          return Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.orange), // 테두리 색상 및 스타일 설정
+            borderRadius: BorderRadius.circular(8), // 테두리의 모서리를 둥글게 만듦
+          ),
+          child: CustomDropdown<Event>(
             hintText: '카테고리 선택',
             listItemBuilder: (context, item, isSelected, onItemSelect) =>
                 Container(
@@ -117,7 +122,8 @@ class _EventListState extends State<EventList> {
               });
               widget.onEventSelected(value);
             },
-          );
+          ),
+        );
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
