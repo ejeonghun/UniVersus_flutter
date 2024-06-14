@@ -58,29 +58,25 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       try {
         var decoded = jsonDecode(data);
-        if (decoded is Map<String, dynamic> &&
-            decoded.containsKey('type') &&
-            decoded['type'] == 'system') {
-          // 시스템 메시지 처리
-          _messages.add(ChatMessage(
-            nickname: 'System',
-            content: decoded['content'],
-            memberIdx: 0,
-            profileImg: decoded['profileImg'] ?? '',
-            regDt: DateTime.now().toIso8601String(),
-            type: 'system',
-          ));
-        } else {
-          // 일반 메시지 처리
-          _messages
-              .addAll(List.from(decoded).map((m) => ChatMessage.fromJson(m)));
-          _messages.sort((a, b) => a.regDt.compareTo(b.regDt));
+
+        if (decoded is Map<String, dynamic>) {
+          // Handle a single message (Map<String, dynamic>)
+          _messages.add(ChatMessage.fromJson(decoded));
+        } else if (decoded is Iterable<dynamic>) {
+          // Handle a list of messages (Iterable<dynamic>)
+          _messages.addAll(decoded.map((m) => ChatMessage.fromJson(m)));
         }
+
+        // Sort messages by timestamp if needed
+        _messages.sort((a, b) => a.regDt.compareTo(b.regDt));
+
+        // Scroll to bottom after processing new messages
+        _scrollToBottom();
       } catch (e) {
-        // 예외 발생 시 처리
+        // Handle exceptions when decoding JSON
         _messages.add(ChatMessage(
-          nickname: 'System',
-          content: data,
+          nickname: '',
+          content: '상대방이 채팅방을 나갔습니다',
           memberIdx: 0,
           profileImg: '',
           regDt: DateTime.now().toIso8601String(),
@@ -117,6 +113,29 @@ class _ChatScreenState extends State<ChatScreen> {
     _scrollController.dispose();
     _channel.sink.close();
     super.dispose();
+  }
+
+  String _formatTimestamp(String regDt) {
+    DateTime messageTime = DateTime.parse(regDt);
+    DateTime now = DateTime.now();
+
+    if (messageTime.year == now.year &&
+        messageTime.month == now.month &&
+        messageTime.day == now.day) {
+      // Today's Messages: Format time in HH:mm
+      return DateFormat('HH:mm').format(messageTime);
+    } else if (messageTime.year == now.year &&
+        messageTime.month == now.month &&
+        messageTime.day == now.day - 1) {
+      // Yesterday's Messages: Format time in "어제 HH:mm"
+      return '어제 ${DateFormat('').format(messageTime)}';
+    } else if (messageTime.year == now.year) {
+      // Messages from the Same Year: Format date and time in "MM월 dd일 HH:mm"
+      return DateFormat('MM월 dd일 ').format(messageTime);
+    } else {
+      // Messages from Previous Years: Format date and time in "yyyy.MM.dd HH:mm"
+      return DateFormat('yyyy.MM.dd').format(messageTime);
+    }
   }
 
   @override
@@ -200,32 +219,6 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Widget _messageContentBubble(ChatMessage message, bool isMine) {
-    // Function to format the timestamp
-    String formatTimestamp(String regDt) {
-      DateTime messageTime = DateTime.parse(regDt);
-      DateTime now = DateTime.now();
-      Duration difference = now.difference(messageTime);
-
-      if (difference.inMinutes < 1) {
-        return '방금 전';
-      } else if (difference.inHours < 1) {
-        return '${difference.inMinutes}분 전';
-      } else if (now.year == messageTime.year &&
-          now.month == messageTime.month &&
-          now.day == messageTime.day) {
-        // Format time in HH:mm for messages sent today
-        return DateFormat('HH:mm').format(messageTime);
-      } else if (now.year == messageTime.year &&
-          now.month == messageTime.month &&
-          now.day - messageTime.day == 1) {
-        return '어제 ${DateFormat('').format(messageTime)}';
-      } else if (now.year == messageTime.year) {
-        return DateFormat('MM월 dd일 ').format(messageTime);
-      } else {
-        return DateFormat('yyyy.MM.dd ').format(messageTime);
-      }
-    }
-
     return Column(
       crossAxisAlignment:
           isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
@@ -238,7 +231,7 @@ class _ChatScreenState extends State<ChatScreen> {
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: Text(
-                  formatTimestamp(message.regDt),
+                  _formatTimestamp(message.regDt),
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 10,
@@ -271,7 +264,7 @@ class _ChatScreenState extends State<ChatScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Text(
-                  formatTimestamp(message.regDt),
+                  _formatTimestamp(message.regDt),
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 10,
