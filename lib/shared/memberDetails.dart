@@ -6,6 +6,8 @@ import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/user/user.dart';
 import 'package:universus/shared/IOSAlertDialog.dart';
 
+/// 멤버 상세정보 클래스
+/// 생성자 : 이정훈
 class MemberDetails {
   final int? memberId;
 
@@ -113,6 +115,10 @@ class MemberDetails {
     );
   }
 
+  /// 멤버 상세정보를 가져오는 함수
+  /// @param memberId: 멤버 번호
+  /// @return 멤버 상세정보 Map
+  /// 생성자 : 이정훈
   Future<Map<String, dynamic>> fetchMemberDetails(String memberId) async {
     DioApiCall api = DioApiCall();
     try {

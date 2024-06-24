@@ -8,7 +8,13 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+/// 사용자 프로필 페이지 모델 클래스
+/// 생성자 : 이정훈
 class ProfileModel extends FlutterFlowModel<ProfileWidget> {
+  /// 사용자 프로필 정보를 불러오는 메소드
+  /// @param memberIdx
+  /// @return userProfile
+  /// 생성자 : 이정훈
   Future<userProfile> getProfile() async {
     String? memberIdx = await UserData.getMemberIdx();
     // 사용자 정보를 불러오는 메소드

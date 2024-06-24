@@ -42,7 +42,7 @@ class _RecruitWidgetState extends State<RecruitWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
+      padding: EdgeInsetsDirectional.fromSTEB(30, 0, 0, 10),
       child: GestureDetector(
         onTap: () {
           if (widget.recruitmentElement.univBoardId == 0) {
@@ -73,7 +73,8 @@ class _RecruitWidgetState extends State<RecruitWidget> {
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.network(
-                widget.recruitmentElement.getImageUrl!, // Example placeholder image
+                widget.recruitmentElement
+                    .getImageUrl!, // Example placeholder image
                 width: 90,
                 height: 90,
                 fit: BoxFit.cover,
