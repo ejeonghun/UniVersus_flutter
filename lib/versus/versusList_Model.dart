@@ -8,6 +8,9 @@ import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'versusList_Widget.dart' show VersusListWidget;
 import 'package:flutter/material.dart';
 
+/// 대항전 대결 리스트 페이지 모델 클래스
+/// 연관 파일 : versusSearch(대결 검색 및 분류), versusElement(대결 컴포넌트)
+/// 생성자 : 이정훈
 class VersusListModel extends FlutterFlowModel<VersusListWidget> {
   ///  State fields for stateful widgets in this page.
 
@@ -19,7 +22,7 @@ class VersusListModel extends FlutterFlowModel<VersusListWidget> {
   // Model for versusElement component.
   late VersusElementModel versusElementModel2;
 
-  /*
+  /**
   * @param statusCode: 0 - 모집중 , 1 - 대기중 , 2 - 진행중, 3 - 경기 준비완료 , 4 - 경기 종료
   * @return List<versusElement>: 대결 리스트
   * @throws Exception: 대결 리스트 조회 실패 시 예외 발생
@@ -56,7 +59,7 @@ class VersusListModel extends FlutterFlowModel<VersusListWidget> {
     }
   }
 
-  /*
+  /**
   * @param statusCode: 0 - 모집중 , 1 - 대기중 , 2 - 진행중, 3 - 경기 준비완료 , 4 - 경기 종료
   * @return List<versusElement>: 대결 리스트
   * @throws Exception: 대결 리스트 조회 실패 시 예외 발생

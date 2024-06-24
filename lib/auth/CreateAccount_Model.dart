@@ -11,6 +11,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+/// 회원가입 페이지 모델 클래스
+/// 생성자 : 이정훈
 class CreateAccountModel extends FlutterFlowModel<CreateAccountWidget> {
   ///  State fields for stateful widgets in this page.
 
@@ -46,6 +48,9 @@ class CreateAccountModel extends FlutterFlowModel<CreateAccountWidget> {
   bool isEmailValid = false; // 이메일 인증 여부 -> 이메일 인증 성공시 true
   String? univId; // 대학교 Id값
 
+  /// 백엔드의 Univcert API를 이용하여 해당 이메일이 학교 이메일이 맞는지 검사 및
+  /// 이메일 인증
+  /// 생성자 : 이정훈
   Future<bool> sendUnivCert() async {
     ApiCall api = ApiCall();
     final response = await api.post('/univAuth/certify',
@@ -58,6 +63,8 @@ class CreateAccountModel extends FlutterFlowModel<CreateAccountWidget> {
     return false;
   }
 
+  /// 백엔드의 Univcert API를 이용하여 발송된 인증번호 검증
+  /// 생성자 : 이정훈
   Future<bool> certifyUnivCert() async {
     ApiCall api = ApiCall();
     final response = await api.post('/univAuth/certifyCode',

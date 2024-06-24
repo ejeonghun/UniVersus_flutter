@@ -7,25 +7,19 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+///대항전 생성 페이지 모델 클래스
+///생성자 : 이정훈
 class versusCreateModel extends FlutterFlowModel<versusCreateWidget> {
-  ///  State fields for stateful widgets in this page.
-
   final formKey = GlobalKey<FormState>();
-  // State field(s) for RadioButton widget.
   FormFieldController<String>? radioButtonValueController;
-  // State field(s) for VersusPrice widget.
   FocusNode? versusPriceFocusNode;
   TextEditingController? versusPriceController;
   String? Function(BuildContext, String?)? versusPriceControllerValidator;
-  // State field(s) for VersusIntro widget.
   FocusNode? versusIntroFocusNode;
   TextEditingController? versusIntroController;
   String? Function(BuildContext, String?)? versusIntroControllerValidator;
-  // State field(s) for CountController widget.
   int? countControllerValue;
-
   int? eventId; // 카테고리 id
-
   double? lat; // 위도
   double? lng; // 경도
   String? placeName; // 장소명

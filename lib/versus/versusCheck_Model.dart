@@ -9,6 +9,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+///  대결 확인 페이지 모델 클래스
+///  사용자 : 게스트팀 리더
+///  화면진입 트리거 : 호스트 팀 리더가 경기 종료(경기 결과 입력)을 하면 FCM으로 게스트 팀 리더에게 univBattleId를 전송하고 게스트 팀 리더가 해당 알림을 클릭하면 해당 페이지로 이동함
+///  생성자 : 이정훈
 class VersusCheckModel extends FlutterFlowModel<VersusCheckWidget> {
   ///  State fields for stateful widgets in this page.
 

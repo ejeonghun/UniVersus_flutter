@@ -7,6 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
+/// 대항전 리스트에서 사용하는 대항전 요소(컴포넌트)
+/// 생성자 : 이정훈
 class VersusElementModel extends FlutterFlowModel<VersusElementWidget> {
   @override
   void initState(BuildContext context) {}
@@ -44,6 +46,7 @@ class VersusElementModel extends FlutterFlowModel<VersusElementWidget> {
         return Colors.white;
     }
   }
+
   String getEventText(int eventId) {
     switch (eventId) {
       case 1:
@@ -68,6 +71,7 @@ class VersusElementModel extends FlutterFlowModel<VersusElementWidget> {
         return '알 수 없음';
     }
   }
+
   Icon getIcon(int eventId) {
     switch (eventId) {
       case 1:
@@ -95,6 +99,7 @@ class VersusElementModel extends FlutterFlowModel<VersusElementWidget> {
         return Icon(Icons.help_outline, size: 25.0); // 알 수 없는 eventId
     }
   }
+
   @override
   void dispose() {}
 }

@@ -11,6 +11,10 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+/* 
+* 대결 결과 입력 페이지 모델 클래스
+* 생성자 : 이정훈
+*/
 class VersusResultModel extends FlutterFlowModel<VersusResultWidget> {
   ///  State fields for stateful widgets in this page.
 
@@ -33,6 +37,11 @@ class VersusResultModel extends FlutterFlowModel<VersusResultWidget> {
   TextEditingController? textController2;
   String? Function(BuildContext, String?)? textController2Validator;
 
+  /** 대결 결과에서 대학교 정보를 불러오기 위한 API 통신 메소드
+  * @param battleId : 대결 ID
+  * @return : 대결 상세 정보
+  * 생성자 : 이정훈
+  */
   Future<versusDetail> getVersusDetail(int battleId) async {
     // 대결 리스트를 불러오는 메소드
     DioApiCall api = DioApiCall();
@@ -87,6 +96,11 @@ class VersusResultModel extends FlutterFlowModel<VersusResultWidget> {
     }
   }
 
+  /** 대결 결과 입력 API 통신 메소드
+  * @param battleId : 대결 ID
+  * @return : API 결과
+  * 생성자 : 이정훈
+  */
   Future<bool> sendVersusRes(int battleId) async {
     // 대결 결과를 전송하는 메소드
     DioApiCall api = DioApiCall();

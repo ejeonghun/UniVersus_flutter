@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:universus/ranking/ranking_model.dart';
-import 'package:universus/winloseRecord/record.dart';
+import 'package:universus/versus/winloseRecord/record.dart';
 
 class TopRankWidget extends StatefulWidget {
   const TopRankWidget({Key? key}) : super(key: key);

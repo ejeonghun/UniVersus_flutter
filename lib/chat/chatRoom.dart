@@ -57,14 +57,14 @@ class _ChatScreenState extends State<ChatScreen> {
       try {
         var decoded = jsonDecode(data);
         if (decoded is Map<String, dynamic> && decoded['type'] == 'system') {
-          _messages.add(ChatMessage(
-            nickname: 'System',
-            content: decoded['content'],
-            memberIdx: 0,
-            profileImg: decoded['profileImg'] ?? '',
-            regDt: DateTime.now().toIso8601String(),
-            type: 'system',
-          ));
+          // _messages.add(ChatMessage(
+          //   nickname: 'System',
+          //   content: decoded['content'],
+          //   memberIdx: 0,
+          //   profileImg: decoded['profileImg'] ?? '',
+          //   regDt: DateTime.now().toIso8601String(),
+          //   type: 'system',
+          // ));
         } else if (decoded is List) {
           // 메시지 리스트를 처리
           _messages
@@ -77,14 +77,14 @@ class _ChatScreenState extends State<ChatScreen> {
           _messages.sort((a, b) => b.regDt.compareTo(a.regDt)); // 최신순으로 정렬
         }
       } catch (e) {
-        _messages.add(ChatMessage(
-          nickname: 'System',
-          content: data,
-          memberIdx: 0,
-          profileImg: '',
-          regDt: DateTime.now().toIso8601String(),
-          type: 'system',
-        ));
+        // _messages.add(ChatMessage(
+        //   nickname: 'System',
+        //   content: data,
+        //   memberIdx: 0,
+        //   profileImg: '',
+        //   regDt: DateTime.now().toIso8601String(),
+        //   type: 'system',
+        // ));
       }
       _scrollToBottom();
     });

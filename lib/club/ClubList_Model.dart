@@ -26,6 +26,8 @@ class ClubListModel extends FlutterFlowModel<ClubListWidget> {
     clublistExModel.dispose();
   }
 
+  /// 클럽 리스트 가져오는 메소드
+  /// 생성자 : 이정훈
   Future<List<ClubElement>> getClubList() async {
     try {
       DioApiCall api = DioApiCall();

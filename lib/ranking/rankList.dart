@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:universus/ranking/ranking_model.dart';
-import 'package:universus/winloseRecord/record.dart';
+import 'package:universus/versus/winloseRecord/record.dart';
 
 class RanklistWidget extends StatefulWidget {
   const RanklistWidget({Key? key}) : super(key: key);

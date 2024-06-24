@@ -22,8 +22,6 @@ import 'package:universus/ranking/ranking.dart';
 import 'package:universus/service_center/service_center.dart';
 import 'package:universus/shared/paymentResult.dart';
 import 'package:universus/versus/versusDetail_Widget.dart';
-import 'package:universus/winloseRecord/record.dart';
-import 'package:universus/winloseRecord/record_model.dart';
 import 'package:universus/versus/versusCheck_Widget.dart';
 
 import 'firebase_options.dart';
@@ -115,11 +113,13 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+// 플러터 에러 핸들러
   FlutterError.onError = (FlutterErrorDetails details) {
     print(details);
     FlutterError.dumpErrorToConsole(details);
   };
 
+// 플러터 에러 핸들러
   PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
     print(error);
     print(stack);

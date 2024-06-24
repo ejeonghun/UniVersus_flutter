@@ -5,6 +5,7 @@ import 'package:universus/chat/chatRoom.dart';
 import 'package:universus/club/ClubList_Widget.dart';
 import 'package:universus/main.dart';
 import 'package:universus/main/main_Widget.dart';
+import 'package:universus/versus/deptVersus/deptVersusCheck_Widget.dart';
 import 'package:universus/versus/versusCheck_Widget.dart';
 import 'package:universus/versus/versusDetail_Widget.dart';
 
@@ -46,12 +47,17 @@ void handleNotificationClick(String payload) {
           print("Invalid data format for chat target: $dataValue");
         }
         break;
-      case 'univBattle/resultRes': // 참가자 결과 전송 알림 시
+      case 'univBattle/resultRes': // univBattle 참가자 결과 전송 알림 시
         navigatorKey.currentState?.push(MaterialPageRoute(
           builder: (context) =>
               VersusCheckWidget(battleId: int.parse(dataValue)),
         ));
         break;
+      case 'deptBattle/resultRes': // deptBattle 참가자 결과 전송 알림 시
+        navigatorKey.currentState?.push(MaterialPageRoute(
+          builder: (context) =>
+              deptVersusCheckWidget(battleId: int.parse(dataValue)),
+        ));
       case 'notice':
         break;
       case 'univBoard/info': // 댓글 달렸을 때 알림 시 해당 게시글로 이동

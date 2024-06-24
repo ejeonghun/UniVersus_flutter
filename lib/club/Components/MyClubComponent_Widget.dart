@@ -8,6 +8,7 @@ import 'package:universus/club/ClubMain_Widget.dart';
 import 'MyClubComponent_model.dart';
 export 'MyClubComponent_model.dart';
 
+/// 내가 가입한 클럽 리스트 컴포넌트
 class MyClubComponentWidget extends StatefulWidget {
   final List<ClubElement> clubs;
 
@@ -58,100 +59,101 @@ class _MyClubComponentWidgetState extends State<MyClubComponentWidget> {
                 ),
               );
             },
-          child: Container(
-            width: 100,
-            height: 72,
-            decoration: BoxDecoration(
-              color: FlutterFlowTheme.of(context).secondaryBackground,
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 0,
-                  color: FlutterFlowTheme.of(context).alternate,
-                  offset: Offset(0, 1),
-                )
-              ],
-            ),
-            child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 45,
-                    height: 45,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFFFBE98),
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: FlutterFlowTheme.of(context).tertiary,
-                        width: 2,
+            child: Container(
+              width: 100,
+              height: 72,
+              decoration: BoxDecoration(
+                color: FlutterFlowTheme.of(context).secondaryBackground,
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 0,
+                    color: FlutterFlowTheme.of(context).alternate,
+                    offset: Offset(0, 1),
+                  )
+                ],
+              ),
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 45,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFFFBE98),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: FlutterFlowTheme.of(context).tertiary,
+                          width: 2,
+                        ),
                       ),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(2),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(44),
-                        child: Image.network(
-                          club.imageUrl,
-                          width: 44,
-                          height: 44,
-                          fit: BoxFit.cover,
+                      child: Padding(
+                        padding: EdgeInsets.all(2),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(44),
+                          child: Image.network(
+                            club.imageUrl,
+                            width: 44,
+                            height: 44,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 4),
-                            child: Text(
-                              club.clubName,
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 4),
+                              child: Text(
+                                club.clubName,
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyLarge
+                                    .override(
+                                      fontFamily: 'Readex Pro',
+                                      letterSpacing: 0,
+                                    ),
+                              ),
+                            ),
+                            Text(
+                              club.getFormattedDate(),
                               style: FlutterFlowTheme.of(context)
-                                  .bodyLarge
+                                  .labelMedium
                                   .override(
                                     fontFamily: 'Readex Pro',
                                     letterSpacing: 0,
                                   ),
                             ),
-                          ),
-                          Text(
-                            club.getFormattedDate(),
-                            style: FlutterFlowTheme.of(context)
-                                .labelMedium
-                                .override(
-                                  fontFamily: 'Readex Pro',
-                                  letterSpacing: 0,
-                                ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  FlutterFlowIconButton(
-                    borderRadius: 20,
-                    borderWidth: 1,
-                    buttonSize: 40,
-                    icon: Icon(
-                      Icons.chevron_right_sharp,
-                      color: FlutterFlowTheme.of(context).primaryText,
-                      size: 24,
+                    FlutterFlowIconButton(
+                      borderRadius: 20,
+                      borderWidth: 1,
+                      buttonSize: 40,
+                      icon: Icon(
+                        Icons.chevron_right_sharp,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 24,
+                      ),
+                      onPressed: () {
+                        print('IconButton pressed ...');
+                      },
                     ),
-                    onPressed: () {
-                      print('IconButton pressed ...');
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-        ),
         );
       },
     );

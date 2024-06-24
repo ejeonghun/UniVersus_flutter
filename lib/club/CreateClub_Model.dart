@@ -11,6 +11,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+/// 클럽 생성 페이지 모델 클래스
+/// 생성자 : 이정훈
 class CreateClubModel extends FlutterFlowModel<CreateClubWidget> {
   ///  State fields for stateful widgets in this page.
 
