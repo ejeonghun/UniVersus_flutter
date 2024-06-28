@@ -13,6 +13,7 @@ migrate_working_dir/
 .git/
 firebase.json
 /firebase.json
+assets/data/
 
 # IntelliJ related
 *.iml
@@ -34,6 +35,7 @@ firebase.json
 .pub-cache/
 .pub/
 /build/
+
 
 # Symbolication related
 app.*.symbols
