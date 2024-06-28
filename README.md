@@ -18,6 +18,13 @@
 
 목적 : 대학교 내 커뮤니티 활성화 및 스포츠 참여율 증감
 
+##### 플랫폼
+<p align="center">
+  <img src="https://img.shields.io/badge/ios-000000?style=for-the-badge&logo=ios&logoColor=white">
+  <img src="https://img.shields.io/badge/android-3DDC84?style=for-the-badge&logo=android&logoColor=white">
+  <img src="https://img.shields.io/badge/web-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white">
+</p>
+
 #### 개발 배경
 - 지원 시스템 부재
      - 대학 간 스포츠 경쟁을 체계적으로 지원할 수 있는 플랫폼이 없어, 대학들이 자체적으로 경쟁을 조직하고 관리하는 데 어려움
@@ -48,6 +55,13 @@
 - 클럽 활동 지원
    - 학교 내 클럽 활동을 활성화하여, 학생들이 다양한 스포츠 활동에 참여할 수 있도록 지원
 
+
+#### Figma
+[![Figma](https://github.com/ejeonghun/UniVersus_flutter/assets/41509711/25fe0015-7e59-4e24-9867-0fcea73a5692)](https://www.figma.com/design/rcohPG5PsVhePBI03CZuTE/UNIVERSUS?node-id=301-10&t=YGfQMFVtVzaEIyDX-1)
+
+
+#### ERD
+![ERD](https://github.com/ejeonghun/UniVersus_flutter/assets/41509711/92900437-37e9-43d5-b016-96df9f77159b)
 
 
 
