@@ -1,6 +1,7 @@
 ## Universus (University + Versus)
 ![image](https://github.com/ejeonghun/UniVersus_flutter/assets/41509711/9537f92e-53ea-4cd7-a5b5-922c95fd8036)
 ### 대학교 스포츠 대항전 애플리케이션
+#### 🔧Stack🔧
 <p align="center">
   <img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white">
   <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
@@ -16,10 +17,8 @@
      <img src="https://img.shields.io/badge/oracleDB-F80000?style=for-the-badge&logo=oracle&logoColor=white">
 </p>
 
-목적 : 대학교 내 커뮤니티 활성화 및 스포츠 참여율 증감
-
-##### 플랫폼
-<p align="center">
+#### 📱Platform📱
+<p align="left">
   <img src="https://img.shields.io/badge/ios-000000?style=for-the-badge&logo=ios&logoColor=white">
   <img src="https://img.shields.io/badge/android-3DDC84?style=for-the-badge&logo=android&logoColor=white">
   <img src="https://img.shields.io/badge/web-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white">
