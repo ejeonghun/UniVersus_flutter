@@ -1,22 +1,6 @@
 ## Universus (University + Versus)
 ![image](https://github.com/ejeonghun/UniVersus_flutter/assets/41509711/9537f92e-53ea-4cd7-a5b5-922c95fd8036)
 ### 대학교 스포츠 대항전 애플리케이션
-<p align="center">
-  <img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white">
-  <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
-  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white">
-  <img src="https://img.shields.io/badge/apache tomcat-F8DC75?style=for-the-badge&logo=apachetomcat&logoColor=black">
-  <img src="https://img.shields.io/badge/flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white">
-  <img src="https://img.shields.io/badge/dart-0175C2?style=for-the-badge&logo=dart&logoColor=white">
-  <img src="https://img.shields.io/badge/ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white">
-  <img src="https://img.shields.io/badge/aws-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white">
-  <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white">
-  <img src="https://img.shields.io/badge/flask-000000?style=for-the-badge&logo=flask&logoColor=white">
-  <img src="https://img.shields.io/badge/transformers-F7981E?style=for-the-badge&logo=hugging-face&logoColor=white">
-     <img src="https://img.shields.io/badge/oracleDB-F80000?style=for-the-badge&logo=oracle&logoColor=white">
-</p>
-
-목적 : 대학교 내 커뮤니티 활성화 및 스포츠 참여율 증감
 
 ##### 플랫폼
 <p align="center">
@@ -55,6 +39,21 @@
 - 클럽 활동 지원
    - 학교 내 클럽 활동을 활성화하여, 학생들이 다양한 스포츠 활동에 참여할 수 있도록 지원
 
+#### 사용 기술
+<p align="center">
+  <img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white">
+  <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white">
+  <img src="https://img.shields.io/badge/apache tomcat-F8DC75?style=for-the-badge&logo=apachetomcat&logoColor=black">
+  <img src="https://img.shields.io/badge/flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white">
+  <img src="https://img.shields.io/badge/dart-0175C2?style=for-the-badge&logo=dart&logoColor=white">
+  <img src="https://img.shields.io/badge/ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white">
+  <img src="https://img.shields.io/badge/aws-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white">
+  <img src="https://img.shields.io/badge/python-3776AB?style=for-the-badge&logo=python&logoColor=white">
+  <img src="https://img.shields.io/badge/flask-000000?style=for-the-badge&logo=flask&logoColor=white">
+  <img src="https://img.shields.io/badge/transformers-F7981E?style=for-the-badge&logo=hugging-face&logoColor=white">
+     <img src="https://img.shields.io/badge/oracleDB-F80000?style=for-the-badge&logo=oracle&logoColor=white">
+</p>
 
 #### Figma
 [![Figma](https://github.com/ejeonghun/UniVersus_flutter/assets/41509711/25fe0015-7e59-4e24-9867-0fcea73a5692)](https://www.figma.com/design/rcohPG5PsVhePBI03CZuTE/UNIVERSUS?node-id=301-10&t=YGfQMFVtVzaEIyDX-1)
