@@ -80,7 +80,7 @@ void initializeNotification() async {
       if (notificationResponse.payload != null) {
         handleNotificationClick(notificationResponse.payload!);
       }
-    },
+    }
   );
 
   await flutterLocalNotificationsPlugin
