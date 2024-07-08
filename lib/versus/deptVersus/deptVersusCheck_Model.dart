@@ -1,23 +1,25 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:universus/class/api/DioApiCall.dart';
 import 'package:universus/class/user/user.dart';
 import 'package:universus/class/versus/versusDetail.dart';
-import 'package:universus/shared/CustomSnackbar.dart';
-import 'deptVersusDetail_Widget.dart' show deptVersusDetailWidget;
+import 'deptVersusCheck_Widget.dart' show deptVersusCheckWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-/// 학과 대항전 상세 페이지 모델 클래스
-/// 생성자 : 이정훈
-class VersusDetailModel extends FlutterFlowModel<deptVersusDetailWidget> {
+///  대결 확인 페이지 모델 클래스
+///  사용자 : 게스트팀 리더
+///  화면진입 트리거 : 호스트 팀 리더가 경기 종료(경기 결과 입력)을 하면 FCM으로 게스트 팀 리더에게 univBattleId를 전송하고 게스트 팀 리더가 해당 알림을 클릭하면 해당 페이지로 이동함
+///  생성자 : 이정훈
+class VersusCheckModel extends FlutterFlowModel<deptVersusCheckWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
 
-  late String status;
+  @override
+  void initState(BuildContext context) {}
 
   /**
  * eventId를 넣으면 Icon을 반환함
@@ -50,6 +52,9 @@ class VersusDetailModel extends FlutterFlowModel<deptVersusDetailWidget> {
     }
   }
 
+  /**
+  * eventId를 넣으면 텍스트를 반환함
+   */
   String getEventText(int eventId) {
     switch (eventId) {
       case 1:
@@ -134,7 +139,6 @@ class VersusDetailModel extends FlutterFlowModel<deptVersusDetailWidget> {
           matchStartDt: response['data']['deptBattle']['matchStartDt'] != null
               ? DateTime.parse(response['data']['deptBattle']['matchStartDt'])
               : null);
-      status = res.status!;
       debugPrint(res.toString());
       return res;
     } else {
@@ -145,145 +149,26 @@ class VersusDetailModel extends FlutterFlowModel<deptVersusDetailWidget> {
   }
 
   /**
-  * @param battleId: 대항전 id
-  * @return bool : 성공 or 실패 -> 스낵바 표시 -> 새로고침
-  * @throws Exception: 대항전 참가 실패 시 스낵바를 띄움.
-  * 생성자 : 이정훈
-  *  */
-  Future<bool> repAttend(int battleId) async {
-    // 대항전 대표 참가
+   * @param battleId: 대항전 id
+   * @param resultYN : 해당 경기 결과가 맞는지 틀린지
+   * @return bool : 성공 여부
+   * 생성자 : 이정훈
+   */
+  Future<bool?> resultRes(int battleId, bool resultYN) async {
+    String? memberIdx = await UserData.getMemberIdx();
     DioApiCall api = DioApiCall();
-    final response = await api.post('/deptBattle/repAttend', {
+    final response = await api.post('/deptBattle/resultRes', {
       'deptBattleId': battleId,
-      'guestLeader': await UserData.getMemberIdx(),
+      'memberIdx': memberIdx,
+      'resultYN': resultYN,
     });
-    return response['success']; // true or false
-  }
 
-  /**
-  * @param battleId: 대항전 id
-  * @return bool : 성공 or 실패 -> 스낵바 표시 -> 새로고침
-  * @throws Exception: 대항전 시작 실패 시 스낵바를 띄움.
-  * 생성자 : 이정훈
-  *
-  * 대항전을 만든 hostLeader만이 경기를 시작할 수 있음.
-  * */
-  Future<bool> matchStart(int battleId) async {
-    // 경기시작 API
-    DioApiCall api = DioApiCall();
-    final response = await api
-        .get('/deptBattle/matchStart?deptBattleId=${battleId.toString()}');
-    return response['success'];
-  }
-
-  /**
-  * Enum -> String
-  * 대항전 상태의 Enum 값을 String으로 변환함
-   */
-  String getText() {
-    switch (status) {
-      case 'IN_PROGRESS':
-        return '진행중';
-      case 'RECRUIT':
-        return '모집중';
-      case 'WAITING':
-        return '대기중';
-      case 'COMPLETED':
-        return '종료';
-      case "PREPARED":
-        return '준비완료';
-      default:
-        return '';
-    }
-  }
-
-  /**
-  * Enum -> String
-  * 대항전 상태의 Enum 값을 상황에 맞는 Color으로 변환함
-   */
-  Color getColor() {
-    switch (status) {
-      case 'IN_PROGRESS':
-        return Colors.yellow;
-      case 'RECRUIT':
-        return Colors.green;
-      case 'WAITING':
-        return Colors.orange;
-      case 'COMPLETED':
-        return Colors.red;
-      case "PREPARED":
-        return Colors.blue;
-      default:
-        return Colors.white;
-    }
-  }
-
-  /*
-  * 대항전 일반 참가 코드입력 팝업창
-  * @param deptBattleId: 대항전 id, context: BuildContext
-  * 생성자 : 이정훈
-  * */
-  Future<void> showInputDialog(BuildContext context, int deptBattleId) async {
-    String userInput = '';
-    return showCupertinoDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text('대항전 참가'),
-          content: CupertinoTextField(
-            onChanged: (value) {
-              userInput = value;
-            },
-            placeholder: '초대 코드 입력',
-          ),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              onPressed: () {
-                Navigator.of(context).pop(); // 다이얼로그 닫기
-              },
-              child: Text('취소'),
-            ),
-            CupertinoDialogAction(
-              onPressed: () async {
-                // 사용자 입력을 처리하는 로직을 추가할 수 있습니다.
-                print('사용자 입력: $userInput');
-                if (await versusAttend(deptBattleId, userInput) == true) {
-                  CustomSnackbar.success(context, "성공", "참가가 되었습니다.", 2);
-                } else {
-                  CustomSnackbar.error(context, "실패", "참가에 실패했습니다.", 2);
-                }
-                Navigator.of(context).pop(); // 다이얼로그 닫기
-              },
-              child: Text('확인'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  /*
-  * 대항전 일반 참가 API
-  * @param deptBattleId: 대항전 id, invitationCode: 초대 코드
-  * @return bool : 성공 or 실패
-  * 생성자 : 이정훈
-  * */
-  Future<bool> versusAttend(int deptBattleId, String invitationCode) async {
-    DioApiCall api = DioApiCall();
-    final response = await api.post('/deptBattle/attend', {
-      'deptBattleId': deptBattleId,
-      'guestLeader': await UserData.getMemberIdx(),
-      'invitationCode': invitationCode,
-    });
-    if (response['success']) {
+    if (response['result'] == 'success') {
       return true;
     } else {
       return false;
     }
   }
-
-  @override
-  void initState(BuildContext context) {}
 
   @override
   void dispose() {

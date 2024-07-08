@@ -9,6 +9,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+/* 
+  대결 진행중 페이지 모델 클래스
+  생성자 : 이정훈
+*/
 class ProceedingModel extends FlutterFlowModel<versusProceedingWidget> {
   ///  State fields for stateful widgets in this page.
 
@@ -76,7 +80,8 @@ class ProceedingModel extends FlutterFlowModel<versusProceedingWidget> {
     }
   }
 
-  /*
+  /**
+  * 대결 정보를 불러오기 위한 메소드 (대결 상세 정보 조회)
   * @param battleId: 대결 아이디
   * @return versusDetail: 대결 상세 정보 클래스
   * @throws Exception: 대결 상세 정보 조회 실패 시 예외 발생

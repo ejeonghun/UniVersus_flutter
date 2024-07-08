@@ -7,6 +7,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+/// 비밀번호 찾기 페이지 모델 클래스
+/// 생성자 : 이정훈
 class PasswordForgetModel extends FlutterFlowModel<PasswordForgetWidget> {
   final formKey = GlobalKey<FormState>();
   FocusNode? emailAddressFocusNode;
@@ -27,6 +29,8 @@ class PasswordForgetModel extends FlutterFlowModel<PasswordForgetWidget> {
     debugPrint(verifyController?.text);
   }
 
+  /// 이메일 인증 요청
+  /// 생성자 : 이정훈
   Future<bool> sendEmailRequest() async {
     ApiCall api = ApiCall();
     final response = await api.post('/pwFind/emailSend', {
@@ -42,6 +46,8 @@ class PasswordForgetModel extends FlutterFlowModel<PasswordForgetWidget> {
     return false;
   }
 
+  /// 이메일 인증 확인
+  /// 생성자 : 이정훈
   Future<bool> verifyEmail() async {
     ApiCall api = ApiCall();
     final response = await api.post('/pwFind/email/auth', {

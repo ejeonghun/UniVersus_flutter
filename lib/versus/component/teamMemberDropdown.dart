@@ -8,6 +8,8 @@ import 'package:universus/shared/CustomSnackbar.dart';
 import 'package:universus/shared/IOSAlertDialog.dart';
 import 'package:universus/shared/memberDetails.dart';
 
+/// 대결 상세 페이지에서 사용되는 대항전 참가인원 드롭다운 위젯
+/// 생성자 : 이정훈
 class TeamMemberDropdown extends StatefulWidget {
   final List<Map<String, dynamic>> teamMembers;
   final int hostLeader;

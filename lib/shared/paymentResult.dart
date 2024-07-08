@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// 결제 결과 페이지
 class PaymentResult extends StatelessWidget {
   bool getIsSuccessed(Map<String, String> result) {
     if (result['imp_success'] == 'true') {

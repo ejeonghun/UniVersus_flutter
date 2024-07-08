@@ -6,6 +6,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+/// 비밀번호 변경 페이지 모델 클래스
+/// 생성자 : 이정훈
 class PasswordChangeModel extends FlutterFlowModel<PasswordChangeWidget> {
   ///  State fields for stateful widgets in this page.
 
@@ -23,6 +25,8 @@ class PasswordChangeModel extends FlutterFlowModel<PasswordChangeWidget> {
 
   late String memberIdx;
 
+  /// 비밀번호 변경 요청
+  /// 생성자 : 이정훈
   Future<bool> changePassword() async {
     // 비밀번호 변경 API
     DioApiCall api = DioApiCall();

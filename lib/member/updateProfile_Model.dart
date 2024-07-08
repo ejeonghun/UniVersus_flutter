@@ -11,6 +11,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+/// 프로필 수정 페이지 모델 클래스
+/// 생성자 : 이정훈
 class ProfileEditModel extends FlutterFlowModel<updateProfileWidget> {
   ///  State fields for stateful widgets in this page.
 

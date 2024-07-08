@@ -11,60 +11,8 @@ import 'package:provider/provider.dart';
 import 'package:universus/class/api/ApiCall.dart';
 import 'package:universus/class/user/user.dart';
 
-// class LoginModel extends FlutterFlowModel<LoginWidget> {
-//   ///  State fields for stateful widgets in this page.
-
-//   final unfocusNode = FocusNode();
-//   final formKey = GlobalKey<FormState>();
-//   // State field(s) for emailAddress widget.
-//   FocusNode? emailAddressFocusNode;
-//   TextEditingController? emailAddressController;
-//   String? Function(BuildContext, String?)? emailAddressControllerValidator;
-//   String? _emailAddressControllerValidator(BuildContext context, String? val) {
-//     if (val == null || val.isEmpty) {
-//       return 'Field is required';
-//     }
-
-//     return null;
-//   }
-
-//   // State field(s) for password widget.
-//   FocusNode? passwordFocusNode;
-//   TextEditingController? passwordController;
-//   late bool passwordVisibility;
-//   String? Function(BuildContext, String?)? passwordControllerValidator;
-//   String? _passwordControllerValidator(BuildContext context, String? val) {
-//     if (val == null || val.isEmpty) {
-//       return 'Field is required';
-//     }
-
-//     return null;
-//   }
-
-// Backend Req 처리
-
-//   @override
-//   void initState(BuildContext context) {
-//     emailAddressControllerValidator = _emailAddressControllerValidator;
-//     passwordVisibility = false;
-//     passwordControllerValidator = _passwordControllerValidator;
-//   }
-
-//   @override
-//   void dispose() {
-//     unfocusNode.dispose();
-//     emailAddressFocusNode?.dispose();
-//     emailAddressController?.dispose();
-
-//     passwordFocusNode?.dispose();
-//     passwordController?.dispose();
-//   }
-
-//   /// Action blocks are added here.
-
-//   /// Additional helper methods are added here.
-// }
-
+/// 로그인 페이지 모델 클래스
+/// 생성자 : 이정훈
 class LoginModel extends FlutterFlowModel<LoginWidget> {
   ///  State fields for stateful widgets in this page.
 
@@ -95,6 +43,8 @@ class LoginModel extends FlutterFlowModel<LoginWidget> {
     return null;
   }
 
+  /// 로그인 요청
+  /// 생성자 : 이정훈
   Future<bool> sendLoginRequest() async {
     var apiCall = ApiCall();
     var responseBody = await apiCall.post('/auth/login', {

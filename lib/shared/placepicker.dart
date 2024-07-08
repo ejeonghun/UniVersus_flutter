@@ -4,6 +4,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:permission_handler/permission_handler.dart'; // Updated permission library import
 
+/// 구글 맵 위치 선택 클래스
+/// 반환값 : PickResult? (선택된 장소에 대한 모든 정보)
+/// 생성자 : 이정훈
 class PlacePickerScreen extends StatefulWidget {
   @override
   _PlacePickerScreenState createState() => _PlacePickerScreenState();

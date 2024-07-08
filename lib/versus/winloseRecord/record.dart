@@ -3,7 +3,7 @@ import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:universus/shared/Template.dart';
-import 'package:universus/winloseRecord/record_model.dart';
+import 'package:universus/versus/winloseRecord/record_model.dart';
 
 class UnivBattleRecordPage extends StatefulWidget {
   final int univId;

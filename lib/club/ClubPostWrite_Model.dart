@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+/// 클럽 게시글 작성 페이지 모델 클래스
+/// 생성자 : 이정훈
 class ClubPostWriteModel extends FlutterFlowModel<ClubPostWriteWidget> {
   final unfocusNode = FocusNode();
   String? dropDownValue;
@@ -42,7 +44,7 @@ class ClubPostWriteModel extends FlutterFlowModel<ClubPostWriteWidget> {
     debugPrint(placeName.toString()); // dropDownValue가 1이면 사용
   }
 
-  /*
+  /**
   * 게시글 작성
   * @param memberIdx, categoryId, title, content, eventId, matchDt, lat, lng, place:
   * @return boolean: 성공 여부

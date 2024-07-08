@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+/// 회원가입 추가 정보 입력 페이지 모델 클래스
+/// 생성자 : 이정훈
 class AdditionalInfoModel extends FlutterFlowModel<AdditionalInfoWidget> {
   ///  State fields for stateful widgets in this page.
 

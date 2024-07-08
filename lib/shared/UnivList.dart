@@ -4,6 +4,8 @@ import 'dart:developer';
 
 import 'package:universus/class/api/ApiCall.dart';
 
+/// 백엔드 API로부터 대학 목록을 가져와서 출력함
+/// 생성자 : 이정훈
 class Univ with CustomDropdownListFilter {
   final String school_name;
   const Univ(this.school_name);

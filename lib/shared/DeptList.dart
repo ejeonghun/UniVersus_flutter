@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:universus/class/api/ApiCall.dart';
 
+/// 학과 선택 드롭다운 클래스
+/// 생성자 : 이정훈
 class Dept with CustomDropdownListFilter {
   final String deptName;
   final int deptId;

@@ -9,6 +9,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+/// 학과 대항전 진행중 페이지 모델 클래스
+/// 생성자 : 이정훈
 class deptProceedingModel extends FlutterFlowModel<deptVersusProceedingWidget> {
   ///  State fields for stateful widgets in this page.
 
@@ -82,13 +84,13 @@ class deptProceedingModel extends FlutterFlowModel<deptVersusProceedingWidget> {
   * @throws Exception: 대결 상세 정보 조회 실패 시 예외 발생
   * 생성자 : 이정훈
   * */
-   Future<versusDetail> getDeptVersusDetail(int battleId) async {
+  Future<versusDetail> getDeptVersusDetail(int battleId) async {
     // 대결 리스트를 불러오는 메소드
     DioApiCall api = DioApiCall();
     final response =
         await api.get('/deptBattle/info?deptBattleId=${battleId.toString()}');
-        print("진행중 ... 불러움");
-        print(response.toString());
+    print("진행중 ... 불러움");
+    print(response.toString());
     if (response.isNotEmpty) {
       // response가 null이 아니면 조회 성공
       List<dynamic> hostParticipantListData =
@@ -111,7 +113,8 @@ class deptProceedingModel extends FlutterFlowModel<deptVersusProceedingWidget> {
           hostTeamName: response['data']['deptBattle']['hostDeptName'],
           hostTeamUnivLogo: response['data']['deptBattle']['univLogo'],
           guestTeamName: response['data']['deptBattle']['guestDeptName'],
-          guestTeamUnivLogo: response['data']['deptBattle']['univLogo'] ?? 'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
+          guestTeamUnivLogo: response['data']['deptBattle']['univLogo'] ??
+              'https://jhuniversus.s3.ap-northeast-2.amazonaws.com/logo.png',
           BattleId: response['data']['deptBattle']['deptBattleId'],
           status: response['data']['deptBattle']['matchStatus'],
           hostLeaderId: response['data']['deptBattle']['hostLeader'],
@@ -126,7 +129,7 @@ class deptProceedingModel extends FlutterFlowModel<deptVersusProceedingWidget> {
           guestLeaderId: response['data']['deptBattle']['guestLeader'],
           winUnivName: response['data']['winUnivName'] ??= "null",
           matchStartDt:
-            DateTime.parse(response['data']['deptBattle']["matchStartDt"]));
+              DateTime.parse(response['data']['deptBattle']["matchStartDt"]));
       debugPrint(res.toString());
       return res;
     } else {
