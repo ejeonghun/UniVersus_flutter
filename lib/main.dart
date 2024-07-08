@@ -5,36 +5,26 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:universus/chat/chatList.dart';
-import 'package:universus/club/ClubList_Model.dart';
 import 'package:universus/club/ClubList_Widget.dart';
 import 'package:universus/club/ClubPostList_Widget.dart';
 import 'package:universus/handleNotificationClick.dart';
-import 'package:universus/main/Components/clubElement_Widget.dart';
-import 'package:universus/main/Components/clubelement_widget.dart';
 import 'package:universus/notice/notice.dart';
 import 'package:universus/permissonManage.dart';
 import 'package:universus/ranking/ranking.dart';
 import 'package:universus/service_center/service_center.dart';
 import 'package:universus/shared/paymentResult.dart';
-import 'package:universus/versus/versusDetail_Widget.dart';
 import 'package:universus/versus/versusCheck_Widget.dart';
-
 import 'firebase_options.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 import 'package:universus/Community/Community_Widget.dart';
 import 'package:universus/Community/Post_Widget.dart';
 import 'package:universus/Community/Write_Widget.dart';
 import 'package:universus/Search/SearchResult_Widget.dart';
 import 'package:universus/Search/Search_Widget.dart';
-import 'package:universus/auth/AdditionalInfo_Widget.dart';
-import 'package:universus/notice/notice.dart';
-
 import 'package:universus/class/user/user.dart';
 
 // Widget Import
@@ -47,15 +37,11 @@ import 'package:universus/auth/CreateAccount_Widget.dart';
 import 'package:universus/auth/PasswordForget_Widget.dart';
 import 'package:universus/main/main_Widget.dart';
 import 'package:universus/member/profile_Widget.dart';
-import 'package:universus/member/updateProfile_Widget.dart';
 import 'package:universus/test/testscreen_Widget.dart';
-import 'package:universus/auth/tmp/KakaoLogin.dart';
 import 'package:universus/shared/placepicker.dart';
 import 'package:universus/versus/versusCreate_Widget.dart';
 import 'package:universus/versus/versusList_Widget.dart';
-import 'package:universus/main/Components/clubElement_Widget.dart';
-import 'package:universus/Community/Post_Widget.dart';
-import 'package:intl/date_symbol_data_local.dart';
+
 
 // 백그라운드 FCM 핸들러
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

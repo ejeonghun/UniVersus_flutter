@@ -3,15 +3,16 @@ import 'package:flutter/foundation.dart'; // For kIsWeb
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:universus/class/user/user.dart';
-import 'package:web_socket_channel/web_socket_channel.dart'; // Common interface
 import 'package:web_socket_channel/io.dart'; // Import for non-web
+import 'package:web_socket_channel/web_socket_channel.dart'; // Common interface
 
-class ChatScreen extends StatefulWidget {
+
+class ChatScreenWeb extends StatefulWidget {
   final int chatRoomId;
   final int chatRoomType;
   final String? customChatRoomName;
 
-  ChatScreen({
+  ChatScreenWeb({
     Key? key,
     required this.chatRoomId,
     required this.chatRoomType,
@@ -19,10 +20,10 @@ class ChatScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  _ChatScreenWebState createState() => _ChatScreenWebState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenWebState extends State<ChatScreenWeb> {
   final _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   late WebSocketChannel _channel;
@@ -42,11 +43,9 @@ class _ChatScreenState extends State<ChatScreen> {
     _currentMemberIdx = await UserData.getMemberIdx();
     setState(() {});
 
-    _channel = IOWebSocketChannel.connect(
-            Uri.parse(
-              'ws://moyoapi.lunaweb.dev/ws/chat/${widget.chatRoomType}/${widget.chatRoomId}',
-            ),
-            headers: {'memberIdx': _currentMemberIdx ?? ''},
+    _channel =
+        WebSocketChannel.connect(
+            Uri.parse('ws://moyoapi.lunaweb.dev/ws/chat/${widget.chatRoomType}/${widget.chatRoomId}?memberIdx=${_currentMemberIdx ?? ''}'),
           );
 
     _channel.stream.listen((data) {
