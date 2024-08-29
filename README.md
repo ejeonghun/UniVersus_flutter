@@ -20,6 +20,8 @@
   <img src="https://img.shields.io/badge/flask-000000?style=for-the-badge&logo=flask&logoColor=white">
   <img src="https://img.shields.io/badge/transformers-F7981E?style=for-the-badge&logo=hugging-face&logoColor=white">
   <img src="https://img.shields.io/badge/oracleDB-F80000?style=for-the-badge&logo=oracle&logoColor=white">
+  <img src="https://img.shields.io/badge/nginx proxy manager-009639?style=for-the-badge&logo=nginxproxymanager&logoColor=white">
+  
 </p>
 
 ## 📱Platform📱
