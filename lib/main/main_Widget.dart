@@ -11,12 +11,14 @@ import 'package:universus/class/club/clubElement.dart';
 import 'package:universus/main/Components/clubElement_Widget.dart';
 import 'package:universus/main/Components/recruit_Widget.dart';
 import 'package:universus/main/Components/recruitmentElement.dart';
+import 'package:universus/permissonManage.dart';
 import 'main_Model.dart';
 import 'package:universus/main/main_Widget.dart';
 import 'dart:async';
 export 'main_Model.dart';
 
-//
+PermissionManage permissionManage = PermissionManage();
+
 class MainWidget extends StatefulWidget {
   const MainWidget({super.key});
 
@@ -68,26 +70,34 @@ class _MainWidgetState extends State<MainWidget> {
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: Future.wait([
+          permissionManage.requestPermissions(context),
           _model.getClubList(),
           _model.getProfile(),
           _model.getrecuitmentElement()
         ]),
         builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  CircularProgressIndicator(), // 로딩 바 추가
-                ],
-              ),
-            );
+            // 현재 테마가 다크 모드인지 여부를 확인합니다.
+        final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+        
+        return Container(
+          color: isDarkMode ? Colors.black : Colors.white, // 다크 모드와 라이트 모드에 따라 배경색 설정
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                CircularProgressIndicator(), // 로딩 바 추가
+              ],
+            ),
+          ),
+        );
           } else if (snapshot.hasError) {
             return Text('오류: ${snapshot.error}');
           } else {
-            List<ClubElement> clubList = snapshot.data![0];
-            userProfile userInfo = snapshot.data![1];
-            List<RecruitmentElement> recruitList = snapshot.data![2];
+            bool isPermissionGranted = snapshot.data![0]; // 권한 허용 여부
+            List<ClubElement> clubList = snapshot.data![1];
+            userProfile userInfo = snapshot.data![2];
+            List<RecruitmentElement> recruitList = snapshot.data![3];
             String schoolName = " ${userInfo.getUnivName}"; // 학교 이름 가져오기
             return GestureDetector(
               onTap: () => _model.unfocusNode.canRequestFocus

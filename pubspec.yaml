@@ -108,7 +108,6 @@ flutter:
     - assets/
     - assets/images/
     - assets/lottie/
-    - assets/data/
   fonts:
     - family: Ownglyph
       fonts:
