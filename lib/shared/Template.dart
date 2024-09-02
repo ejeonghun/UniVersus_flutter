@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// 이벤트 관련 템플릿 클래스
+/// 생성자 ; 이정훈
 class Template {
   static Icon getIcon(String eventName, {double size = 20.0}) {
     switch (eventName) {

@@ -5,6 +5,8 @@ import 'package:iamport_flutter/iamport_payment.dart';
 /* 아임포트 결제 데이터 모델을 불러옵니다. */
 import 'package:iamport_flutter/model/payment_data.dart';
 
+/// 결제 처리 위젯 클래스
+/// 생성자 : 이정훈
 class Payment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

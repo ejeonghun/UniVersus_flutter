@@ -10,9 +10,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+/// 대결 상세 페이지 모델 클래스
+/// 생성자 : 이정훈
 class VersusDetailModel extends FlutterFlowModel<VersusDetailWidget> {
-  ///  State fields for stateful widgets in this page.
-
   final unfocusNode = FocusNode();
 
   late String status;

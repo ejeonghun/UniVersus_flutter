@@ -11,6 +11,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+/// 학과 대항전 결과 입력 페이지 모델 클래스
+/// 생성자 : 이정훈
 class deptVersusResultModel extends FlutterFlowModel<deptVersusResultWidget> {
   ///  State fields for stateful widgets in this page.
 

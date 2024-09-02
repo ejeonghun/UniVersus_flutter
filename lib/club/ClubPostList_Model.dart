@@ -7,6 +7,9 @@ import 'package:universus/class/user/userProfile.dart';
 import 'ClubPostList_Widget.dart' show ClubPostListWidget;
 import 'package:flutter/material.dart';
 
+/// 클럽 내 커뮤니티 페이지 모델 클래스
+/// 연관 파일 : PostElement(게시글 컴포넌트)
+/// 생성자 : 이정훈
 class CommunityModel extends FlutterFlowModel<ClubPostListWidget> {
   ///  State fields for stateful widgets in this page.
   final unfocusNode = FocusNode();
