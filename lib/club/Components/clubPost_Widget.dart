@@ -98,7 +98,7 @@ class _ClubPostWidgetState extends State<ClubPostWidget> {
                       ),
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(
-                            140.0, 0.0, 0.0, 0.0),
+                            100.0, 0.0, 0.0, 0.0),
                         child: Text(
                           '${widget.clubPost.getRegDt}',
                           style: FlutterFlowTheme.of(context)
