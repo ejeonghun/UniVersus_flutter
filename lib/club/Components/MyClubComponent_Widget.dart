@@ -82,12 +82,8 @@ class _MyClubComponentWidgetState extends State<MyClubComponentWidget> {
                       width: 45,
                       height: 45,
                       decoration: BoxDecoration(
-                        color: Color(0xFFFFBE98),
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: FlutterFlowTheme.of(context).tertiary,
-                          width: 2,
-                        ),
+                        color: Color.fromARGB(255, 251, 138, 73),
+                        shape: BoxShape.circle,                      
                       ),
                       child: Padding(
                         padding: EdgeInsets.all(2),
@@ -95,8 +91,8 @@ class _MyClubComponentWidgetState extends State<MyClubComponentWidget> {
                           borderRadius: BorderRadius.circular(44),
                           child: Image.network(
                             club.imageUrl,
-                            width: 44,
-                            height: 44,
+                            width: 46,
+                            height: 46,
                             fit: BoxFit.cover,
                           ),
                         ),
