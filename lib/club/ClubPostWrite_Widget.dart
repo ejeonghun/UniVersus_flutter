@@ -249,6 +249,8 @@ class _ClubPostWriteWidgetState extends State<ClubPostWriteWidget> {
                             // 웹이 아니면 파일 이미지를 가져옵니다.
                             File(_model.imageFile!.path),
                             fit: BoxFit.cover,
+                            width: 110,
+                            height: 110,
                           ),
                         ),
                       ),
