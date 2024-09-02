@@ -2,6 +2,10 @@
 ![Universus Logo](https://github.com/ejeonghun/UniVersus_flutter/assets/41509711/9537f92e-53ea-4cd7-a5b5-922c95fd8036)
 ### 대학교 스포츠 대항전 애플리케이션
 
+## Test Account
+- ID : test@g.yju.ac.kr
+- PW : 1234
+
 ## 🔧Stack🔧
 <p align="center">
   <img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white">
@@ -16,6 +20,8 @@
   <img src="https://img.shields.io/badge/flask-000000?style=for-the-badge&logo=flask&logoColor=white">
   <img src="https://img.shields.io/badge/transformers-F7981E?style=for-the-badge&logo=hugging-face&logoColor=white">
   <img src="https://img.shields.io/badge/oracleDB-F80000?style=for-the-badge&logo=oracle&logoColor=white">
+  <img src="https://img.shields.io/badge/nginx proxy manager-009639?style=for-the-badge&logo=nginxproxymanager&logoColor=white">
+  
 </p>
 
 ## 📱Platform📱

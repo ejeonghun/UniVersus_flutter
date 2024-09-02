@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:universus/chat/chatRoom.dart';
 import 'package:universus/chat/chats_Model.dart';
 import 'package:universus/notice/notice_model.dart' as custom;
+import 'package:universus/versus/deptVersus/deptVersusDetail_Widget.dart';
+import 'package:universus/versus/versusDetail_Widget.dart';
 
 class NoticePage extends StatefulWidget {
   @override
@@ -117,6 +118,32 @@ class _NoticePageState extends State<NoticePage> {
           ),
           onTap: () {
             // Handle notification tap
+            // 대항전 알림 항목을 탭했을 때 DeptVersusDetailWidget 또는 VersusDetailWidget으로 이동하도록 처리
+            if (notification.relatedItemId != null) {
+              if (notification.type == 'UNIV_BATTLE') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VersusDetailWidget(
+                      battleId: notification.relatedItemId,
+                    ),
+                  ),
+                );
+              } else {
+                // 대항전 상세 화면으로 이동
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => deptVersusDetailWidget(
+                      battleId: notification.relatedItemId, // 대항전 ID 전달
+                    ),
+                  ),
+                );
+              }
+            } else {
+              // Handle case where relatedItemId is null
+              print("relatedItemId is null");
+            }
           },
         ),
       ),
@@ -153,7 +180,7 @@ class _NoticePageState extends State<NoticePage> {
           title: Text(
             chatRoom.customChatRoomName ?? '상대가 지정되지 않음',
             style: TextStyle(
-              color: Colors.black, // 예시로 검정색을 사용합니다. 원하는 색상으로 변경하세요.
+              color: Colors.black, // 원하는 색상으로 변경 가능
             ),
           ),
           subtitle: Row(
