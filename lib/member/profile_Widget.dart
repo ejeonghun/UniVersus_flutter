@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:universus/BottomBar2.dart';
 import 'package:universus/auth/PasswordChange_Widget.dart';
 import 'package:universus/class/user/user.dart';
 import 'package:universus/class/user/userProfile.dart';
@@ -882,6 +883,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                   ],
                 );
               }
-            }));
+            }),
+            bottomNavigationBar: BottomBar2(selectedIndex: 4,),
+            );
   }
 }

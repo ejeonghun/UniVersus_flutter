@@ -1168,7 +1168,7 @@ class _TestscreenWidgetState extends State<TestscreenWidget> {
             ),
           ),
         ),
-        bottomNavigationBar: BottomBar2(),
+        bottomNavigationBar: BottomBar2(selectedIndex: 0,),
       ),
     );
   }

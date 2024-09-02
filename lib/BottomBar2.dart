@@ -2,14 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 
 class BottomBar2 extends StatefulWidget {
-  const BottomBar2({Key? key}) : super(key: key);
+  final int selectedIndex; // 선택된 인덱스를 매개변수로 받습니다.
+
+  const BottomBar2({Key? key, required this.selectedIndex}) : super(key: key);
 
   @override
   _BottomBar2State createState() => _BottomBar2State();
 }
 
 class _BottomBar2State extends State<BottomBar2> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.selectedIndex; // 초기화 시 부모 위젯에서 받은 값으로 설정
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,22 +30,22 @@ class _BottomBar2State extends State<BottomBar2> {
         switch (index) {
           case 0:
             debugPrint("메인으로 이동");
-            Navigator.of(context).pushNamed('/main');
+            Navigator.of(context).pushReplacementNamed('/main');
             break;
           case 1:
             debugPrint('대항전으로 이동');
-            Navigator.of(context).pushNamed('/versusList');
+            Navigator.of(context).pushReplacementNamed('/versusList');
             break;
           case 2:
-            Navigator.of(context).pushNamed('/Community');
+            Navigator.of(context).pushReplacementNamed('/Community');
             debugPrint('내 정보 클릭');
             break;
           case 3:
-            Navigator.of(context).pushNamed('/chat/main');
+            Navigator.of(context).pushReplacementNamed('/chat/main');
             debugPrint('3');
             break;
           case 4:
-            Navigator.of(context).pushNamed('/profile');
+            Navigator.of(context).pushReplacementNamed('/profile');
             debugPrint('4');
             break;
           default:
@@ -55,10 +63,12 @@ class _BottomBar2State extends State<BottomBar2> {
       type: BottomNavigationBarType.fixed,
       backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       unselectedItemColor: FlutterFlowTheme.of(context).primaryText,
-      selectedItemColor: FlutterFlowTheme.of(context).primaryText, // 선택된 항목의 아이콘 색상을 선택되지 않은 항목과 같게 설정
-      currentIndex: _selectedIndex, // 현재 선택된 인덱스 반영
-      selectedLabelStyle: TextStyle(color: FlutterFlowTheme.of(context).primaryText), // 선택된 항목의 텍스트 색상을 선택되지 않은 항목과 같게 설정
-      unselectedLabelStyle: TextStyle(color: FlutterFlowTheme.of(context).primaryText), // 선택되지 않은 항목의 텍스트 색상
+      selectedItemColor: Colors.orange,
+      currentIndex: _selectedIndex,
+      selectedIconTheme: IconThemeData(color: Colors.orange),
+      unselectedIconTheme: IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
+      selectedLabelStyle: TextStyle(color: Colors.orange),
+      unselectedLabelStyle: TextStyle(color: FlutterFlowTheme.of(context).primaryText),
     );
   }
 }
