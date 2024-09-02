@@ -4,11 +4,10 @@ import 'package:universal_io/io.dart' as universal_io;
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class PermissionManage {
-  Future<void> requestPermissions(BuildContext context) async {
+  Future<bool> requestPermissions(BuildContext context) async {
     if (kIsWeb) {
-      // Handle permissions for the web, if necessary.
-      // Typically, browser permissions are handled differently.
-      return;
+      // 웹은 기본적으로 권한이 허용되어있다고 가정
+      return true;
     }
 
     bool cameraPermission = await requestCameraPermission(context);
@@ -19,7 +18,10 @@ class PermissionManage {
     if (!cameraPermission || !storagePermission || !locationPermission) {
       // !notificationPermission
       // 하나 이상의 권한이 허용되지 않았을 경우, 추가적인 처리를 할 수 있습니다.
+      debugPrint("권한이 모두 허용되지 않았습니다.");
     }
+
+    return cameraPermission && storagePermission && locationPermission;
   }
 
   Future<bool> requestCameraPermission(BuildContext context) async {

@@ -45,7 +45,7 @@ class _ChatScreenWebState extends State<ChatScreenWeb> {
 
     _channel =
         WebSocketChannel.connect(
-            Uri.parse('ws://moyoapi.lunaweb.dev/ws/chat/${widget.chatRoomType}/${widget.chatRoomId}?memberIdx=${_currentMemberIdx ?? ''}'),
+            Uri.parse('wss://moyoapi.lunaweb.dev/ws/chat/${widget.chatRoomType}/${widget.chatRoomId}?memberIdx=${_currentMemberIdx ?? ''}'),
           );
 
     _channel.stream.listen((data) {

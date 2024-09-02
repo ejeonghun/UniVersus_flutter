@@ -51,7 +51,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 // 알림 init 작업
 void initializeNotification() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
