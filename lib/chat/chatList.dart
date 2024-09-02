@@ -249,7 +249,7 @@ class _ChatsPageState extends State<ChatsPage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomBar2(), // 바텀 네비게이션 추가
+      bottomNavigationBar: BottomBar2(selectedIndex: 3,), // 바텀 네비게이션 추가
     );
   }
 }

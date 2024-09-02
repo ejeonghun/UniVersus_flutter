@@ -533,7 +533,7 @@ class _PostWidgetState extends State<PostWidget> {
                   ),
                 ),
               ),
-              bottomNavigationBar: BottomBar2(),
+              bottomNavigationBar: BottomBar2(selectedIndex: 2,),
             ),
           );
         }

@@ -79,7 +79,6 @@ class _MainWidgetState extends State<MainWidget> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // 현재 테마가 다크 모드인지 여부를 확인합니다.
         final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-        
         return Container(
           color: isDarkMode ? Colors.black : Colors.white, // 다크 모드와 라이트 모드에 따라 배경색 설정
           child: Center(
@@ -526,7 +525,7 @@ class _MainWidgetState extends State<MainWidget> {
                     ),
                   ),
                 ),
-                bottomNavigationBar: BottomBar2(),
+                bottomNavigationBar: BottomBar2(selectedIndex: 0,),
               ),
             );
           }
