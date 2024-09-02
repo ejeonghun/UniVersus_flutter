@@ -18,6 +18,8 @@
 	<string>moyo</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>FLTEnableImpeller</key>
+	<false />
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>

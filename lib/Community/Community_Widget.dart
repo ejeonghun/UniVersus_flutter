@@ -198,7 +198,7 @@ class _CommunityWidgetState extends State<CommunityWidget>
                       ],
                     ),
                   ),
-                  bottomNavigationBar: BottomBar2(),
+                  bottomNavigationBar: BottomBar2(selectedIndex: 2,),
                 ),
               ); // 끝
             } else {

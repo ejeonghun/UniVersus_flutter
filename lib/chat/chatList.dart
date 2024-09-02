@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:universus/BottomBar2.dart';
 import 'package:universus/chat/chatRoom.dart';
+import 'package:universus/chat/chatRoomWeb.dart';
 import 'package:universus/class/user/user.dart'; // 사용자 클래스 import
 import 'package:universus/chat/chats_Model.dart'; // ChatsModel import
 
@@ -165,11 +167,16 @@ class ChatRoomItem extends StatelessWidget {
           ),
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-              return ChatScreen(
+              return (kIsWeb) ? ChatScreenWeb(
+                chatRoomType: chatRoom.chatRoomType,
+                chatRoomId: chatRoom.chatRoomId,
+                customChatRoomName: chatRoom.customChatRoomName,
+              ) : ChatScreen(
                 chatRoomType: chatRoom.chatRoomType,
                 chatRoomId: chatRoom.chatRoomId,
                 customChatRoomName: chatRoom.customChatRoomName,
               );
+              
             }));
           },
         ),
@@ -242,7 +249,7 @@ class _ChatsPageState extends State<ChatsPage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomBar2(), // 바텀 네비게이션 추가
+      bottomNavigationBar: BottomBar2(selectedIndex: 3,), // 바텀 네비게이션 추가
     );
   }
 }
