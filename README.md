@@ -111,6 +111,12 @@
 ## 📂 Back-end Repository
 [Back-end](https://github.com/ejeonghun/universus_backend)
 
+## 🧾Poster
+[2024 CAPSTONE_DESIGN.pdf](https://github.com/user-attachments/files/17359793/2024.CAPSTONE_DESIGN.pdf)
+
+[2024 CAPSTONE_DESIGN_lasted.pdf](https://github.com/user-attachments/files/17359794/2024.CAPSTONE_DESIGN_lasted.pdf)
+
+
 ## 🌳 Project Tree
 ```
 # 모델 : 백엔드 및 기능 작동 부분
